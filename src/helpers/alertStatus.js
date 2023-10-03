@@ -1,13 +1,18 @@
-  export const alertStatus = [{
+export const alertStatus = [
+  {
     status: "success",
-    title: "Sucesso!"
-  }, {
+    title: "Sucesso!",
+  },
+  {
     status: "error",
-    title: "Verfic"
-  }, {
+    title: "Verfic",
+  },
+  {
     status: "info",
-    title: "We are going live in July!"
-  }, {
+    title: "We are going live in July!",
+  },
+  {
     status: "warning",
-    title: "Poor internet connection."
-  }];
+    title: "Poor internet connection.",
+  },
+]

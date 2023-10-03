@@ -1,6 +1,4 @@
-
 export const assetTypes = {
- 
- farmland: 'Pomar',
- cashew: 'Caju',
-};
+  farmland: "Pomar",
+  cashew: "Caju",
+}

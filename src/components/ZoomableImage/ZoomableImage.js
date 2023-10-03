@@ -1,4 +1,3 @@
-
 // import React, { useState } from 'react';
 // import { View, Image, StyleSheet } from 'react-native';
 // import { PinchGestureHandler, State } from 'react-native-gesture-handler';
@@ -7,11 +6,10 @@
 
 // export function ZoomableImage({ imageSource  }){
 
-//  const [scale, setScale] = useState({ 
+//  const [scale, setScale] = useState({
 //   scale: 1,
 //   lastScale: 1,
 //  });
-
 
 //  onPinchGestureEvent = (e)=>{
 //   if(e.nativeEvent.scale !== scale.lastScale){
@@ -32,8 +30,6 @@
 //   }
 //  };
 
-
-
 //  return (
 //   <View style={{
 //    flex: 1,
@@ -46,7 +42,7 @@
 //     onGestureEvent={onPinchGestureEvent}
 //     onHandlerStateChange={onPinchHandlerStateChange}
 //    >
-//     <ImageZoom 
+//     <ImageZoom
 //      cropWidth={'100%'}
 //      imageWidth={'100%'}
 //      imageHeight={'100%'}
@@ -56,7 +52,7 @@
 //       transform: [{ scale: scale.scale }],
 //      }}
 //     >
-//      <Image 
+//      <Image
 //       source={imageSource}
 //       resizeMode='contain'
 //       style={{
@@ -65,7 +61,7 @@
 //       }}
 //      />
 //     </ImageZoom>
-//     </PinchGestureHandler> 
+//     </PinchGestureHandler>
 //   </View>
 //  )
 // }

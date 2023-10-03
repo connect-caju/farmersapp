@@ -2,20 +2,20 @@
 
 const farmersFakeList = [
   {
-    name: 'Amy Farha',
-    avatar_url: 'https://local.pt',
+    name: "Amy Farha",
+    avatar_url: "https://local.pt",
     age: 45,
     farmlands: 2,
     trees: 345,
-    subcategory: 'comercial',
+    subcategory: "comercial",
   },
   {
-    name: 'Chris Jackson',
-    avatar_url: 'https://local.pt',
+    name: "Chris Jackson",
+    avatar_url: "https://local.pt",
     age: 45,
     farmlands: 2,
     trees: 345,
-    subcategory: 'comercial',
+    subcategory: "comercial",
   },
   // {
   //   name: 'Amy Farha',
@@ -169,6 +169,6 @@ const farmersFakeList = [
   //   trees: 345,
   //   subcategory: 'comercial',
   // },
-];
+]
 
-export default farmersFakeList;
+export default farmersFakeList

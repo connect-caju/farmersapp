@@ -1,13 +1,13 @@
-import {  StyleSheet,  } from 'react-native';
-import COLORS from '../../consts/colors';
-import {  
+import { StyleSheet } from "react-native"
+import COLORS from "../../consts/colors"
+import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
   listenOrientationChange as lor,
-  removeOrientationListener as rol } 
-      from 'react-native-responsive-screen';
+  removeOrientationListener as rol,
+} from "react-native-responsive-screen"
 
-import { 
+import {
   responsiveFontSize,
   responsiveScreenFontSize,
   responsiveHeight,
@@ -15,21 +15,17 @@ import {
   responsiveScreenHeight,
   responsiveScreenWidth,
   useDimensionsChange,
-
-} from 'react-native-responsive-dimensions';
-
+} from "react-native-responsive-dimensions"
 
 const styles = StyleSheet.create({
+  images: {
+    width: 200,
+    height: 200,
+    borderColor: COLORS.main,
+    // borderWidth: 2,
+    marginHorizontal: 3,
+    borderRadius: 120,
+  },
+})
 
-    images: {
-      width: 200,
-      height: 200,
-      borderColor: COLORS.main,
-      // borderWidth: 2,
-      marginHorizontal: 3,
-      borderRadius: 120,
-    },
-  
-  });
-
-  export default styles;
+export default styles

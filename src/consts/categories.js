@@ -1,34 +1,30 @@
-
 const categories = {
-
   farmer: {
-    category: 'Produtor',
+    category: "Produtor",
     subcategories: {
-      autosustentable: 'Familiar', 
-      commercial: 'Comercial', 
-      notSubcategorized: 'Não subcategorizado',
+      autosustentable: "Familiar",
+      commercial: "Comercial",
+      notSubcategorized: "Não subcategorizado",
     },
   },
 
   group: {
-    category: 'Grupo',
+    category: "Grupo",
     subcategories: {
-      processing: 'Processamento', 
-      production: 'Produção', 
-      selling: 'Venda Conjunta',
-    }
-
+      processing: "Processamento",
+      production: "Produção",
+      selling: "Venda Conjunta",
+    },
   },
 
   institution: {
-    category: 'Instituição',
+    category: "Instituição",
     subcategories: {
-      processing: 'Processamento', 
-      production: 'Produção', 
-      selling: 'Venda Conjunta',
-    }
+      processing: "Processamento",
+      production: "Produção",
+      selling: "Venda Conjunta",
+    },
   },
+}
 
-};
-
-export default categories;
+export default categories

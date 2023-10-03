@@ -1,14 +1,14 @@
-import {TouchableOpacity, View, Text,} from 'react-native';
-import React, { useState, useEffect, } from 'react';
-import {Avatar, Icon } from '@rneui/themed';
-import {  
+import { TouchableOpacity, View, Text } from "react-native"
+import React, { useState, useEffect } from "react"
+import { Avatar, Icon } from "@rneui/themed"
+import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
   listenOrientationChange as lor,
-  removeOrientationListener as rol } 
-      from 'react-native-responsive-screen';
+  removeOrientationListener as rol,
+} from "react-native-responsive-screen"
 
-import { 
+import {
   responsiveFontSize,
   responsiveScreenFontSize,
   responsiveHeight,
@@ -16,55 +16,58 @@ import {
   responsiveScreenHeight,
   responsiveScreenWidth,
   useDimensionsChange,
+} from "react-native-responsive-dimensions"
+import Animated, {
+  Layout,
+  LightSpeedInLeft,
+  LightSpeedOutRight,
+} from "react-native-reanimated"
 
-} from 'react-native-responsive-dimensions';
-import Animated, { Layout, LightSpeedInLeft, LightSpeedOutRight, } from 'react-native-reanimated';
-
-import { Box, Center, Stack,  } from 'native-base';
-import { getInitials } from '../../helpers/getInitials';
-import { useNavigation } from '@react-navigation/native';
-import COLORS from '../../consts/colors';
-import { months } from '../../helpers/dates';
-import { resourceValidation } from '../../consts/resourceValidation';
-
+import { Box, Center, Stack } from "native-base"
+import { getInitials } from "../../helpers/getInitials"
+import { useNavigation } from "@react-navigation/native"
+import COLORS from "../../consts/colors"
+import { months } from "../../helpers/dates"
+import { resourceValidation } from "../../consts/resourceValidation"
 
 const GroupItem = ({ item, route }) => {
+  const navigation = useNavigation()
+  const [farmlandStatus, setFarmlandStatus] = useState("")
 
-   const navigation = useNavigation();
-   const [farmlandStatus, setFarmlandStatus] = useState('');
-
-   useEffect(()=>{
-
+  useEffect(() => {
     if (item?.farmlandsList?.length > 0) {
-      if (item?.farmlandsList.some(farmland => farmland.status === resourceValidation.status.invalidated)) {
-        setFarmlandStatus(resourceValidation.status.invalidated);
+      if (
+        item?.farmlandsList.some(
+          (farmland) =>
+            farmland.status === resourceValidation.status.invalidated,
+        )
+      ) {
+        setFarmlandStatus(resourceValidation.status.invalidated)
+      } else if (
+        item?.farmlandsList.some(
+          (farmland) => farmland.status === resourceValidation.status.pending,
+        )
+      ) {
+        setFarmlandStatus(resourceValidation.status.pending)
+      } else {
+        setFarmlandStatus(resourceValidation.status.validated)
       }
-      else if (item?.farmlandsList.some(farmland => farmland.status === resourceValidation.status.pending)) {
-        setFarmlandStatus(resourceValidation.status.pending);
-      }
-      else {
-        setFarmlandStatus(resourceValidation.status.validated);
-      }
-    }
-    else {
+    } else {
       // setFarmlandStatus(resourceValidation.status.invalidated);
     }
+  }, [item])
 
-   }, [ item ]);
-
-
-
-   return (
+  return (
     <Animated.View
       // entering={LightSpeedInLeft}
       exiting={LightSpeedOutRight}
       // layout={Layout.springify()}
       style={{
-        paddingHorizontal: wp('1%'),
-        marginVertical: hp('1%'),
+        paddingHorizontal: wp("1%"),
+        marginVertical: hp("1%"),
         height: 110,
-        width: '100%',
-        backgroundColor: '#F5F5F5',
+        width: "100%",
+        backgroundColor: "#F5F5F5",
         flex: 1,
         borderTopColor: COLORS.fifth,
         // borderTopWidth: 2,
@@ -73,161 +76,188 @@ const GroupItem = ({ item, route }) => {
         borderColor: COLORS.main,
         shadowColor: COLORS.main,
         elevation: 3,
-
       }}
     >
       <Box
         style={{
-          position: 'absolute',
+          position: "absolute",
           top: 1,
           right: 1,
           zIndex: 1,
         }}
       >
-        <Icon 
-          name={item?.status === resourceValidation.status.pending ? 'pending-actions' : item?.status === resourceValidation.status.validated ? 'check-circle' : 'dangerous'}
-          size={wp('6%')}
-          color={item?.status === resourceValidation.status.pending ? COLORS.danger : item?.status === resourceValidation.status.validated ? COLORS.main : COLORS.red}
+        <Icon
+          name={
+            item?.status === resourceValidation.status.pending
+              ? "pending-actions"
+              : item?.status === resourceValidation.status.validated
+              ? "check-circle"
+              : "dangerous"
+          }
+          size={wp("6%")}
+          color={
+            item?.status === resourceValidation.status.pending
+              ? COLORS.danger
+              : item?.status === resourceValidation.status.validated
+              ? COLORS.main
+              : COLORS.red
+          }
         />
       </Box>
       <Stack direction="row" w="100%">
-      <Center w="15%" m="2">
-
-      <Avatar 
-            size={wp('16%')}
+        <Center w="15%" m="2">
+          <Avatar
+            size={wp("16%")}
             rounded
             title={item.imageAlt}
             containerStyle={{ backgroundColor: COLORS.grey }}
             source={{ uri: item.image }}
-        />
-      </Center>
+          />
+        </Center>
 
-      <Box w="80%">
-    <TouchableOpacity
-      onPress={()=>{
-        navigation.navigate('Profile', {
-          ownerId: item._id,
-          farmersIDs: item?.farmersIDs,
-          farmerType: 'Grupo'
-        })
-      }}    
-    >
-
-      <Text 
-        style={{
-          fontSize: responsiveFontSize(2),
-          fontFamily: 'JosefinSans-Bold',
-          color: COLORS.main,
-        }}
-        numberOfLines={1}
-        ellipsizeMode={'tail'}
-      >
-        {item?.name}
-      <Text 
-        style={{
-          fontSize: responsiveFontSize(1.7),
-          fontFamily: 'JosefinSans-Italic',
-          color: COLORS.main,
-          paddingTop: 6,          
-        }}
-        numberOfLines={1}
-        ellipsizeMode={'tail'}
-        >
-        {' '}({item?.type})
-        </Text>
-      </Text>
-    <Stack direction="column" >
-        <Stack direction="row">
-          <Box w="100%" style={{ }}>
-        <Stack direction="row">
-              <Text 
+        <Box w="80%">
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Profile", {
+                ownerId: item._id,
+                farmersIDs: item?.farmersIDs,
+                farmerType: "Grupo",
+              })
+            }}
+          >
+            <Text
+              style={{
+                fontSize: responsiveFontSize(2),
+                fontFamily: "JosefinSans-Bold",
+                color: COLORS.main,
+              }}
+              numberOfLines={1}
+              ellipsizeMode={"tail"}
+            >
+              {item?.name}
+              <Text
                 style={{
                   fontSize: responsiveFontSize(1.7),
-                fontFamily: 'JosefinSans-Italic',
+                  fontFamily: "JosefinSans-Italic",
+                  color: COLORS.main,
+                  paddingTop: 6,
                 }}
+                numberOfLines={1}
+                ellipsizeMode={"tail"}
               >
-               {/* {item?.type?.includes('Grupo') ? 'Representante: ' : 'Presidente: '}  */}
-              {item.legalStatus}
+                {" "}
+                ({item?.type})
               </Text>
-        </Stack>
-        <Stack direction="row">
-            <Box w="50%" >
-              <Text 
-                style={{
-                  fontSize: responsiveFontSize(1.7),
-                fontFamily: 'JosefinSans-Italic',
-                }}
-              >
-                Criação: {item.creationYear}
-              </Text>
-            </Box>
-            {/* <Box w="50%"> */}
-            {/* <Stack direction="row"> */}
-                <Box style={{
-                  flexDirection: 'row',
-                  // borderWidth: 1,
-                  borderRadius: 20,
-                  borderColor: farmlandStatus === resourceValidation.status.pending ? COLORS.danger : farmlandStatus === resourceValidation.status.validated ? COLORS.main : COLORS.red,
-                  justifyContent: 'space-between',
-                }}>
-                    <Text 
+            </Text>
+            <Stack direction="column">
+              <Stack direction="row">
+                <Box w="100%" style={{}}>
+                  <Stack direction="row">
+                    <Text
                       style={{
                         fontSize: responsiveFontSize(1.7),
-                        fontFamily: 'JosefinSans-Italic',
-                        marginHorizontal: 2,
-                        paddingHorizontal: 5,
+                        fontFamily: "JosefinSans-Italic",
                       }}
-                      >
-                      Pomares: {' '}{item.farmlands}
+                    >
+                      {/* {item?.type?.includes('Grupo') ? 'Representante: ' : 'Presidente: '}  */}
+                      {item.legalStatus}
                     </Text>
-                    <Icon  name={
-                      farmlandStatus === resourceValidation.status.pending 
-                      ? 'pending-actions' 
-                      : 
-                      farmlandStatus === resourceValidation.status.validated 
-                      ? 'check-circle' 
-                      :
-                      item?.farmlands === 0
-                      ? 'error-outline'
-                      : 'dangerous'
-                    }
-                          size={wp('6%')}
-                          color={farmlandStatus === resourceValidation.status.pending ? COLORS.danger : farmlandStatus === resourceValidation.status.validated ? COLORS.main : COLORS.red}
-                    />
-                  {/* </Box> */}
-              {/* </Stack> */}
-            </Box>
-            <Box w="5%">
-
-            </Box>
-        </Stack>
+                  </Stack>
+                  <Stack direction="row">
+                    <Box w="50%">
+                      <Text
+                        style={{
+                          fontSize: responsiveFontSize(1.7),
+                          fontFamily: "JosefinSans-Italic",
+                        }}
+                      >
+                        Criação: {item.creationYear}
+                      </Text>
+                    </Box>
+                    {/* <Box w="50%"> */}
+                    {/* <Stack direction="row"> */}
+                    <Box
+                      style={{
+                        flexDirection: "row",
+                        // borderWidth: 1,
+                        borderRadius: 20,
+                        borderColor:
+                          farmlandStatus === resourceValidation.status.pending
+                            ? COLORS.danger
+                            : farmlandStatus ===
+                              resourceValidation.status.validated
+                            ? COLORS.main
+                            : COLORS.red,
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: responsiveFontSize(1.7),
+                          fontFamily: "JosefinSans-Italic",
+                          marginHorizontal: 2,
+                          paddingHorizontal: 5,
+                        }}
+                      >
+                        Pomares: {item.farmlands}
+                      </Text>
+                      <Icon
+                        name={
+                          farmlandStatus === resourceValidation.status.pending
+                            ? "pending-actions"
+                            : farmlandStatus ===
+                              resourceValidation.status.validated
+                            ? "check-circle"
+                            : item?.farmlands === 0
+                            ? "error-outline"
+                            : "dangerous"
+                        }
+                        size={wp("6%")}
+                        color={
+                          farmlandStatus === resourceValidation.status.pending
+                            ? COLORS.danger
+                            : farmlandStatus ===
+                              resourceValidation.status.validated
+                            ? COLORS.main
+                            : COLORS.red
+                        }
+                      />
+                      {/* </Box> */}
+                      {/* </Stack> */}
+                    </Box>
+                    <Box w="5%"></Box>
+                  </Stack>
+                </Box>
+              </Stack>
+            </Stack>
+          </TouchableOpacity>
         </Box>
       </Stack>
-    </Stack>
-  </TouchableOpacity>
-  </Box>
-  </Stack>
 
-  <Stack direction="row" w="100%" 
-    style={{ 
-      // paddingTop: 5,  
-    }} 
-    >
-      <Box w="100%">
-        <Text 
-          style={{ 
-            textAlign: 'right',
-            color: COLORS.grey,
-            fontFamily: 'JosefinSans-Italic',
-            fontSize: responsiveFontSize(1.5),
-          }}
+      <Stack
+        direction="row"
+        w="100%"
+        style={
+          {
+            // paddingTop: 5,
+          }
+        }
+      >
+        <Box w="100%">
+          <Text
+            style={{
+              textAlign: "right",
+              color: COLORS.grey,
+              fontFamily: "JosefinSans-Italic",
+              fontSize: responsiveFontSize(1.5),
+            }}
           >
-          Registo: {item.createdAt} por {item.user}
-        </Text>
-      </Box>
-  </Stack>
+            Registo: {item.createdAt} por {item.user}
+          </Text>
+        </Box>
+      </Stack>
     </Animated.View>
   )
 }
 
-export default GroupItem;
+export default GroupItem

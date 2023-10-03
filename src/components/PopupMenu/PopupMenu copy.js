@@ -1,35 +1,37 @@
-
-import { Icon } from "@rneui/base";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { Stack, Box, Center } from 'native-base';
-import CustomDivider  from '../Divider/CustomDivider'
+import { Icon } from "@rneui/base"
+import { ScrollView, StyleSheet, Text, View } from "react-native"
+import { Stack, Box, Center } from "native-base"
+import CustomDivider from "../Divider/CustomDivider"
 import {
-    Menu,
-    MenuProvider,
-    MenuOptions,
-    MenuOption,
-    MenuTrigger,
-    renderers
-   } from "react-native-popup-menu";
-import { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faEllipsisVertical, faEye, faPeopleGroup } from "@fortawesome/free-solid-svg-icons";
-import COLORS from "../../consts/colors";
+  Menu,
+  MenuProvider,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+  renderers,
+} from "react-native-popup-menu"
+import { useState } from "react"
+import { useNavigation } from "@react-navigation/native"
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome"
+import {
+  faEllipsisVertical,
+  faEye,
+  faPeopleGroup,
+} from "@fortawesome/free-solid-svg-icons"
+import COLORS from "../../consts/colors"
 
+const { SlideInMenu } = renderers
 
-const { SlideInMenu } = renderers;
-
-export function CustomizedMenuOption ({ text, iconName, value }) {
+export function CustomizedMenuOption({ text, iconName, value }) {
   return (
     <MenuOption
-      onSelect={()=>alert(`You clicked ${value}`)}
+      onSelect={() => alert(`You clicked ${value}`)}
       customStyles={{
         optionWrapper: {
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+        },
       }}
     >
       <FontAwesomeIcon icon={iconName} size={20} color={COLORS.grey} />
@@ -38,68 +40,53 @@ export function CustomizedMenuOption ({ text, iconName, value }) {
   )
 }
 
+export function PopupMenu({}) {
+  const [isOpen, setIsOpen] = useState(false)
+  const navigation = useNavigation()
 
-   
-export function PopupMenu({  }){
-
-    const [isOpen, setIsOpen] = useState(false);
-    const navigation = useNavigation();
-
-    return (
-
-      <MenuProvider
-        backHandler={true}
-        style={{
-
-        }}
-      >
-        <Menu
-          renderer={SlideInMenu}
+  return (
+    <MenuProvider backHandler={true} style={{}}>
+      <Menu renderer={SlideInMenu}>
+        <MenuTrigger
+          // text="Click"
+          customStyles={{
+            triggerWrapper: {
+              // top: -20,
+            },
+          }}
         >
-          <MenuTrigger
-            // text="Click"
-            customStyles={{
-              triggerWrapper: {
-                // top: -20,
-              }
-            }}
-          >
-            <Box>
-              <FontAwesomeIcon 
-                  icon={faEllipsisVertical} 
-                  size={20} 
-                  color={COLORS.main}
-                  fade 
-              />
-
+          <Box>
+            <FontAwesomeIcon
+              icon={faEllipsisVertical}
+              size={20}
+              color={COLORS.main}
+              fade
+            />
           </Box>
-          </MenuTrigger>
+        </MenuTrigger>
 
-          <MenuOptions
-            customStyles={{
-              optionsContainer: {
-                // borderRadius: 8,
-                // flexDirection: 'row'
-              },
-            }}
-          >
-              <CustomizedMenuOption 
-                text="Aderir a uma organização"
-                iconName={faPeopleGroup}
-              />
-              <CustomDivider />
-              <CustomizedMenuOption 
-                text="Ver organizações"
-                iconName={faEye}
-              />
-          </MenuOptions>
+        <MenuOptions
+          customStyles={{
+            optionsContainer: {
+              // borderRadius: 8,
+              // flexDirection: 'row'
+            },
+          }}
+        >
+          <CustomizedMenuOption
+            text="Aderir a uma organização"
+            iconName={faPeopleGroup}
+          />
+          <CustomDivider />
+          <CustomizedMenuOption text="Ver organizações" iconName={faEye} />
+        </MenuOptions>
+      </Menu>
+    </MenuProvider>
+  )
+}
 
-        </Menu>
-      </MenuProvider>
-);
-};
-
-{/* <MenuProvider>
+{
+  /* <MenuProvider>
   <Menu
   renderer={renderers.SlideInMenu}
     opened={true}
@@ -272,32 +259,31 @@ export function PopupMenu({  }){
       </View>
     </MenuOptions>
   </Menu>
-</MenuProvider> */}
+</MenuProvider> */
+}
 
-
-
-export function PopMenuWrapper ({ children }) {
-  
+export function PopMenuWrapper({ children }) {
   return (
-    <View style={{
-      flex: 1,
-      backgroundColor: '#231547',
-      justifyContent: 'center',
-      alignItems: 'center',
-    }}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: "#231547",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       {children}
     </View>
   )
-} 
+}
 
-
-   const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: "#fff",
-      justifyContent: "center",
-      alignItems: "center",
-    },
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
+  },
 })
 
-  //  export default PopupMenu;
+//  export default PopupMenu;

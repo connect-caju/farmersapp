@@ -4,7 +4,6 @@
 /* eslint-disable prettier/prettier */
 
 const districts = {
-    
   Niassa: [
     "Chimbunila",
     "Cuamba",
@@ -199,8 +198,6 @@ const districts = {
     "Muanza",
     "Nhamatanda",
   ],
+}
 
-  
-};
-
-export default districts;
+export default districts

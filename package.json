@@ -7,7 +7,8 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint --ext .tsx --ext .ts src/*",
+    "format": "prettier --check ./src"
   },
   "dependencies": {
     "@eva-design/eva": "^2.1.1",
@@ -27,10 +28,12 @@
     "@ui-kitten/components": "^5.1.2",
     "accordion-collapse-react-native": "^1.1.1",
     "bcrypt-react-native": "^1.1.1",
+    "eslint-plugin-prettier": "^5.0.0",
     "lottie-react-native": "^5.1.4",
     "native-base": "^3.4.25",
     "native-base-autocomplete": "^1.3.2",
     "posh-git": "^0.0.9",
+    "prettier": "^3.0.3",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-native": "0.70.6",

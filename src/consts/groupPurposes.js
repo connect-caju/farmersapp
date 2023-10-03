@@ -1,4 +1,1 @@
-
-export const groupPurposes = [
- 'Processamento', 'Produção', 'Venda Conjunta',
-]
+export const groupPurposes = ["Processamento", "Produção", "Venda Conjunta"]

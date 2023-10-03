@@ -1,6 +1,5 @@
-
 export const actorCategory = {
- single: 'Indivíduo',
- organization: 'Grupo',
- company: 'Instituição',
+  single: "Indivíduo",
+  organization: "Grupo",
+  company: "Instituição",
 }
