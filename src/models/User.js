@@ -1,3 +1,5 @@
+/* eslint-disable semi */
+
 /**
  *  User schema (custom user data)
  */

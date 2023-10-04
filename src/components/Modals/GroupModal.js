@@ -2,31 +2,31 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 
-import React, { useCallback, useEffect, useState } from "react"
-import { Text, Stack, Box, Center, Divider } from "native-base"
-import { ScrollView, Pressable, View, TouchableOpacity } from "react-native"
-import { Button, Icon } from "@rneui/themed"
-import CustomDivider from "../Divider/CustomDivider"
-import styles from "./styles"
-import Modal from "react-native-modal"
+import React, { useCallback, useEffect, useState } from "react";
+import { Text, Stack, Box, Center, Divider } from "native-base";
+import { ScrollView, Pressable, View, TouchableOpacity } from "react-native";
+import { Button, Icon } from "@rneui/themed";
+import CustomDivider from "../Divider/CustomDivider";
+import styles from "./styles";
+import Modal from "react-native-modal";
 
-import "react-native-get-random-values"
-import { v4 as uuidv4 } from "uuid"
-import Realm from "realm"
+import "react-native-get-random-values";
+import { v4 as uuidv4 } from "uuid";
+import Realm from "realm";
 
-import SuccessModal from "./SuccessModal"
-import { generateUUID } from "../../helpers/generateUUID"
-import { generateFormattedDate } from "../../helpers/generateFormattedDate"
-import { generateFormattedAdminPost } from "../../helpers/generateFormattedAdminPost"
-import { generateFormattedSurname } from "../../helpers/generateFormattedSurname"
-import { useNavigation } from "@react-navigation/native"
-import { user } from "../../consts/user"
+import SuccessModal from "./SuccessModal";
+import { generateUUID } from "../../helpers/generateUUID";
+import { generateFormattedDate } from "../../helpers/generateFormattedDate";
+import { generateFormattedAdminPost } from "../../helpers/generateFormattedAdminPost";
+import { generateFormattedSurname } from "../../helpers/generateFormattedSurname";
+import { useNavigation } from "@react-navigation/native";
+import { user } from "../../consts/user";
 
-import { realmContext } from "../../models/realmContext"
-import COLORS from "../../consts/colors"
-import { groupAffiliationStatus } from "../../consts/groupAffiliationStatus"
-import { generateUniqueNumber } from "../../helpers/generateUniqueNumber"
-const { useRealm, useObject, useQuery } = realmContext
+import { realmContext } from "../../models/realmContext";
+import COLORS from "../../consts/colors";
+import { groupAffiliationStatus } from "../../consts/groupAffiliationStatus";
+import { generateUniqueNumber } from "../../helpers/generateUniqueNumber";
+const { useRealm, useObject, useQuery } = realmContext;
 
 export default function GroupModal({
   modalVisible,
@@ -52,16 +52,16 @@ export default function GroupModal({
 
   customUserData,
 }) {
-  const [addDataModalVisible, setAddDataModalVisible] = useState(false)
+  const [addDataModalVisible, setAddDataModalVisible] = useState(false);
   // const [farmerId, setFarmerId] = useState(null);
-  const navigation = useNavigation()
-  const realm = useRealm()
+  const navigation = useNavigation();
+  const realm = useRealm();
 
   // const currentUserStat = useObject('UserStat', customUserData?.userId);
   const currentUserStat = useQuery("UserStat").filtered(
     "userId == $0",
     customUserData?.userId,
-  )[0]
+  )[0];
 
   const addGroup = useCallback(
     (farmerData, realm) => {
@@ -79,7 +79,7 @@ export default function GroupModal({
         // manager,
         licence,
         nuit,
-      } = farmerData
+      } = farmerData;
 
       realm.write(async () => {
         const newGroup = await realm.create("Group", {
@@ -101,20 +101,20 @@ export default function GroupModal({
           userProvince: customUserData?.userProvince,
           userId: customUserData?.userId,
           userName: customUserData?.name,
-        })
+        });
         setFarmerItem({
           ownerId: newGroup._id,
           ownerName: newGroup.type + " " + newGroup.name,
           flag: "Grupo",
-        })
-      })
+        });
+      });
 
       // update userStat (1 more farmer registered by the user)
       if (currentUserStat) {
         realm.write(() => {
           currentUserStat.registeredFarmers =
-            currentUserStat.registeredFarmers + 1
-        })
+            currentUserStat.registeredFarmers + 1;
+        });
       } else {
         realm.write(() => {
           const newStat = realm.create("UserStat", {
@@ -125,8 +125,8 @@ export default function GroupModal({
             userProvince: customUserData.userProvince,
             userRole: customUserData.role,
             registeredFarmers: 1,
-          })
-        })
+          });
+        });
       }
     },
     [
@@ -134,17 +134,10 @@ export default function GroupModal({
       farmerData,
       // farmerType
     ],
-  )
+  );
 
   return (
-    // <View
-    //     style={{ flex: 1, }}
-    // >
     <Modal
-      // visible={modalVisible}
-      // animationType="slide"
-      // onRequestClose={()=>setModalVisible(false)}
-      // // statusBarTranslucent={false}
       isVisible={modalVisible}
       supportedOrientations={["portrait", "landscape"]}
       propagateSwipe
@@ -193,7 +186,7 @@ export default function GroupModal({
               size={30}
               color={COLORS.ghostwhite}
               onPress={() => setModalVisible(false)}
-              // style={{ position: 'relative', top: 10, right: 10, }}
+            // style={{ position: 'relative', top: 10, right: 10, }}
             />
           </View>
         </View>
@@ -296,44 +289,44 @@ export default function GroupModal({
                     </Text>
                     {farmerData?.legalStatus ===
                       groupAffiliationStatus.affiliated && (
-                      <Text style={styles.values}>
-                        {farmerData?.affiliationYear} (ano de legalização)
-                      </Text>
-                    )}
+                        <Text style={styles.values}>
+                          {farmerData?.affiliationYear} (ano de legalização)
+                        </Text>
+                      )}
                   </Box>
                 </Box>
               </Stack>
 
               {farmerData?.legalStatus ===
                 groupAffiliationStatus.affiliated && (
-                <>
-                  <CustomDivider
-                    marginVertical="1"
-                    thickness={1}
-                    bg={COLORS.lightgrey}
-                  />
+                  <>
+                    <CustomDivider
+                      marginVertical="1"
+                      thickness={1}
+                      bg={COLORS.lightgrey}
+                    />
 
-                  <Stack direction="row" w="100%" my="1">
-                    <Box w="40%">
-                      <Text style={styles.keys}>Documentos:</Text>
-                    </Box>
-                    <Box w="60%">
-                      <Box>
-                        <Text style={styles.values}>
-                          {farmerData?.nuit
-                            ? farmerData?.nuit + " (NUIT)"
-                            : "Nenhum (NUIT)"}
-                        </Text>
-                        <Text style={styles.values}>
-                          {farmerData?.licence
-                            ? farmerData?.licence + " (Licença/Alvará)"
-                            : "Nenhum (Licença/Alvará)"}
-                        </Text>
+                    <Stack direction="row" w="100%" my="1">
+                      <Box w="40%">
+                        <Text style={styles.keys}>Documentos:</Text>
                       </Box>
-                    </Box>
-                  </Stack>
-                </>
-              )}
+                      <Box w="60%">
+                        <Box>
+                          <Text style={styles.values}>
+                            {farmerData?.nuit
+                              ? farmerData?.nuit + " (NUIT)"
+                              : "Nenhum (NUIT)"}
+                          </Text>
+                          <Text style={styles.values}>
+                            {farmerData?.licence
+                              ? farmerData?.licence + " (Licença/Alvará)"
+                              : "Nenhum (Licença/Alvará)"}
+                          </Text>
+                        </Box>
+                      </Box>
+                    </Stack>
+                  </>
+                )}
 
               <CustomDivider
                 marginVertical="1"
@@ -374,25 +367,25 @@ export default function GroupModal({
                 <Button
                   onPress={() => {
                     try {
-                      addGroup(farmerData, realm)
-                      setModalVisible(false)
-                      setIsCoordinatesModalVisible(true)
+                      addGroup(farmerData, realm);
+                      setModalVisible(false);
+                      setIsCoordinatesModalVisible(true);
                     } catch (error) {
                       throw new Error("Failed to register Group", {
                         cause: error,
-                      })
+                      });
                     } finally {
-                      setGroupType("")
-                      setGroupName("")
-                      setGroupAffiliationYear("")
-                      setGroupAdminPost("")
-                      setGroupVillage("")
+                      setGroupType("");
+                      setGroupName("");
+                      setGroupAffiliationYear("");
+                      setGroupAdminPost("");
+                      setGroupVillage("");
                       // setGroupManagerName('');
                       // setGroupManagerPhone('');
-                      setGroupOperatingLicence("")
-                      setGroupNuit("")
-                      setGroupMembersNumber("")
-                      setGroupWomenNumber("")
+                      setGroupOperatingLicence("");
+                      setGroupNuit("");
+                      setGroupMembersNumber("");
+                      setGroupWomenNumber("");
                     }
                   }}
                   type="outline"
@@ -408,7 +401,7 @@ export default function GroupModal({
       </View>
     </Modal>
     // </View>
-  )
+  );
 }
 
 // export default GroupModal;

@@ -3,35 +3,28 @@ import React from "react"
 import { StatusBar } from "react-native"
 import { NavigationContainer } from "@react-navigation/native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-import { Icon } from "@rneui/themed"
+import { Icon } from "@rneui/themed";
 import {
   widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-  listenOrientationChange as lor,
-  removeOrientationListener as rol,
-} from "react-native-responsive-screen"
+} from "react-native-responsive-screen";
 
 import {
   responsiveFontSize,
-  responsiveScreenFontSize,
-  responsiveHeight,
-  responsiveWidth,
-  responsiveScreenHeight,
-  responsiveScreenWidth,
-  useDimensionsChange,
-} from "react-native-responsive-dimensions"
+} from "react-native-responsive-dimensions";
 
-import HomeStackScreen from "../Stacks/HomeStackScreen"
-import FarmersStackScreen from "../Stacks/FarmersStackScreen"
-import COLORS from "../../consts/colors"
-import SearchScreen from "../../screens/SearchScreen/SearchScreen"
+import HomeStackScreen from "../Stacks/HomeStackScreen";
+import FarmersStackScreen from "../Stacks/FarmersStackScreen";
+import COLORS from "../../consts/colors";
 
-import { realmContext } from "../../models/realmContext"
-const { RealmProvider } = realmContext
+// import { realmContext } from "../../models/realmContext";
+// import { useRealm } from "@realm/react";
+// const { RealmProvider } = realmContext;
 
-const Tab = createBottomTabNavigator()
+const Tab = createBottomTabNavigator();
+
 
 export default function AppTabs() {
+
   return (
     <>
       <StatusBar barStyle="dark-content" backgroundColor="#EBEBE4" />

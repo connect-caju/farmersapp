@@ -3,8 +3,8 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
-import { Text, Pressable } from "react-native"
-import React, { useState, useCallback } from "react"
+import { Text, Pressable } from "react-native";
+import React, { useState, useCallback } from "react";
 import {
   Box,
   FormControl,
@@ -13,35 +13,35 @@ import {
   CheckIcon,
   Center,
   //   Radio,
-} from "native-base"
-import { Icon, CheckBox } from "@rneui/themed"
+} from "native-base";
+import { Icon, CheckBox } from "@rneui/themed";
 // import { Datepicker  } from '@ui-kitten/components';
-import { DatePickerModal } from "react-native-paper-dates"
-import { pt, registerTranslation } from "react-native-paper-dates"
-registerTranslation("pt", pt)
+import { DatePickerModal } from "react-native-paper-dates";
+import { pt, registerTranslation } from "react-native-paper-dates";
+registerTranslation("pt", pt);
 // import {
 //   KeyboardAwareScrollView,
 //   useMaskedTextInput,
 // } from 'react-native-keyboard-tools';
-import { SelectList } from "react-native-dropdown-select-list"
+import { SelectList } from "react-native-dropdown-select-list";
 // import {Dropdown} from 'react-native-element-dropdown';
 
-import { CustomInput } from "../../components/Inputs/CustomInput"
-import administrativePosts from "../../consts/administrativePosts"
-import provinces from "../../consts/provinces"
+import { CustomInput } from "../../components/Inputs/CustomInput";
+import administrativePosts from "../../consts/administrativePosts";
+import provinces from "../../consts/provinces";
 // import provinces2 from '../../consts/provinces2';
 
-import districts from "../../consts/districts"
-import villages from "../../consts/villages"
-import idDocTypes from "../../consts/idDocTypes"
-import CustomDivider from "../../components/Divider/CustomDivider"
-import styles from "./styles"
+import districts from "../../consts/districts";
+import villages from "../../consts/villages";
+import idDocTypes from "../../consts/idDocTypes";
+import CustomDivider from "../../components/Divider/CustomDivider";
+import styles from "./styles";
 // import {localeDateService} from '../../helpers/dates';
 // import countries from '../../consts/countries';
-import COLORS from "../../consts/colors"
+import COLORS from "../../consts/colors";
 
 // import {realmContext} from '../../models/realmContext';
-import countries3 from "../../consts/countries3"
+import countries3 from "../../consts/countries3";
 // const {useRealm} = realmContext;
 
 export default function IndividualFarmerForm({
@@ -89,19 +89,23 @@ export default function IndividualFarmerForm({
   errors,
   setErrors,
 }) {
-  const [openDatePicker, setOpenDatePicker] = useState(false)
+  const [openDatePicker, setOpenDatePicker] = useState(false);
 
   const onDismissSingle = useCallback(() => {
-    setOpenDatePicker(false)
-  }, [setOpenDatePicker])
+    setOpenDatePicker(false);
+  }, [setOpenDatePicker]);
 
   const onConfirmSingle = useCallback(
     (params) => {
-      setOpenDatePicker(false)
-      setBirthDate(params?.date)
+      setOpenDatePicker(false);
+      setBirthDate(params?.date);
+      setErrors((prev) => ({
+        ...prev,
+        birthDate: "",
+      }));
     },
     [setOpenDatePicker, setBirthDate],
-  )
+  );
 
   return (
     <Box px="3" my="6">
@@ -133,8 +137,8 @@ export default function IndividualFarmerForm({
                   color: isSprayingAgent
                     ? COLORS.main
                     : errors?.isSprayingAgent
-                    ? COLORS.red
-                    : COLORS.grey,
+                      ? COLORS.red
+                      : COLORS.grey,
                 }}
                 title="Sim"
                 checked={isSprayingAgent}
@@ -155,12 +159,12 @@ export default function IndividualFarmerForm({
                   />
                 }
                 onPress={() => {
-                  setIsNotSprayingAgent(false)
-                  setIsSprayingAgent(true)
+                  setIsNotSprayingAgent(false);
+                  setIsSprayingAgent(true);
                   setErrors({
                     ...errors,
                     isSprayingAgent: "",
-                  })
+                  });
                 }}
               />
             </Box>
@@ -176,8 +180,8 @@ export default function IndividualFarmerForm({
                   color: isNotSprayingAgent
                     ? COLORS.main
                     : errors?.isSprayingAgent
-                    ? COLORS.red
-                    : COLORS.grey,
+                      ? COLORS.red
+                      : COLORS.grey,
                 }}
                 title="Não"
                 checked={isNotSprayingAgent}
@@ -198,12 +202,12 @@ export default function IndividualFarmerForm({
                   />
                 }
                 onPress={() => {
-                  setIsNotSprayingAgent(true)
-                  setIsSprayingAgent(false)
+                  setIsNotSprayingAgent(true);
+                  setIsSprayingAgent(false);
                   setErrors({
                     ...errors,
                     isSprayingAgent: "",
-                  })
+                  });
                 }}
               />
             </Box>
@@ -213,7 +217,7 @@ export default function IndividualFarmerForm({
               leftIcon={<Icon name="error-outline" size={16} color="red" />}
               _text={{ fontSize: "xs" }}
             >
-              {}
+              { }
             </FormControl.ErrorMessage>
           ) : (
             <FormControl.HelperText />
@@ -231,8 +235,8 @@ export default function IndividualFarmerForm({
             placeholder="Apelido"
             value={surname}
             onChangeText={(newSurname) => {
-              setErrors((prev) => ({ ...prev, surname: "" }))
-              setSurname(newSurname)
+              setErrors((prev) => ({ ...prev, surname: "" }));
+              setSurname(newSurname);
             }}
           />
           {"surname" in errors ? (
@@ -255,8 +259,8 @@ export default function IndividualFarmerForm({
             placeholder="Outros nomes"
             value={otherNames}
             onChangeText={(newNames) => {
-              setErrors((prev) => ({ ...prev, otherNames: "" }))
-              setOtherNames(newNames)
+              setErrors((prev) => ({ ...prev, otherNames: "" }));
+              setOtherNames(newNames);
             }}
           />
           {"otherNames" in errors ? (
@@ -303,8 +307,8 @@ export default function IndividualFarmerForm({
                   )
                 }
                 onValueChange={(newGender) => {
-                  setErrors((prev) => ({ ...prev, gender: "" }))
-                  setGender(newGender)
+                  setErrors((prev) => ({ ...prev, gender: "" }));
+                  setGender(newGender);
                 }}
               >
                 <Select.Item label="Masculino" value="Masculino" />
@@ -335,8 +339,8 @@ export default function IndividualFarmerForm({
                 value={familySize}
                 keyboardType="numeric"
                 onChangeText={(newSize) => {
-                  setErrors((prev) => ({ ...prev, familySize: "" }))
-                  setFamilySize(newSize)
+                  setErrors((prev) => ({ ...prev, familySize: "" }));
+                  setFamilySize(newSize);
                 }}
               />
               {"familySize" in errors ? (
@@ -395,8 +399,8 @@ export default function IndividualFarmerForm({
                 }
                 mt={1}
                 onValueChange={(newAdminPost) => {
-                  setErrors((prev) => ({ ...prev, addressAdminPost: "" }))
-                  setAddressAdminPost(newAdminPost)
+                  setErrors((prev) => ({ ...prev, addressAdminPost: "" }));
+                  setAddressAdminPost(newAdminPost);
                 }}
               >
                 {selectedAddressAdminPosts?.map((adminPost, index) => (
@@ -471,8 +475,8 @@ export default function IndividualFarmerForm({
                 keyboardType="phone-pad"
                 value={primaryPhone}
                 onChangeText={(newPhone) => {
-                  setErrors((prev) => ({ ...prev, primaryPhone: "" }))
-                  setPrimaryPhone(newPhone)
+                  setErrors((prev) => ({ ...prev, primaryPhone: "" }));
+                  setPrimaryPhone(newPhone);
                 }}
                 InputLeftElement={
                   <Icon name="phone" color="grey" size={20} type="material" />
@@ -500,8 +504,8 @@ export default function IndividualFarmerForm({
                 keyboardType="phone-pad"
                 value={secondaryPhone}
                 onChangeText={(newPhone) => {
-                  setErrors((prev) => ({ ...prev, secondaryPhone: "" }))
-                  setSecondaryPhone(newPhone)
+                  setErrors((prev) => ({ ...prev, secondaryPhone: "" }));
+                  setSecondaryPhone(newPhone);
                 }}
                 InputLeftElement={
                   <Icon name="phone" color="grey" size={20} type="material" />
@@ -551,9 +555,8 @@ export default function IndividualFarmerForm({
                       }}
                     >
                       {birthDate
-                        ? `${birthDate.getDate()}/${
-                            birthDate.getMonth() + 1
-                          }/${birthDate.getFullYear()}`
+                        ? `${birthDate.getDate()}/${birthDate.getMonth() + 1
+                        }/${birthDate.getFullYear()}`
                         : "Data de nascimento"}
                     </Text>
                     <Icon name="date-range" size={30} color={COLORS.main} />
@@ -655,8 +658,8 @@ export default function IndividualFarmerForm({
                 }
                 mt={1}
                 onValueChange={(newProvince) => {
-                  setErrors((prev) => ({ ...prev, birthProvince: "" }))
-                  setBirthProvince(newProvince)
+                  setErrors((prev) => ({ ...prev, birthProvince: "" }));
+                  setBirthProvince(newProvince);
                 }}
               >
                 {provinces?.map((province, index) => (
@@ -721,25 +724,25 @@ export default function IndividualFarmerForm({
                     }
                     mt={1}
                     onValueChange={(newDistrict) => {
-                      setErrors((prev) => ({ ...prev, birthDistrict: "" }))
-                      setBirthDistrict(newDistrict)
+                      setErrors((prev) => ({ ...prev, birthDistrict: "" }));
+                      setBirthDistrict(newDistrict);
                     }}
                   >
                     {birthProvince === "País Estrangeiro"
                       ? countries3?.map((country, index) => (
-                          <Select.Item
-                            key={index}
-                            label={country}
-                            value={country}
-                          />
-                        ))
+                        <Select.Item
+                          key={index}
+                          label={country}
+                          value={country}
+                        />
+                      ))
                       : districts[birthProvince]?.map((district, index) => (
-                          <Select.Item
-                            key={index}
-                            label={district}
-                            value={district}
-                          />
-                        ))}
+                        <Select.Item
+                          key={index}
+                          label={district}
+                          value={district}
+                        />
+                      ))}
                   </Select>
 
                   {"birthDistrict" in errors ? (
@@ -794,8 +797,8 @@ export default function IndividualFarmerForm({
                         }
                         mt={1}
                         onValueChange={(newAdminPost) => {
-                          setErrors((prev) => ({ ...prev, birthAdminPost: "" }))
-                          setBirthAdminPost(newAdminPost)
+                          setErrors((prev) => ({ ...prev, birthAdminPost: "" }));
+                          setBirthAdminPost(newAdminPost);
                         }}
                       >
                         {administrativePosts[birthDistrict]?.map(
@@ -839,8 +842,8 @@ export default function IndividualFarmerForm({
                 </FormControl.Label>
                 <SelectList
                   setSelected={(newDistrict) => {
-                    setErrors((prev) => ({ ...prev, birthDistrict: "" }))
-                    setBirthDistrict(newDistrict)
+                    setErrors((prev) => ({ ...prev, birthDistrict: "" }));
+                    setBirthDistrict(newDistrict);
                   }}
                   data={countries3}
                   save="value"
@@ -1018,8 +1021,8 @@ export default function IndividualFarmerForm({
                     ...prev,
                     docType: "",
                     docNumber: "",
-                  }))
-                  setDocType(newDocType)
+                  }));
+                  setDocType(newDocType);
                 }}
               >
                 {idDocTypes?.map((docType) => (
@@ -1058,8 +1061,8 @@ export default function IndividualFarmerForm({
                 value={docNumber}
                 placeholder="Número do Documento"
                 onChangeText={(newDocNumber) => {
-                  setErrors((prev) => ({ ...prev, docNumber: "" }))
-                  setDocNumber(newDocNumber)
+                  setErrors((prev) => ({ ...prev, docNumber: "" }));
+                  setDocNumber(newDocNumber);
                 }}
               />
               {"docNumber" in errors ? (
@@ -1087,8 +1090,8 @@ export default function IndividualFarmerForm({
                 value={nuit}
                 keyboardType="numeric"
                 onChangeText={(newNuit) => {
-                  setErrors((prev) => ({ ...prev, nuit: "" }))
-                  setNuit(newNuit)
+                  setErrors((prev) => ({ ...prev, nuit: "" }));
+                  setNuit(newNuit);
                 }}
               />
               {"nuit" in errors ? (
@@ -1145,8 +1148,8 @@ export default function IndividualFarmerForm({
                   color: isGroupMember
                     ? COLORS.main
                     : errors?.isGroupMember
-                    ? COLORS.red
-                    : COLORS.grey,
+                      ? COLORS.red
+                      : COLORS.grey,
                 }}
                 title="Sim"
                 checked={isGroupMember}
@@ -1167,12 +1170,12 @@ export default function IndividualFarmerForm({
                   />
                 }
                 onPress={() => {
-                  setIsNotGroupMember(false)
-                  setIsGroupMember(true)
+                  setIsNotGroupMember(false);
+                  setIsGroupMember(true);
                   setErrors({
                     ...errors,
                     isGroupMember: "",
-                  })
+                  });
                 }}
               />
             </Box>
@@ -1188,8 +1191,8 @@ export default function IndividualFarmerForm({
                   color: isNotGroupMember
                     ? COLORS.main
                     : errors?.isGroupMember
-                    ? COLORS.red
-                    : COLORS.grey,
+                      ? COLORS.red
+                      : COLORS.grey,
                 }}
                 title="Não"
                 checked={isNotGroupMember}
@@ -1210,12 +1213,12 @@ export default function IndividualFarmerForm({
                   />
                 }
                 onPress={() => {
-                  setIsNotGroupMember(true)
-                  setIsGroupMember(false)
+                  setIsNotGroupMember(true);
+                  setIsGroupMember(false);
                   setErrors({
                     ...errors,
                     isGroupMember: "",
-                  })
+                  });
                 }}
               />
             </Box>
@@ -1225,7 +1228,7 @@ export default function IndividualFarmerForm({
               leftIcon={<Icon name="error-outline" size={16} color="red" />}
               _text={{ fontSize: "xs" }}
             >
-              {}
+              { }
             </FormControl.ErrorMessage>
           ) : (
             <FormControl.HelperText />
@@ -1233,5 +1236,5 @@ export default function IndividualFarmerForm({
         </FormControl>
       </Box>
     </Box>
-  )
+  );
 }

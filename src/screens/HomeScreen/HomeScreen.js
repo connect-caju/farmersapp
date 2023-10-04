@@ -1,3 +1,4 @@
+/* eslint-disable semi */
 import {
   View,
   Text,
@@ -6,7 +7,6 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  AppState,
 } from "react-native"
 import React, { useCallback, useState, useEffect } from "react"
 import { Box, Stack, Center } from "native-base"
@@ -15,21 +15,9 @@ import { useFocusEffect } from "@react-navigation/native"
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-  listenOrientationChange as lor,
-  removeOrientationListener as rol,
 } from "react-native-responsive-screen"
 
-import {
-  responsiveFontSize,
-  responsiveScreenFontSize,
-  responsiveHeight,
-  responsiveWidth,
-  responsiveScreenHeight,
-  responsiveScreenWidth,
-  useDimensionsChange,
-} from "react-native-responsive-dimensions"
-import Toast from "react-native-toast-message"
-import AsyncStorage from "@react-native-async-storage/async-storage"
+import { responsiveFontSize } from "react-native-responsive-dimensions"
 
 import COLORS from "../../consts/colors"
 import CustomActivityIndicator from "../../components/ActivityIndicator/CustomActivityIndicator"
@@ -40,15 +28,18 @@ import { roles } from "../../consts/roles"
 import UserProfile from "../../components/UserProfile/UserProfile"
 import { getPercentage } from "../../helpers/getPercentage"
 
-import { useUser, useApp } from "@realm/react"
+import { useUser } from "@realm/react"
 import { realmContext } from "../../models/realmContext"
-const { useRealm, useQuery, useObject } = realmContext
+const { useRealm, useQuery } = realmContext
 
 // sync subscription by this name
 const userStats = "userStats"
 
+// realm variable used for manual client reset in the syncConfig
+export let realm
+
 export default function HomeScreen({ route, navigation }) {
-  const realm = useRealm()
+  realm = useRealm()
   const user = useUser()
   const customUserData = user?.customData
 
@@ -259,7 +250,7 @@ export default function HomeScreen({ route, navigation }) {
           <Stack
             direction="row"
             w="100%"
-            // py="5"
+          // py="5"
           >
             <Box w="40%" alignItems={"center"}>
               <Image

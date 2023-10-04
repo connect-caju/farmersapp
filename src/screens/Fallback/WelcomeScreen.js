@@ -7,9 +7,9 @@ import {
   Image,
   StatusBar,
   TextInput,
-} from "react-native"
-import React, { useEffect, useState, useCallback } from "react"
-import { Button, Icon, BottomSheet } from "@rneui/themed"
+} from "react-native";
+import React, { useEffect, useState, useCallback } from "react";
+import { Button, Icon, BottomSheet } from "@rneui/themed";
 import {
   Box,
   Stack,
@@ -18,75 +18,75 @@ import {
   Select,
   CheckIcon,
   ScrollView,
-} from "native-base"
-import AwesomeAlert from "react-native-awesome-alerts"
+} from "native-base";
+import AwesomeAlert from "react-native-awesome-alerts";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from "react-native-responsive-screen"
+} from "react-native-responsive-screen";
 
-import { responsiveFontSize } from "react-native-responsive-dimensions"
+import { responsiveFontSize } from "react-native-responsive-dimensions";
 
-import styles from "./styles"
-import { CustomInput } from "../../components/Inputs/CustomInput"
-import validateUserData from "../../helpers/validateUserData"
-import districts from "../../consts/districts"
-import COLORS from "../../consts/colors"
+import styles from "./styles";
+import { CustomInput } from "../../components/Inputs/CustomInput";
+import validateUserData from "../../helpers/validateUserData";
+import districts from "../../consts/districts";
+import COLORS from "../../consts/colors";
 
-import { Realm, useApp } from "@realm/react"
-import { secrets } from "../../secrets"
-import { BSON } from "realm"
-import { roles } from "../../consts/roles"
-import { errorMessages } from "../../consts/errorMessages"
-import CustomActivityIndicator from "../../components/ActivityIndicator/CustomActivityIndicator"
-import { cooperatives } from "../../consts/cooperatives"
+import { Realm, useApp } from "@realm/react";
+import { secrets } from "../../secrets";
+import { BSON } from "realm";
+import { roles } from "../../consts/roles";
+import { errorMessages } from "../../consts/errorMessages";
+import CustomActivityIndicator from "../../components/ActivityIndicator/CustomActivityIndicator";
+import { cooperatives } from "../../consts/cooperatives";
 
 export default function WelcomeScreen() {
-  const [isLoggingIn, setIsLoggingIn] = useState(true)
-  const [showPassword, setShowPassword] = useState(false)
+  const [isLoggingIn, setIsLoggingIn] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
 
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [passwordConfirm, setPasswordConfirm] = useState("")
-  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false)
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
   // ------------------------------------------
-  const [alert, setAlert] = useState(false)
-  const [messageAlert, setMessageAlert] = useState("")
-  const [titleAlert, setTitleAlert] = useState("")
-  const [cancelText, setCancelText] = useState("")
-  const [confirmText, setConfirmText] = useState("")
-  const [showCancelButton, setShowCancelButton] = useState(false)
-  const [showConfirmButton, setShowConfirmButton] = useState(false)
-  const [errorFlag, setErrorFlag] = useState(null)
+  const [alert, setAlert] = useState(false);
+  const [messageAlert, setMessageAlert] = useState("");
+  const [titleAlert, setTitleAlert] = useState("");
+  const [cancelText, setCancelText] = useState("");
+  const [confirmText, setConfirmText] = useState("");
+  const [showCancelButton, setShowCancelButton] = useState(false);
+  const [showConfirmButton, setShowConfirmButton] = useState(false);
+  const [errorFlag, setErrorFlag] = useState(null);
 
   // ---------------------------------------------
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState({});
 
-  const [role, setRole] = useState(roles.fieldAgent)
-  const [userProvince, setUserProvince] = useState("")
-  const [userDistrict, setUserDistrict] = useState("")
-  const [selectedDistricts, setSelectedDistricts] = useState([])
-  const [coop, setCoop] = useState("")
+  const [role, setRole] = useState(roles.fieldAgent);
+  const [userProvince, setUserProvince] = useState("");
+  const [userDistrict, setUserDistrict] = useState("");
+  const [selectedDistricts, setSelectedDistricts] = useState([]);
+  const [coop, setCoop] = useState("");
 
-  const [phone, setPhone] = useState(null)
+  const [phone, setPhone] = useState(null);
 
   // ----------------------------------------------------
-  const [bottomSheetVisible, setBottomSheetVisible] = useState(false)
+  const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
 
   const toggleBottomSheet = () => {
-    setBottomSheetVisible(!bottomSheetVisible)
-  }
+    setBottomSheetVisible(!bottomSheetVisible);
+  };
   // ---------------------------------------------------
 
   // -------------------------------------------
   // const [connectionStatus, setConnectionStatus] = useState(false)
 
   const [loadingActivitiyIndicator, setLoadingActivityIndicator] =
-    useState(false)
+    useState(false);
 
-  const app = useApp()
+  const app = useApp();
 
   // on user registration
   const onSignUp = useCallback(
@@ -112,11 +112,11 @@ export default function WelcomeScreen() {
         userDistrict: newUserDistrict,
         userProvince: newUserProvince,
         coop: newCoop,
-      }
+      };
 
       // validate user data and return nothing if any error is found
       if (!(await validateUserData(userData, errors, setErrors))) {
-        return
+        return;
       }
 
       // extract validated user data
@@ -129,21 +129,21 @@ export default function WelcomeScreen() {
         userDistrict,
         userProvince,
         coop,
-      } = await validateUserData(userData, errors, setErrors)
+      } = await validateUserData(userData, errors, setErrors);
 
       // try to register new user
       try {
         // remove any current user
         // app?.currentUser?.logOut();
 
-        await app.emailPasswordAuth.registerUser({ email, password })
+        await app.emailPasswordAuth.registerUser({ email, password });
 
-        const creds = Realm.Credentials.emailPassword(email, password)
-        const newUser = await app.logIn(creds)
-        const mongo = newUser.mongoClient(secrets.serviceName)
+        const creds = Realm.Credentials.emailPassword(email, password);
+        const newUser = await app.logIn(creds);
+        const mongo = newUser.mongoClient(secrets.serviceName);
         const collection = mongo
           .db(secrets.databaseName)
-          .collection(secrets.userCollectionName)
+          .collection(secrets.userCollectionName);
 
         // pack the validated user data and save it into the database
         const validatedUserdata = {
@@ -162,20 +162,20 @@ export default function WelcomeScreen() {
           image: "",
           lastLoginAt: new Date(),
           createdAt: new Date(),
-        }
+        };
 
         // save custom user data
-        const result = await collection.insertOne(validatedUserdata)
-        const customUserData = await newUser.refreshCustomData()
+        const result = await collection.insertOne(validatedUserdata);
+        const customUserData = await newUser.refreshCustomData();
       } catch (error) {
-        setAlert(true)
-        console.log("error: ", { cause: error })
-        setErrorFlag(error)
-        return
+        setAlert(true);
+        console.log("error: ", { cause: error });
+        setErrorFlag(error);
+        return;
       }
     },
     [app, email, password],
-  )
+  );
 
   useEffect(() => {
     if (
@@ -183,47 +183,47 @@ export default function WelcomeScreen() {
       (errorFlag?.toString()?.includes(errorMessages.signIn.logUsernameFlag) ||
         errorFlag?.toString()?.includes(errorMessages.signIn.logPasswordFlag))
     ) {
-      setTitleAlert(errorMessages.signIn.title)
-      setMessageAlert(errorMessages.signIn.message)
-      setShowCancelButton(errorMessages.signIn.showCancelButton)
-      setShowConfirmButton(errorMessages.signIn.showConfirmButton)
-      setConfirmText(errorMessages.signIn.confirmText)
-      setCancelText(errorMessages.signIn.cancelText)
+      setTitleAlert(errorMessages.signIn.title);
+      setMessageAlert(errorMessages.signIn.message);
+      setShowCancelButton(errorMessages.signIn.showCancelButton);
+      setShowConfirmButton(errorMessages.signIn.showConfirmButton);
+      setConfirmText(errorMessages.signIn.confirmText);
+      setCancelText(errorMessages.signIn.cancelText);
     } else if (
       alert &&
       errorFlag?.toString()?.includes(errorMessages.network.logFlag)
     ) {
-      setTitleAlert(errorMessages.network.title)
-      setMessageAlert(errorMessages.network.message)
-      setShowCancelButton(errorMessages.network.showCancelButton)
-      setShowConfirmButton(errorMessages.network.showConfirmButton)
-      setConfirmText(errorMessages.network.confirmText)
-      setCancelText(errorMessages.network.cancelText)
+      setTitleAlert(errorMessages.network.title);
+      setMessageAlert(errorMessages.network.message);
+      setShowCancelButton(errorMessages.network.showCancelButton);
+      setShowConfirmButton(errorMessages.network.showConfirmButton);
+      setConfirmText(errorMessages.network.confirmText);
+      setCancelText(errorMessages.network.cancelText);
     } else if (
       alert &&
       errorFlag?.toString()?.includes(errorMessages.signUp.logFlag)
     ) {
-      setTitleAlert(errorMessages.signUp.title)
-      setMessageAlert(errorMessages.signUp.message)
-      setShowCancelButton(errorMessages.signUp.showCancelButton)
-      setShowConfirmButton(errorMessages.signUp.showConfirmButton)
-      setConfirmText(errorMessages.signUp.confirmText)
-      setCancelText(errorMessages.signUp.cancelText)
+      setTitleAlert(errorMessages.signUp.title);
+      setMessageAlert(errorMessages.signUp.message);
+      setShowCancelButton(errorMessages.signUp.showCancelButton);
+      setShowConfirmButton(errorMessages.signUp.showConfirmButton);
+      setConfirmText(errorMessages.signUp.confirmText);
+      setCancelText(errorMessages.signUp.cancelText);
     } else if (alert) {
-      setTitleAlert(errorMessages.server.title)
-      setMessageAlert(errorMessages.server.message)
-      setShowCancelButton(errorMessages.server.showCancelButton)
-      setShowConfirmButton(errorMessages.server.showConfirmButton)
-      setConfirmText(errorMessages.server.confirmText)
-      setCancelText(errorMessages.server.cancelText)
+      setTitleAlert(errorMessages.server.title);
+      setMessageAlert(errorMessages.server.message);
+      setShowCancelButton(errorMessages.server.showCancelButton);
+      setShowConfirmButton(errorMessages.server.showConfirmButton);
+      setConfirmText(errorMessages.server.confirmText);
+      setCancelText(errorMessages.server.cancelText);
     }
-  }, [errorFlag, alert])
+  }, [errorFlag, alert]);
 
   useEffect(() => {
     if (userProvince) {
-      setSelectedDistricts(districts[userProvince])
+      setSelectedDistricts(districts[userProvince]);
     }
-  }, [userProvince, errors, isLoggingIn])
+  }, [userProvince, errors, isLoggingIn]);
 
   if (loadingActivitiyIndicator) {
     return (
@@ -231,7 +231,7 @@ export default function WelcomeScreen() {
         loadingActivitiyIndicator={loadingActivitiyIndicator}
         setLoadingActivityIndicator={setLoadingActivityIndicator}
       />
-    )
+    );
   }
 
   //   console.log('Welcome Component: app is shifting from background to foreground and vice-versa');
@@ -330,21 +330,21 @@ export default function WelcomeScreen() {
             cancelButtonColor={COLORS.danger}
             confirmButtonColor={COLORS.main}
             onCancelPressed={() => {
-              setAlert(false)
-              setErrorFlag(null)
+              setAlert(false);
+              setErrorFlag(null);
             }}
             onConfirmPressed={() => {
-              setAlert(false)
+              setAlert(false);
               if (isLoggingIn) {
                 // setIsLoggingIn(false);
               } else if (passwordConfirm) {
                 //
               } else {
-                setIsLoggingIn(true)
-                setEmail("")
-                setPassword("")
+                setIsLoggingIn(true);
+                setEmail("");
+                setPassword("");
               }
-              setErrorFlag(null)
+              setErrorFlag(null);
             }}
           />
 
@@ -373,8 +373,8 @@ export default function WelcomeScreen() {
                     type="text"
                     autoCapitalize="words"
                     onChangeText={(newName) => {
-                      setErrors((prev) => ({ ...prev, name: "" }))
-                      setName(newName)
+                      setErrors((prev) => ({ ...prev, name: "" }));
+                      setName(newName);
                     }}
                   />
                   {"name" in errors ? (
@@ -401,8 +401,8 @@ export default function WelcomeScreen() {
                   keyboardType={"email-address"}
                   value={email}
                   onChangeText={(value) => {
-                    setErrors((prev) => ({ ...prev, email: "" }))
-                    setEmail(value?.toLowerCase()?.trim())
+                    setErrors((prev) => ({ ...prev, email: "" }));
+                    setEmail(value?.toLowerCase()?.trim());
                   }}
                   InputLeftElement={
                     <Icon
@@ -434,8 +434,8 @@ export default function WelcomeScreen() {
                     secureTextEntry={!showPassword ? true : false}
                     value={password}
                     onChangeText={(newPassword) => {
-                      setErrors((prev) => ({ ...prev, password: "" }))
-                      setPassword(newPassword)
+                      setErrors((prev) => ({ ...prev, password: "" }));
+                      setPassword(newPassword);
                     }}
                     InputRightElement={
                       <Icon
@@ -477,8 +477,8 @@ export default function WelcomeScreen() {
                         secureTextEntry={!showPassword ? true : false}
                         value={password}
                         onChangeText={(newPassword) => {
-                          setErrors((prev) => ({ ...prev, password: "" }))
-                          setPassword(newPassword)
+                          setErrors((prev) => ({ ...prev, password: "" }));
+                          setPassword(newPassword);
                         }}
                         InputRightElement={
                           <Icon
@@ -524,8 +524,8 @@ export default function WelcomeScreen() {
                           setErrors((prev) => ({
                             ...prev,
                             passwordConfirm: "",
-                          }))
-                          setPasswordConfirm(newPasswordConfirm)
+                          }));
+                          setPasswordConfirm(newPasswordConfirm);
                         }}
                         InputRightElement={
                           <Icon
@@ -576,8 +576,8 @@ export default function WelcomeScreen() {
                         keyboardType="phone-pad"
                         value={phone}
                         onChangeText={(newPhone) => {
-                          setErrors((prev) => ({ ...prev, phone: "" }))
-                          setPhone(newPhone)
+                          setErrors((prev) => ({ ...prev, phone: "" }));
+                          setPhone(newPhone);
                         }}
                         InputLeftElement={
                           <Icon
@@ -633,7 +633,7 @@ export default function WelcomeScreen() {
                                 size={25}
                                 color="grey"
                                 onPress={() => {
-                                  setRole("")
+                                  setRole("");
                                 }}
                               />
                             ) : (
@@ -646,8 +646,8 @@ export default function WelcomeScreen() {
                           }
                           mt={1}
                           onValueChange={(newRole) => {
-                            setErrors((prev) => ({ ...prev, role: "" }))
-                            setRole(newRole)
+                            setErrors((prev) => ({ ...prev, role: "" }));
+                            setRole(newRole);
                           }}
                         >
                           <Select.Item
@@ -720,9 +720,9 @@ export default function WelcomeScreen() {
                                 color="grey"
                                 onPress={() => {
                                   if (!role.includes(roles.provincialManager)) {
-                                    setUserDistrict("")
+                                    setUserDistrict("");
                                   }
-                                  setUserProvince("")
+                                  setUserProvince("");
                                 }}
                               />
                             ) : (
@@ -735,11 +735,11 @@ export default function WelcomeScreen() {
                           }
                           mt={1}
                           onValueChange={(newProvince) => {
-                            setErrors((prev) => ({ ...prev, userProvince: "" }))
+                            setErrors((prev) => ({ ...prev, userProvince: "" }));
                             if (!role.includes(roles.provincialManager)) {
-                              setUserDistrict("")
+                              setUserDistrict("");
                             }
-                            setUserProvince(newProvince)
+                            setUserProvince(newProvince);
                           }}
                         >
                           <Select.Item
@@ -806,8 +806,8 @@ export default function WelcomeScreen() {
                               setErrors((prev) => ({
                                 ...prev,
                                 userDistrict: "",
-                              }))
-                              setUserDistrict(newDistrict)
+                              }));
+                              setUserDistrict(newDistrict);
                             }}
                           >
                             {selectedDistricts?.map((district, index) => (
@@ -868,7 +868,7 @@ export default function WelcomeScreen() {
                                 size={25}
                                 color="grey"
                                 onPress={() => {
-                                  setCoop("")
+                                  setCoop("");
                                 }}
                               />
                             ) : (
@@ -881,8 +881,8 @@ export default function WelcomeScreen() {
                           }
                           mt={1}
                           onValueChange={(newCoop) => {
-                            setErrors((prev) => ({ ...prev, coop: "" }))
-                            setCoop(newCoop)
+                            setErrors((prev) => ({ ...prev, coop: "" }));
+                            setCoop(newCoop);
                           }}
                         >
                           {cooperatives[userDistrict]?.map((coop, index) => (
@@ -921,14 +921,14 @@ export default function WelcomeScreen() {
                           const creds = Realm.Credentials.emailPassword(
                             email,
                             password,
-                          )
-                          await app?.logIn(creds)
+                          );
+                          await app?.logIn(creds);
                         }
-                        return app.currentUser
+                        return app.currentUser;
                       } catch (error) {
-                        setAlert(true)
-                        setErrorFlag(error)
-                        return
+                        setAlert(true);
+                        setErrorFlag(error);
+                        return;
                       }
                     } else {
                       await onSignUp(
@@ -941,7 +941,7 @@ export default function WelcomeScreen() {
                         userDistrict,
                         userProvince,
                         coop,
-                      )
+                      );
                     }
                   }}
                   type="outline"
@@ -965,7 +965,7 @@ export default function WelcomeScreen() {
                       disabled
                       onPress={
                         // toggleBottomSheet
-                        () => {}
+                        () => { }
                       }
                     >
                       <Text
@@ -998,8 +998,8 @@ export default function WelcomeScreen() {
                     </Text>
                     <Pressable
                       onPress={() => {
-                        setLoadingActivityIndicator(true)
-                        setIsLoggingIn((prevState) => !prevState)
+                        setLoadingActivityIndicator(true);
+                        setIsLoggingIn((prevState) => !prevState);
                       }}
                     >
                       <Text
@@ -1039,8 +1039,8 @@ export default function WelcomeScreen() {
                     </Text>
                     <Pressable
                       onPress={() => {
-                        setLoadingActivityIndicator(true)
-                        setIsLoggingIn((prevState) => !prevState)
+                        setLoadingActivityIndicator(true);
+                        setIsLoggingIn((prevState) => !prevState);
                       }}
                     >
                       <Text
@@ -1107,12 +1107,12 @@ export default function WelcomeScreen() {
                   backgroundColor: COLORS.ghostwhite,
                 }}
 
-                // onFocus={}
+              // onFocus={}
               />
             </View>
           </View>
         </BottomSheet>
       </SafeAreaView>
     </>
-  )
+  );
 }

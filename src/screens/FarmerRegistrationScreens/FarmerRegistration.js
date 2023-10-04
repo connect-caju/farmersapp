@@ -179,7 +179,7 @@ export default function FarmerRegistration({ route, navigation }) {
           "Indivíduo",
         )
         foundIdentierMatches = realm
-          .objects("Actor")
+					.objects("Actor")
           .filtered("identifier == $0", identifier)
       }
 
