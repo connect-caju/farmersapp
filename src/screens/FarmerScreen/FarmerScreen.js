@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef, useMemo } from "react"
+import React, { useEffect, useState, useCallback, useRef, useMemo } from "react";
 import {
   View,
   Text,
@@ -13,86 +13,85 @@ import {
   Easing,
   useNativeDriver,
   Platform,
-} from "react-native"
-import { Box, Stack, Center } from "native-base"
-import { Divider, Icon, Avatar } from "@rneui/base"
-import { launchCamera, launchImageLibrary } from "react-native-image-picker"
-import AwesomeAlert from "react-native-awesome-alerts"
+} from "react-native";
+import { Box, Stack, Center } from "native-base";
+import { Divider, Icon, Avatar } from "@rneui/base";
+import { launchCamera, launchImageLibrary } from "react-native-image-picker";
+import AwesomeAlert from "react-native-awesome-alerts";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
   listenOrientationChange as lor,
   removeOrientationListener as rol,
-} from "react-native-responsive-screen"
+} from "react-native-responsive-screen";
 
-import { responsiveFontSize } from "react-native-responsive-dimensions"
+import { responsiveFontSize } from "react-native-responsive-dimensions";
 
-import PersonalData from "../../components/PersonalData/PersonalData"
-import FarmlandData from "../../components/FarmlandData/FarmlandData"
-import styles from "./styles"
-import COLORS from "../../consts/colors"
-import PhotoModal from "../../components/Modals/PhotoModal"
+import PersonalData from "../../components/PersonalData/PersonalData";
+import FarmlandData from "../../components/FarmlandData/FarmlandData";
+import styles from "./styles";
+import COLORS from "../../consts/colors";
+import PhotoModal from "../../components/Modals/PhotoModal";
 
-import { roles } from "../../consts/roles"
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome"
-import { faTree } from "@fortawesome/free-solid-svg-icons"
-import { Dimensions } from "react-native"
-import CustomActivityIndicator from "../../components/ActivityIndicator/CustomActivityIndicator"
-import Animated from "react-native-reanimated"
-import { useUser } from "@realm/react"
-import { realmContext } from "../../models/realmContext"
-import { SuccessLottie } from "../../components/LottieComponents/SuccessLottie"
-import EditDataBottomSheet from "../../components/EditData/EditDataBottomSheet"
-const { useRealm, useQuery, useObject } = realmContext
+import { roles } from "../../consts/roles";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faTree } from "@fortawesome/free-solid-svg-icons";
+import { Dimensions } from "react-native";
+import CustomActivityIndicator from "../../components/ActivityIndicator/CustomActivityIndicator";
+import { useUser } from "@realm/react";
+import { realmContext } from "../../models/realmContext";
+import { SuccessLottie } from "../../components/LottieComponents/SuccessLottie";
 
-const singleFarmer = "singleFarmer"
-const ownFarmlands = "ownFarmlands"
+const { useRealm, useQuery, useObject } = realmContext;
+
+const singleFarmer = "singleFarmer";
+const ownFarmlands = "ownFarmlands";
 
 export default function FarmerScreen({ route, navigation }) {
-  const ownerId = route.params.ownerId
-  const farmersIDs = route.params?.farmersIDs
-  const realm = useRealm()
-  const user = useUser()
-  const customUserData = user?.customData
-  const farmer = realm.objectForPrimaryKey("Actor", ownerId)
+  const ownerId = route.params.ownerId;
+  const farmersIDs = route.params?.farmersIDs;
+  const realm = useRealm();
+  const user = useUser();
+  const customUserData = user?.customData;
+  const farmer = realm.objectForPrimaryKey("Actor", ownerId);
   const farmlands = realm
     .objects("Farmland")
-    .filtered("farmerId == $0", ownerId)
-  const [isAddPhoto, setIsAddPhoto] = useState(false)
-  const [isPhotoModalVisible, setIsPhotoModalVisible] = useState(false)
-  const [refresh, setRefresh] = useState(false)
+    .filtered("farmerId == $0", ownerId);
+  const [isAddPhoto, setIsAddPhoto] = useState(false);
+  const [isPhotoModalVisible, setIsPhotoModalVisible] = useState(false);
+  const [refresh, setRefresh] = useState(false);
   const [currentNode, setCurrentNode] = useState({
     next: null,
     prev: null,
     current: null,
-  })
+  });
   const [loadingActivitiyIndicator, setLoadingActivityIndicator] =
-    useState(false)
+    useState(false);
 
-  const [successLottieVisible, setSuccessLottieVisible] = useState(false)
+  const [successLottieVisible, setSuccessLottieVisible] = useState(false);
   // ------------------------------------------------------------------------
 
   // controle EditFarmerData Component animation
-  const scale = useRef(new NativeAnimated.Value(0)).current
-  const bottomSheetRef = useRef(null)
+  const scale = useRef(new NativeAnimated.Value(0)).current;
+  const bottomSheetRef = useRef(null);
   const onScrollToBottomSheet = useCallback(() => {
-    bottomSheetRef?.current?.scrollTo(-20000)
-  }, [])
-  const [isOverlayVisible, setIsOverlayVisible] = useState(false)
+    bottomSheetRef?.current?.scrollTo(-20000);
+  }, []);
+  const [isOverlayVisible, setIsOverlayVisible] = useState(false);
 
   // Animate by resizing EditFarmerData Component
   const resizeBox = (to) => {
-    to === 1 && setIsOverlayVisible(true)
+    to === 1 && setIsOverlayVisible(true);
     NativeAnimated.timing(scale, {
       toValue: to,
       useNativeDriver: true,
       duration: 400,
       easing: Easing.linear,
-    }).start(() => to === 0 && setIsOverlayVisible(false))
-  }
+    }).start(() => to === 0 && setIsOverlayVisible(false));
+  };
 
   // variables
-  const bottomSheetModalRef = useRef(null)
+  const bottomSheetModalRef = useRef(null);
 
   // ----------------------------------------------------------------------
 
@@ -100,34 +99,34 @@ export default function FarmerScreen({ route, navigation }) {
   useEffect(() => {
     if (successLottieVisible) {
       setTimeout(() => {
-        setSuccessLottieVisible(false)
-      }, 3000)
+        setSuccessLottieVisible(false);
+      }, 3000);
     }
-  }, [successLottieVisible])
+  }, [successLottieVisible]);
 
   useEffect(() => {
     if (farmersIDs?.length > 0) {
-      current = farmersIDs.find((node) => node.current === ownerId)
-      setCurrentNode(current)
+      current = farmersIDs.find((node) => node.current === ownerId);
+      setCurrentNode(current);
     }
-  }, [ownerId])
+  }, [ownerId]);
 
   useEffect(() => {
     realm.subscriptions.update((mutableSubs) => {
-      mutableSubs.removeByName(singleFarmer)
+      mutableSubs.removeByName(singleFarmer);
       mutableSubs.add(realm.objects("Actor").filtered(`_id == "${ownerId}"`), {
         name: singleFarmer,
-      })
-    })
+      });
+    });
 
     realm.subscriptions.update((mutableSubs) => {
-      mutableSubs.removeByName(ownFarmlands)
+      mutableSubs.removeByName(ownFarmlands);
       mutableSubs.add(
         realm.objects("Farmland").filtered(`farmerId == "${ownerId}"`),
         { name: ownFarmlands },
-      )
-    })
-  }, [realm, refresh])
+      );
+    });
+  }, [realm, refresh]);
 
   // picker a picture from gallery
   const launchNativeImageLibrary = () => {
@@ -137,25 +136,25 @@ export default function FarmerScreen({ route, navigation }) {
         skipBackup: true,
         path: "images",
       },
-    }
+    };
     launchImageLibrary(options, (response) => {
       if (response.didCancel) {
-        console.log("User cancelled image picker")
+        console.log("User cancelled image picker");
       } else if (response.errorCode) {
-        console.log("ImagePicker Error: ", response.error)
+        console.log("ImagePicker Error: ", response.error);
       } else {
-        const source = { uri: response.assets.uri }
+        const source = { uri: response.assets.uri };
 
         const imageString =
-          "data:image/jpeg;base64," + response.assets[0].base64
+          "data:image/jpeg;base64," + response.assets[0].base64;
 
         realm.write(() => {
-          farmer.image = imageString
-          setLoadingActivityIndicator(true)
-        })
+          farmer.image = imageString;
+          setLoadingActivityIndicator(true);
+        });
       }
-    })
-  }
+    });
+  };
 
   return (
     <SafeAreaView
@@ -178,10 +177,10 @@ export default function FarmerScreen({ route, navigation }) {
         confirmButtonColor={COLORS.main}
         cancelButtonColor={COLORS.danger}
         onCancelPressed={() => {
-          setIsAddPhoto(false)
+          setIsAddPhoto(false);
         }}
         onConfirmPressed={() => {
-          setIsAddPhoto(false)
+          setIsAddPhoto(false);
         }}
       />
 
@@ -203,7 +202,7 @@ export default function FarmerScreen({ route, navigation }) {
           <Box>
             <Pressable
               onPress={() => {
-                navigation.navigate("Farmers")
+                navigation.navigate("Farmers");
               }}
               style={{
                 position: "absolute",
@@ -272,11 +271,11 @@ export default function FarmerScreen({ route, navigation }) {
               elevation: 1,
             }}
             onPress={() => {
-              setLoadingActivityIndicator(true)
+              setLoadingActivityIndicator(true);
               navigation.navigate("Farmer", {
                 ownerId: currentNode?.prev,
                 farmersIDs,
-              })
+              });
             }}
           >
             <Icon name="arrow-back-ios" size={40} color={COLORS.ghostwhite} />
@@ -310,11 +309,11 @@ export default function FarmerScreen({ route, navigation }) {
               elevation: 1,
             }}
             onPress={() => {
-              setLoadingActivityIndicator(true)
+              setLoadingActivityIndicator(true);
               navigation.navigate("Farmer", {
                 ownerId: currentNode?.next,
                 farmersIDs,
-              })
+              });
             }}
           >
             <Icon
@@ -355,7 +354,7 @@ export default function FarmerScreen({ route, navigation }) {
                   ownerType: "Indivíduo",
                   ownerId: farmer?._id,
                   farmersIDs,
-                })
+                });
               }}
               style={{
                 position: "relative",
@@ -514,8 +513,8 @@ export default function FarmerScreen({ route, navigation }) {
                         ownerImage: farmer?.image || "",
                         ownerAddress: farmer?.address,
                         flag: "Indivíduo",
-                      })
-                      setRefresh(!refresh)
+                      });
+                      setRefresh(!refresh);
                     }}
                   >
                     <Box
@@ -588,5 +587,5 @@ export default function FarmerScreen({ route, navigation }) {
         />
       )}
     </SafeAreaView>
-  )
+  );
 }

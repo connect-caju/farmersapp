@@ -35,6 +35,13 @@ const { useRealm, useQuery } = realmContext
 // sync subscription by this name
 const userStats = "userStats"
 
+const districtSingleFarmers = "districtSingleFarmers"
+const districtGroupFarmers = "districtGroupFarmers"
+const districtInstitutionFarmers = "districtInstitutionFarmers"
+const districtFarmlands = "districtFarmlands"
+const serviceProviderSubs = "serviceProviderSubs"
+const actorMembershipSubs = "actorMembershipSubs"
+
 // realm variable used for manual client reset in the syncConfig
 export let realm
 
@@ -180,6 +187,7 @@ export default function HomeScreen({ route, navigation }) {
     .reduce((ac, cur) => ac + cur, 0)
   //----------------------------------------------------------------------
 
+  // realm subscription to all the resources
   useEffect(() => {
     realm.subscriptions.update((mutableSubs) => {
       mutableSubs.removeByName(userStats)
@@ -198,6 +206,83 @@ export default function HomeScreen({ route, navigation }) {
       setIsFieldAgent(false)
     }
   }, [user, realm])
+
+  useEffect(() => {
+    if (
+      customUserData?.role !== roles.provincialManager &&
+      customUserData?.role !== roles.ampcmSupervisor
+    ) {
+      realm.subscriptions.update((mutableSubs) => {
+        mutableSubs.add(
+          realm
+            .objects("Actor")
+            .filtered(`userDistrict == "${user?.customData?.userDistrict}"`),
+          // { name: districtSingleFarmers },
+        )
+      })
+
+      realm.subscriptions.update((mutableSubs) => {
+        // mutableSubs.removeByName(districtGroupFarmers)
+        mutableSubs.add(
+          realm
+            .objects("Group")
+            .filtered(`userDistrict == "${user?.customData?.userDistrict}"`),
+          // { name: districtGroupFarmers },
+        )
+      })
+
+      realm.subscriptions.update((mutableSubs) => {
+        mutableSubs.add(
+          realm
+            .objects("Institution")
+            .filtered(`userDistrict == "${user?.customData?.userDistrict}"`),
+          // { name: districtInstitutionFarmers },
+        )
+      })
+
+
+      realm.subscriptions.update((mutableSubs) => {
+        mutableSubs.add(
+          realm
+            .objects("Farmland")
+            .filtered(`userDistrict == "${user?.customData?.userDistrict}"`),
+          // { name: districtFarmlands },
+        )
+      })
+
+      realm.subscriptions.update((mutableSubs) => {
+        mutableSubs.add(
+          realm
+            .objects("SprayingServiceProvider")
+            .filtered(`userDistrict == "${user?.customData?.userDistrict}"`),
+          // { name: serviceProviderSubs },
+        )
+      })
+
+      realm.subscriptions.update((mutableSubs) => {
+        mutableSubs.add(
+          realm
+            .objects("ActorMembership")
+            .filtered(`userDistrict == "${user?.customData?.userDistrict}"`),
+          // { name: actorMembershipSubs },
+        )
+      })
+    } else if (
+      customUserData?.role === roles.provincialManager ||
+      // customUserData?.role === roles.coopManager ||
+      customUserData?.role === roles.ampcmSupervisor
+    ) {
+      realm.subscriptions.update((mutableSubs) => {
+        mutableSubs.removeByName(provincialStats)
+        mutableSubs.add(
+          realm
+            .objects("UserStat")
+            .filtered(`userProvince == "${user?.customData?.userProvince}"`),
+          { name: provincialStats },
+        )
+      })
+    }
+  }, [realm, user])
 
   useFocusEffect(
     useCallback(() => {

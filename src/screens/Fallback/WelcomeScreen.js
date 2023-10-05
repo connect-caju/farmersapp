@@ -367,7 +367,7 @@ export default function WelcomeScreen() {
                   <FormControl.Label>Nome Completo</FormControl.Label>
                   <CustomInput
                     width="100%"
-                    autoFocus={!isLoggingIn ? true : false}
+                    autoFocus={!isLoggingIn ? false : false}
                     placeholder="Nome completo"
                     value={name}
                     type="text"

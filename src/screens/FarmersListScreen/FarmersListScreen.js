@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react"
+import React, { useEffect, useState, useRef } from "react";
 import {
   View,
   Text,
@@ -8,59 +8,49 @@ import {
   Switch,
   DrawerLayoutAndroid,
   TextInput,
-} from "react-native"
-import { Box, Center, Pressable, Stack } from "native-base"
+} from "react-native";
+import { Box, Center, Pressable, Stack } from "native-base";
 
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-  listenOrientationChange as lor,
-  removeOrientationListener as rol,
-} from "react-native-responsive-screen"
+} from "react-native-responsive-screen";
 
-import {
-  responsiveFontSize,
-  responsiveScreenFontSize,
-  responsiveHeight,
-  responsiveWidth,
-  responsiveScreenHeight,
-  responsiveScreenWidth,
-  useDimensionsChange,
-} from "react-native-responsive-dimensions"
+import { responsiveFontSize } from "react-native-responsive-dimensions";
 
-import { realmContext } from "../../models/realmContext"
-import { useUser } from "@realm/react"
-import { customizeItem } from "../../helpers/customizeItem"
-import GroupItem from "../../components/GroupItem/GroupItem"
-import FarmerItem from "../../components/FarmerItem/FarmerItem"
-import InstitutionItem from "../../components/InstitutionItem/InstitutionItem"
-import COLORS from "../../consts/colors"
-import CustomActivityIndicator from "../../components/ActivityIndicator/CustomActivityIndicator"
-import { roles } from "../../consts/roles"
-import { Icon } from "@rneui/base"
+import { realmContext } from "../../models/realmContext";
+import { useUser } from "@realm/react";
+import { customizeItem } from "../../helpers/customizeItem";
+import GroupItem from "../../components/GroupItem/GroupItem";
+import FarmerItem from "../../components/FarmerItem/FarmerItem";
+import InstitutionItem from "../../components/InstitutionItem/InstitutionItem";
+import COLORS from "../../consts/colors";
+import CustomActivityIndicator from "../../components/ActivityIndicator/CustomActivityIndicator";
+import { roles } from "../../consts/roles";
+import { Icon } from "@rneui/base";
 import {
   faEllipsisVertical,
   faInstitution,
   faPeopleGroup,
   faPerson,
   faSearch,
-} from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome"
-import { extractIDs } from "../../helpers/extractIDs"
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { extractIDs } from "../../helpers/extractIDs";
 
-const { useRealm, useQuery } = realmContext
+const { useRealm, useQuery } = realmContext;
 
-const districtSingleFarmers = "districtSingleFarmers"
-const districtGroupFarmers = "districtGroupFarmers"
-const districtInstitutionFarmers = "districtInstitutionFarmers"
-const districtFarmlands = "districtFarmlands"
-const serviceProviderSubs = "serviceProviderSubs"
-const actorMembershipSubs = "actorMembershipSubs"
+const districtSingleFarmers = "districtSingleFarmers";
+const districtGroupFarmers = "districtGroupFarmers";
+const districtInstitutionFarmers = "districtInstitutionFarmers";
+const districtFarmlands = "districtFarmlands";
+const serviceProviderSubs = "serviceProviderSubs";
+const actorMembershipSubs = "actorMembershipSubs";
 
-const userSingleFarmers = "userSingleFarmers"
-const userGroupFarmers = "userGroupFarmers"
-const userInstitutionFarmers = "userInstitutionFarmers"
-const userFarmlands = "userFarmlands"
+const userSingleFarmers = "userSingleFarmers";
+const userGroupFarmers = "userGroupFarmers";
+const userInstitutionFarmers = "userInstitutionFarmers";
+const userFarmlands = "userFarmlands";
 
 const DrawerLayout = ({ route, navigation, farmerType }) => {
   // const [loadingActivitiyIndicator, setLoadingActivityIndicator] = useState(true);
@@ -101,8 +91,8 @@ const DrawerLayout = ({ route, navigation, farmerType }) => {
                   farmerType?.includes("Institu")
                     ? faInstitution
                     : farmerType?.includes("Grupo")
-                    ? faPeopleGroup
-                    : faPerson
+                      ? faPeopleGroup
+                      : faPerson
                 }
                 size={30}
                 color={COLORS.fourth}
@@ -126,8 +116,8 @@ const DrawerLayout = ({ route, navigation, farmerType }) => {
               {farmerType?.includes("Institu")
                 ? "Produtores Institucionais"
                 : farmerType?.includes("Grupo")
-                ? "Organizações"
-                : "Produtores Singulares"}
+                  ? "Organizações"
+                  : "Produtores Singulares"}
             </Text>
           </Box>
         </Stack>
@@ -163,92 +153,92 @@ const DrawerLayout = ({ route, navigation, farmerType }) => {
         </Text>
       </View>
     </View>
-  )
-}
+  );
+};
 
 const FarmersListScreen = ({ route, navigation }) => {
-  const realm = useRealm()
-  const user = useUser()
-  let customUserData = user.customData
+  const realm = useRealm();
+  const user = useUser();
+  let customUserData = user.customData;
   customUserData = {
     name: customUserData?.name,
     userDistrict: customUserData?.userDistrict,
     userProvince: customUserData?.userProvince,
     userId: customUserData?.userId,
     role: customUserData?.role,
-  }
+  };
 
-  const farmerType = route.params?.farmerType || "Indivíduo"
-  let farmers
-  let farmlands
-  let serviceProviders
-  let farmersIDs // IDs to be used for swiping between farmers' screen
+  const farmerType = route.params?.farmerType || "Indivíduo";
+  let farmers;
+  let farmlands;
+  let serviceProviders;
+  let farmersIDs; // IDs to be used for swiping between farmers' screen
   if (farmerType === "Indivíduo") {
     farmers = realm
       .objects("Actor")
-      .filtered("userDistrict == $0", customUserData?.userDistrict)
+      .filtered("userDistrict == $0", customUserData?.userDistrict);
     serviceProviders = realm
       .objects("SprayingServiceProvider")
-      .filtered("userDistrict == $0", customUserData?.userDistrict)
+      .filtered("userDistrict == $0", customUserData?.userDistrict);
     farmlands = realm
       .objects("Farmland")
-      .filtered("userDistrict == $0", customUserData?.userDistrict)
+      .filtered("userDistrict == $0", customUserData?.userDistrict);
     farmers = customizeItem(
       farmers,
       farmlands,
       serviceProviders,
       customUserData,
       "Indivíduo",
-    )
-    farmersIDs = extractIDs(farmers)
+    );
+    farmersIDs = extractIDs(farmers);
   } else if (farmerType === "Grupo") {
     farmers = realm
       .objects("Group")
-      .filtered("userDistrict == $0", customUserData?.userDistrict)
+      .filtered("userDistrict == $0", customUserData?.userDistrict);
     serviceProviders = realm
       .objects("SprayingServiceProvider")
-      .filtered("userDistrict == $0", customUserData?.userDistrict)
+      .filtered("userDistrict == $0", customUserData?.userDistrict);
     farmlands = realm
       .objects("Farmland")
-      .filtered("userDistrict == $0", customUserData?.userDistrict)
+      .filtered("userDistrict == $0", customUserData?.userDistrict);
     farmers = customizeItem(
       farmers,
       farmlands,
       serviceProviders,
       customUserData,
       "Grupo",
-    )
-    farmersIDs = extractIDs(farmers)
+    );
+    farmersIDs = extractIDs(farmers);
   } else if (farmerType === "Instituição") {
     farmers = realm
       .objects("Institution")
-      .filtered("userDistrict == $0", customUserData?.userDistrict)
+      .filtered("userDistrict == $0", customUserData?.userDistrict);
     serviceProviders = realm
       .objects("SprayingServiceProvider")
-      .filtered("userDistrict == $0", customUserData?.userDistrict)
+      .filtered("userDistrict == $0", customUserData?.userDistrict);
     farmlands = realm
       .objects("Farmland")
-      .filtered("userDistrict == $0", customUserData?.userDistrict)
+      .filtered("userDistrict == $0", customUserData?.userDistrict);
     farmers = customizeItem(
       farmers,
       farmlands,
       serviceProviders,
       customUserData,
       "Instituição",
-    )
-    farmersIDs = extractIDs(farmers)
+    );
+    farmersIDs = extractIDs(farmers);
   }
 
-  const [showAll, setShowAll] = useState(false)
-  const [isEndReached, setIsEndReached] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [showAll, setShowAll] = useState(false);
+  const [isEndReached, setIsEndReached] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [loadingActivitiyIndicator, setLoadingActivityIndicator] =
-    useState(false)
-  const drawerRef = useRef(null)
-  const [drawerPosition, setDrawerPosition] = useState("right")
-  const [isSearching, setIsSearching] = useState(false)
-  const [searchQuery, setSearchQuery] = useState("")
-  const [foundFarmersList, setFoundFarmersList] = useState([])
+    useState(false);
+  const drawerRef = useRef(null);
+  const [drawerPosition, setDrawerPosition] = useState("right");
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [foundFarmersList, setFoundFarmersList] = useState([]);
 
   // const [fetchedFarmers, setFetchedFarmers] = useState([]);
   // const [fetchedGroups, setFetchedGroups] = useState([]);
@@ -265,147 +255,144 @@ const FarmersListScreen = ({ route, navigation }) => {
     ) {
       if (farmerType === "Indivíduo" && showAll) {
         realm.subscriptions.update((mutableSubs) => {
-          mutableSubs.removeByName(districtSingleFarmers)
+          mutableSubs.removeByName(districtSingleFarmers);
           mutableSubs.add(
             realm
               .objects("Actor")
               .filtered(`userDistrict == "${user?.customData?.userDistrict}"`),
             { name: districtSingleFarmers },
-          )
-        })
+          );
+        });
       } else if (farmerType === "Indivíduo" && !showAll) {
         realm.subscriptions.update((mutableSubs) => {
-          mutableSubs.removeByName(districtSingleFarmers)
+          mutableSubs.removeByName(districtSingleFarmers);
           mutableSubs.add(
             realm
               .objects("Actor")
               .filtered(`userId == "${user?.customData?.userId}"`),
             { name: districtSingleFarmers },
-          )
-        })
+          );
+        });
       }
 
       if (farmerType === "Grupo" && showAll) {
         realm.subscriptions.update((mutableSubs) => {
-          mutableSubs.removeByName(districtGroupFarmers)
+          mutableSubs.removeByName(districtGroupFarmers);
           mutableSubs.add(
             realm
               .objects("Group")
               .filtered(`userDistrict == "${user?.customData?.userDistrict}"`),
             { name: districtGroupFarmers },
-          )
-        })
+          );
+        });
       } else if (farmerType === "Grupo" && !showAll) {
         realm.subscriptions.update((mutableSubs) => {
-          mutableSubs.removeByName(districtGroupFarmers)
+          mutableSubs.removeByName(districtGroupFarmers);
           mutableSubs.add(
             realm
               .objects("Group")
               .filtered(`userId == "${user?.customData?.userId}"`),
             { name: districtGroupFarmers },
-          )
-        })
+          );
+        });
       }
 
       if (farmerType === "Instituição" && showAll) {
         realm.subscriptions.update((mutableSubs) => {
-          mutableSubs.removeByName(districtInstitutionFarmers)
+          mutableSubs.removeByName(districtInstitutionFarmers);
           mutableSubs.add(
             realm
               .objects("Institution")
               .filtered(`userDistrict == "${user?.customData?.userDistrict}"`),
             { name: districtInstitutionFarmers },
-          )
-        })
+          );
+        });
       } else if (farmerType === "Instituição" && !showAll) {
         realm.subscriptions.update((mutableSubs) => {
-          mutableSubs.removeByName(districtInstitutionFarmers)
+          mutableSubs.removeByName(districtInstitutionFarmers);
           mutableSubs.add(
             realm
               .objects("Institution")
               .filtered(`userId == "${user?.customData?.userId}"`),
             { name: districtInstitutionFarmers },
-          )
-        })
+          );
+        });
       }
 
       realm.subscriptions.update((mutableSubs) => {
-        mutableSubs.removeByName(districtFarmlands)
+        mutableSubs.removeByName(districtFarmlands);
         mutableSubs.add(
           realm
             .objects("Farmland")
             .filtered(`userDistrict == "${user?.customData?.userDistrict}"`),
           { name: districtFarmlands },
-        )
-      })
+        );
+      });
 
       realm.subscriptions.update((mutableSubs) => {
-        mutableSubs.removeByName(serviceProviderSubs)
+        mutableSubs.removeByName(serviceProviderSubs);
         mutableSubs.add(
           realm
             .objects("SprayingServiceProvider")
             .filtered(`userDistrict == "${user?.customData?.userDistrict}"`),
           { name: serviceProviderSubs },
-        )
-      })
+        );
+      });
 
       realm.subscriptions.update((mutableSubs) => {
-        mutableSubs.removeByName(actorMembershipSubs)
+        mutableSubs.removeByName(actorMembershipSubs);
         mutableSubs.add(
           realm
             .objects("ActorMembership")
             .filtered(`userDistrict == "${user?.customData?.userDistrict}"`),
           { name: actorMembershipSubs },
-        )
-      })
-    } else if (
-      customUserData?.role === roles.provincialManager ||
-      customUserData?.role === roles.coopManager
-    ) {
+        );
+      });
+    } else if (customUserData?.role === roles.provincialManager) {
       realm.subscriptions.update((mutableSubs) => {
-        mutableSubs.removeByName(provincialStats)
+        mutableSubs.removeByName(provincialStats);
         mutableSubs.add(
           realm
             .objects("UserStat")
             .filtered(`userProvince == "${user?.customData?.userProvince}"`),
           { name: provincialStats },
-        )
-      })
+        );
+      });
     }
-  }, [realm, user, showAll])
+  }, [realm, user, showAll]);
 
   useEffect(() => {
     if (isSearching && searchQuery.length > 0) {
       setFoundFarmersList(
         farmers.filter((item) => {
           if (farmerType?.includes("Indiv")) {
-            return item.name?.toLowerCase()?.includes(searchQuery.toLowerCase())
+            return item.name?.toLowerCase()?.includes(searchQuery.toLowerCase());
           } else if (farmerType?.includes("Grupo")) {
             return (
               item.name?.toLowerCase()?.includes(searchQuery.toLowerCase()) ||
               item.type?.toLowerCase()?.includes(searchQuery.toLowerCase())
-            )
+            );
           } else if (farmerType?.includes("Institu")) {
             return (
               item.name?.toLowerCase()?.includes(searchQuery.toLowerCase()) ||
               item.manager?.toLowerCase()?.includes(searchQuery.toLowerCase())
-            )
+            );
           }
         }),
-      )
+      );
     }
-  }, [isSearching, searchQuery])
+  }, [isSearching, searchQuery]);
 
-  const keyExtractor = (item, index) => index.toString()
+  const keyExtractor = (item, index) => index.toString();
 
   const handleEndReached = () => {
     if (!isEndReached && !isLoading) {
-      setIsLoading(true)
+      setIsLoading(true);
       setTimeout(() => {
-        setIsLoading(false)
-      }, 2000)
+        setIsLoading(false);
+      }, 2000);
     }
-  }
+  };
 
   if (loadingActivitiyIndicator) {
     return (
@@ -413,7 +400,7 @@ const FarmersListScreen = ({ route, navigation }) => {
         loadingActivitiyIndicator={loadingActivitiyIndicator}
         setLoadingActivityIndicator={setLoadingActivityIndicator}
       />
-    )
+    );
   }
 
   return (
@@ -453,8 +440,8 @@ const FarmersListScreen = ({ route, navigation }) => {
                   trackColor={{ true: COLORS.main, false: COLORS.grey }}
                   thumbColor={showAll ? COLORS.grey : COLORS.main}
                   onValueChange={() => {
-                    setShowAll(!showAll)
-                    setLoadingActivityIndicator(true)
+                    setShowAll(!showAll);
+                    setLoadingActivityIndicator(true);
                   }}
                   value={showAll}
                 />
@@ -488,8 +475,8 @@ const FarmersListScreen = ({ route, navigation }) => {
                         {farmerType === "Grupo"
                           ? "Organizações:"
                           : farmerType === "Indivíduo"
-                          ? "Produtores:"
-                          : "Instituições:"}{" "}
+                            ? "Produtores:"
+                            : "Instituições:"}{" "}
                         {farmers?.length}]
                       </Text>
                     </Center>
@@ -567,9 +554,9 @@ const FarmersListScreen = ({ route, navigation }) => {
                 <Pressable
                   onPress={() => {
                     if (isSearching) {
-                      setIsSearching(false)
-                      setSearchQuery("")
-                      setFoundFarmersList([])
+                      setIsSearching(false);
+                      setSearchQuery("");
+                      setFoundFarmersList([]);
                     }
                   }}
                   style={{
@@ -652,10 +639,10 @@ const FarmersListScreen = ({ route, navigation }) => {
               renderItem={({ item }) => {
                 // add all the IDs to each item to allow swiping between screens...
                 // when the user open any item from the list
-                item.farmersIDs = farmersIDs
+                item.farmersIDs = farmersIDs;
 
                 if (item.flag === "Grupo") {
-                  return <GroupItem route={route} item={item} />
+                  return <GroupItem route={route} item={item} />;
                 } else if (item.flag === "Indivíduo") {
                   return (
                     <FarmerItem
@@ -663,9 +650,9 @@ const FarmersListScreen = ({ route, navigation }) => {
                       navigation={navigation}
                       item={item}
                     />
-                  )
+                  );
                 } else if (item.flag === "Instituição") {
-                  return <InstitutionItem route={route} item={item} />
+                  return <InstitutionItem route={route} item={item} />;
                 }
               }}
               ListFooterComponent={() => {
@@ -679,9 +666,9 @@ const FarmersListScreen = ({ route, navigation }) => {
                         marginBottom: 100,
                       }}
                     ></Box>
-                  )
+                  );
                 }
-                return null
+                return null;
               }}
             />
           </Box>
@@ -713,7 +700,7 @@ const FarmersListScreen = ({ route, navigation }) => {
               onEndReachedThreshold={0.1}
               renderItem={({ item }) => {
                 if (item.flag === "Grupo") {
-                  return <GroupItem route={route} item={item} />
+                  return <GroupItem route={route} item={item} />;
                 } else if (item.flag === "Indivíduo") {
                   return (
                     <FarmerItem
@@ -721,9 +708,9 @@ const FarmersListScreen = ({ route, navigation }) => {
                       navigation={navigation}
                       item={item}
                     />
-                  )
+                  );
                 } else if (item.flag === "Instituição") {
-                  return <InstitutionItem route={route} item={item} />
+                  return <InstitutionItem route={route} item={item} />;
                 }
               }}
               ListFooterComponent={() => {
@@ -737,9 +724,9 @@ const FarmersListScreen = ({ route, navigation }) => {
                         marginBottom: 100,
                       }}
                     ></Box>
-                  )
+                  );
                 }
-                return null
+                return null;
               }}
             />
           </Box>
@@ -765,8 +752,8 @@ const FarmersListScreen = ({ route, navigation }) => {
               {farmerType === "Grupo"
                 ? " organizações"
                 : farmerType === "Indivíduo"
-                ? " produtores"
-                : " instituições"}{" "}
+                  ? " produtores"
+                  : " instituições"}{" "}
               foi encontrado!
             </Text>
           </Box>
@@ -794,15 +781,15 @@ const FarmersListScreen = ({ route, navigation }) => {
               {farmerType === "Grupo"
                 ? " organizações"
                 : farmerType === "Indivíduo"
-                ? " produtores"
-                : " instituições"}{" "}
+                  ? " produtores"
+                  : " instituições"}{" "}
               foi encontrado!
             </Text>
           </Box>
         )}
       </DrawerLayoutAndroid>
     </SafeAreaView>
-  )
-}
+  );
+};
 
-export default FarmersListScreen
+export default FarmersListScreen;

@@ -15,24 +15,24 @@ import {
   TouchableOpacity,
   SectionList,
   ActivityIndicator,
-} from "react-native"
-import React, { useEffect, useRef, useState } from "react"
-import { ListItem, Avatar, Icon } from "@rneui/themed"
-import { Box, Center, Pressable, Stack } from "native-base"
-import { useFocusEffect } from "@react-navigation/native"
+} from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { ListItem, Avatar, Icon } from "@rneui/themed";
+import { Box, Center, Pressable, Stack } from "native-base";
+import { useFocusEffect } from "@react-navigation/native";
 import {
   faUserTie,
   faPeopleGroup,
   faInstitution,
   faPerson,
-} from "@fortawesome/free-solid-svg-icons"
+} from "@fortawesome/free-solid-svg-icons";
 
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
   listenOrientationChange as lor,
   removeOrientationListener as rol,
-} from "react-native-responsive-screen"
+} from "react-native-responsive-screen";
 
 import {
   responsiveFontSize,
@@ -42,24 +42,24 @@ import {
   // responsiveScreenHeight,
   // responsiveScreenWidth,
   // useDimensionsChange,
-} from "react-native-responsive-dimensions"
+} from "react-native-responsive-dimensions";
 
-import CustomActivityIndicator from "../../components/ActivityIndicator/CustomActivityIndicator"
+import CustomActivityIndicator from "../../components/ActivityIndicator/CustomActivityIndicator";
 // import LottieAddButton from '../../components/Buttons/LottieAddButton';
-import TickComponent from "../../components/LottieComponents/TickComponent"
-import { customizeItem } from "../../helpers/customizeItem"
+import TickComponent from "../../components/LottieComponents/TickComponent";
+import { customizeItem } from "../../helpers/customizeItem";
 
-import COLORS from "../../consts/colors"
+import COLORS from "../../consts/colors";
 
-import { realmContext } from "../../models/realmContext"
-import { useUser } from "@realm/react"
-import { roles } from "../../consts/roles"
-import StatItem from "../../components/StatItem/StatItem"
-import FarmerTypeCard from "../../components/FarmerTypeCard/FarmerTypeCard"
-import CustomDivider from "../../components/Divider/CustomDivider"
-const { useRealm, useQuery } = realmContext
+import { realmContext } from "../../models/realmContext";
+import { useUser } from "@realm/react";
+import { roles } from "../../consts/roles";
+import StatItem from "../../components/StatItem/StatItem";
+import FarmerTypeCard from "../../components/FarmerTypeCard/FarmerTypeCard";
+import CustomDivider from "../../components/Divider/CustomDivider";
+const { useRealm, useQuery } = realmContext;
 
-const provincialStats = "provincialStats"
+const provincialStats = "provincialStats";
 
 const farmersTypes = [
   {
@@ -90,40 +90,40 @@ const farmersTypes = [
     borderColor: COLORS.darkyGreen,
     color: COLORS.main,
   },
-]
+];
 
 export default function FarmersScreen({ route, navigation }) {
-  const realm = useRealm()
-  const user = useUser()
-  let customUserData = user.customData
+  const realm = useRealm();
+  const user = useUser();
+  let customUserData = user.customData;
 
   const farmers = realm
     .objects("Actor")
-    .filtered("userDistrict == $0", customUserData?.userDistrict)
+    .filtered("userDistrict == $0", customUserData?.userDistrict);
   const serviceProviders = realm
     .objects("SprayingServiceProvider")
-    .filtered("userDistrict == $0", customUserData?.userDistrict)
+    .filtered("userDistrict == $0", customUserData?.userDistrict);
   const groups = realm
     .objects("Group")
-    .filtered("userDistrict == $0", customUserData?.userDistrict)
+    .filtered("userDistrict == $0", customUserData?.userDistrict);
   const institutions = realm
     .objects("Institution")
-    .filtered("userDistrict == $0", customUserData?.userDistrict)
+    .filtered("userDistrict == $0", customUserData?.userDistrict);
   const farmlands = realm
     .objects("Farmland")
-    .filtered("userDistrict == $0", customUserData?.userDistrict)
+    .filtered("userDistrict == $0", customUserData?.userDistrict);
   const stats = realm
     .objects("UserStat")
-    .filtered("userProvince == $0", customUserData?.userProvince)
+    .filtered("userProvince == $0", customUserData?.userProvince);
 
-  const [fetchedFarmers, setFetchedFarmers] = useState([])
-  const [fetchedGroups, setFetchedGroups] = useState([])
-  const [fetchedInstitutions, setFetchedInstitutions] = useState([])
-  const [refresh, setRefresh] = useState(false)
+  const [fetchedFarmers, setFetchedFarmers] = useState([]);
+  const [fetchedGroups, setFetchedGroups] = useState([]);
+  const [fetchedInstitutions, setFetchedInstitutions] = useState([]);
+  const [refresh, setRefresh] = useState(false);
 
   const districts = Array.from(
     new Set(stats.map((stat) => stat?.userDistrict)),
-  ).filter((district) => district !== "NA")
+  ).filter((district) => district !== "NA");
 
   customUserData = {
     name: customUserData?.name,
@@ -131,7 +131,7 @@ export default function FarmersScreen({ route, navigation }) {
     userProvince: customUserData?.userProvince,
     userId: customUserData?.userId,
     role: customUserData?.role,
-  }
+  };
 
   const individualsList = customizeItem(
     fetchedFarmers,
@@ -139,23 +139,23 @@ export default function FarmersScreen({ route, navigation }) {
     serviceProviders,
     customUserData,
     "Indivíduo",
-  )
+  );
   const groupsList = customizeItem(
     fetchedGroups,
     farmlands,
     serviceProviders,
     customUserData,
     "Grupo",
-  )
+  );
   const institutionsList = customizeItem(
     fetchedInstitutions,
     farmlands,
     serviceProviders,
     customUserData,
     "Instituição",
-  )
+  );
 
-  const filteredStats = stats?.filter((stat) => stat.userDistrict !== "NA")
+  const filteredStats = stats?.filter((stat) => stat.userDistrict !== "NA");
   // ------------------------------------------------------
 
   // ----------------------------------------------------------------------------
@@ -167,42 +167,42 @@ export default function FarmersScreen({ route, navigation }) {
       new Set(stats.map((stat) => stat.userDistrict)),
     )
       .filter((district) => district !== "NA")
-      .sort()
-    const statsByDistrict = []
+      .sort();
+    const statsByDistrict = [];
     for (let i = 0; i < districts.length; i++) {
-      const district = districts[i]
-      let newObject = {}
-      const usersStats = stats.filter((stat) => stat.userDistrict === district)
-      newObject["title"] = `${district}`
-      newObject["data"] = usersStats
-      statsByDistrict.push(newObject)
+      const district = districts[i];
+      let newObject = {};
+      const usersStats = stats.filter((stat) => stat.userDistrict === district);
+      newObject["title"] = `${district}`;
+      newObject["data"] = usersStats;
+      statsByDistrict.push(newObject);
     }
 
-    return statsByDistrict
-  }
+    return statsByDistrict;
+  };
 
-  const statsByDistrict = listStatsByDistrict(stats)
+  const statsByDistrict = listStatsByDistrict(stats);
   //  ---------------------------------------------------------------------------------
 
   // // merge the three arrays of farmers and sort the items by createdAt
-  let farmersList = []
+  let farmersList = [];
 
   if (individualsList.length > 0) {
-    farmersList = farmersList.concat(individualsList)
+    farmersList = farmersList.concat(individualsList);
   }
   if (groupsList.length > 0) {
-    farmersList = farmersList.concat(groupsList)
+    farmersList = farmersList.concat(groupsList);
   }
   if (institutionsList.length > 0) {
-    farmersList = farmersList.concat(institutionsList)
+    farmersList = farmersList.concat(institutionsList);
   }
   if (farmersList.length > 0) {
     farmersList = farmersList?.sort(
       (a, b) => new Date(b?.createdAt) - new Date(a?.createdAt),
-    )
+    );
   }
 
-  useEffect(() => {}, [refresh])
+  useEffect(() => { }, [refresh]);
 
   useEffect(() => {
     if (
@@ -210,38 +210,38 @@ export default function FarmersScreen({ route, navigation }) {
       customUserData?.role === roles.ampcmSupervisor
     ) {
       realm.subscriptions.update((mutableSubs) => {
-        mutableSubs.removeByName(provincialStats)
+        mutableSubs.removeByName(provincialStats);
         mutableSubs.add(
           realm
             .objects("UserStat")
             .filtered(`userProvince == "${user?.customData?.userProvince}"`),
           { name: provincialStats },
-        )
-      })
+        );
+      });
     }
   }, [
     realm,
     user,
     // showAll
-  ])
+  ]);
 
-  const keyExtractor = (item, index) => index.toString()
+  const keyExtractor = (item, index) => index.toString();
 
   const addFarmer = () => {
-    navigation.navigate("FarmerForm1", { customUserData })
-  }
+    navigation.navigate("FarmerForm1", { customUserData });
+  };
 
   const [loadingActivitiyIndicator, setLoadingActivityIndicator] =
-    useState(false)
+    useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
       const task = InteractionManager.runAfterInteractions(() => {
-        setLoadingActivityIndicator(true)
-      })
-      return () => task.cancel()
+        setLoadingActivityIndicator(true);
+      });
+      return () => task.cancel();
     }, []),
-  )
+  );
 
   if (loadingActivitiyIndicator) {
     return (
@@ -249,7 +249,7 @@ export default function FarmersScreen({ route, navigation }) {
         loadingActivitiyIndicator={loadingActivitiyIndicator}
         setLoadingActivityIndicator={setLoadingActivityIndicator}
       />
-    )
+    );
   }
 
   return (
@@ -355,7 +355,7 @@ export default function FarmersScreen({ route, navigation }) {
               <SectionList
                 sections={statsByDistrict}
                 keyExtractor={(item, index) => {
-                  return item.userId
+                  return item.userId;
                 }}
                 renderItem={({ item }) => (
                   <StatItem route={route} navigation={navigation} item={item} />
@@ -405,7 +405,7 @@ export default function FarmersScreen({ route, navigation }) {
                   <Center w="100%">
                     <TouchableOpacity
                       onPress={() => {
-                        setRefresh(!refresh)
+                        setRefresh(!refresh);
                       }}
                     >
                       <Text
@@ -478,13 +478,13 @@ export default function FarmersScreen({ route, navigation }) {
                   ItemSeparatorComponent={() => <CustomDivider thickness={2} />}
                   renderItem={({ item }) => {
                     if (item?.farmerType === "Grupo") {
-                      item["total"] = groups?.length
+                      item["total"] = groups?.length;
                     } else if (item?.farmerType === "Indivíduo") {
-                      item["total"] = farmers?.length
+                      item["total"] = farmers?.length;
                     } else if (item?.farmerType === "Instituição") {
-                      item["total"] = institutions?.length
+                      item["total"] = institutions?.length;
                     }
-                    return <FarmerTypeCard route={route} item={item} />
+                    return <FarmerTypeCard route={route} item={item} />;
                   }}
                   ListFooterComponent={() => {
                     return (
@@ -495,7 +495,7 @@ export default function FarmersScreen({ route, navigation }) {
                       >
                         <Text></Text>
                       </Box>
-                    )
+                    );
                   }}
                 />
               </Box>
@@ -503,5 +503,5 @@ export default function FarmersScreen({ route, navigation }) {
           </Box>
         )}
     </SafeAreaView>
-  )
+  );
 }
