@@ -14,7 +14,7 @@ export function FarmerTypeCard({ route, item }) {
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate("FarmersList", { farmerType: item?.farmerType })
+        navigation.navigate("FarmersListLayout", { farmerType: item?.farmerType })
       }}
       style={{
         alignItems: "center",

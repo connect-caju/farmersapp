@@ -108,7 +108,7 @@ export default function UserProfile({
         backgroundColor: "ghostwhite",
         width: "100%",
         height: "100%",
-        backgroundColor: COLORS.dark,
+        backgroundColor: COLORS.fourth,
         paddingTop: 10,
       }}
       isVisible={isUserProfileVisible}
@@ -147,7 +147,7 @@ export default function UserProfile({
           <Box w="10%">
             <Icon
               name="close"
-              color={COLORS.ghostwhite}
+              color={COLORS.grey}
               size={25}
               onPress={() => {
                 setIsUserProfileVisible(false)
@@ -173,7 +173,7 @@ export default function UserProfile({
                   paddingBottom: 20,
                   marginVertical: 10,
                   borderRadius: 20,
-                  backgroundColor: COLORS.ghostwhite,
+                  backgroundColor: COLORS.white,
                 }}
               >
                 <TouchableOpacity

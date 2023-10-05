@@ -21,6 +21,7 @@ import FarmersListScreen from "../../screens/FarmersListScreen/FarmersListScreen
 import DuplicatesAlert from "../../components/Alerts/DuplicatesAlert"
 import CameraScreen from "../../screens/CameraScreen/CameraScreen"
 import ProfileScreen from "../../screens/ActorScreen/ProfileScreen"
+import FarmersListLayout from "../../screens/FarmersListLayout/FarmersListLayout"
 
 const FarmersStack = createNativeStackNavigator()
 
@@ -63,6 +64,7 @@ export default function FarmersStackScreen() {
       <FarmersStack.Screen name="GroupMembers" component={GroupMembersScreen} />
       <FarmersStack.Screen name="FarmerGroups" component={FarmerGroupsScreen} />
       <FarmersStack.Screen name="FarmersList" component={FarmersListScreen} />
+      <FarmersStack.Screen name="FarmersListLayout" component={FarmersListLayout} />
       <FarmersStack.Screen name="Camera" component={CameraScreen} />
       <FarmersStack.Screen name="Profile" component={ProfileScreen} />
       {/* <FarmersStack.Screen name="Duplicates" component={DuplicatesAlert} /> */}

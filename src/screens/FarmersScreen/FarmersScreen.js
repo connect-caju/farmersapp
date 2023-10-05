@@ -1,5 +1,5 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable prettier/prettier */
-/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import {
   FlatList,
