@@ -1,3 +1,4 @@
+/* eslint-disable semi */
 import { roles } from "../consts/roles"
 import { capitalize } from "./capitalize"
 import BcryptReactNative from "bcrypt-react-native"

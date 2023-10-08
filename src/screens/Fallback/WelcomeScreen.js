@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable linebreak-style */
 import {
   Pressable,

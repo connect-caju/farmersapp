@@ -35,7 +35,6 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { extractIDs } from "../../helpers/extractIDs";
 import CustomDivider from "../../components/Divider/CustomDivider";
-import FarmersFilteredList from "../../components/FarmersFilteredList/FarmersFilteredList";
 
 const { useRealm } = realmContext;
 
@@ -642,11 +641,6 @@ const FarmersListScreen = ({ route, navigation }) => {
       </View>
 
       {farmersRegisteredByUser?.length > 0 && searchQuery.length === 0 ? (
-        // <FarmersFilteredList
-        //   farmerType={farmerType}
-        //   route={route}
-        //   navigation={navigation}
-        // />
         <Box
           alignItems="stretch"
           w="100%"

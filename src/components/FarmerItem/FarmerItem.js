@@ -1,44 +1,37 @@
-import { TouchableOpacity, View, Text } from "react-native"
-import React, { useState, useEffect } from "react"
-import { Icon, Avatar } from "@rneui/themed"
+/* eslint-disable react/prop-types */
+/* eslint-disable linebreak-style */
+/* eslint-disable prettier/prettier */
+import { TouchableOpacity, View, Text } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Icon, Avatar } from "@rneui/themed";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-  listenOrientationChange as lor,
-  removeOrientationListener as rol,
-} from "react-native-responsive-screen"
+} from "react-native-responsive-screen";
 
-import {
-  responsiveFontSize,
-  responsiveScreenFontSize,
-  responsiveHeight,
-  responsiveWidth,
-  responsiveScreenHeight,
-  responsiveScreenWidth,
-  useDimensionsChange,
-} from "react-native-responsive-dimensions"
+import { responsiveFontSize } from "react-native-responsive-dimensions";
 import Animated, {
   Layout,
   LightSpeedInLeft,
   LightSpeedOutRight,
-} from "react-native-reanimated"
+} from "react-native-reanimated";
 
-import { Box, Center, Stack } from "native-base"
-import { getInitials } from "../../helpers/getInitials"
-import { useNavigation } from "@react-navigation/native"
-import COLORS from "../../consts/colors"
-import { months } from "../../helpers/dates"
-import { resourceValidation } from "../../consts/resourceValidation"
+import { Box, Center, Stack } from "native-base";
+import { getInitials } from "../../helpers/getInitials";
+import { useNavigation } from "@react-navigation/native";
+import COLORS from "../../consts/colors";
+import { months } from "../../helpers/dates";
+import { resourceValidation } from "../../consts/resourceValidation";
 
-import { useUser } from "@realm/react"
-import { realmContext } from "../../models/realmContext"
-const { useRealm, useQuery, useObject } = realmContext
+import { useUser } from "@realm/react";
+import { realmContext } from "../../models/realmContext";
+const { useRealm, useQuery, useObject } = realmContext;
 
-const subScribedFarmlands = "subScribedFarmlands"
+const subScribedFarmlands = "subScribedFarmlands";
 
 const FarmerItem = ({ item, route, farmerType }) => {
-  const navigation = useNavigation()
-  const [farmlandStatus, setFarmlandStatus] = useState("")
+  const navigation = useNavigation();
+  const [farmlandStatus, setFarmlandStatus] = useState("");
 
   //  console.log("IDs: ", item.farmersIDs);
 
@@ -50,25 +43,25 @@ const FarmerItem = ({ item, route, farmerType }) => {
             farmland.status === resourceValidation.status.invalidated,
         )
       ) {
-        setFarmlandStatus(resourceValidation.status.invalidated)
+        setFarmlandStatus(resourceValidation.status.invalidated);
       } else if (
         item?.farmlandsList.some(
           (farmland) => farmland.status === resourceValidation.status.pending,
         )
       ) {
-        setFarmlandStatus(resourceValidation.status.pending)
+        setFarmlandStatus(resourceValidation.status.pending);
       } else {
-        setFarmlandStatus(resourceValidation.status.validated)
+        setFarmlandStatus(resourceValidation.status.validated);
       }
     } else {
       // setFarmlandStatus(resourceValidation.status.invalidated);
     }
-  }, [item])
+  }, [item]);
 
   return (
-    <Animated.View
+    <View
       // entering={LightSpeedInLeft}
-      exiting={LightSpeedOutRight}
+      // exiting={LightSpeedOutRight}
       // layout={Layout.springify()}
       style={{
         paddingHorizontal: 10,
@@ -100,16 +93,16 @@ const FarmerItem = ({ item, route, farmerType }) => {
             item?.status === resourceValidation.status.pending
               ? "pending-actions"
               : item?.status === resourceValidation.status.validated
-              ? "check-circle"
-              : "dangerous"
+                ? "check-circle"
+                : "dangerous"
           }
           size={wp("6%")}
           color={
             item?.status === resourceValidation.status.pending
               ? COLORS.danger
               : item?.status === resourceValidation.status.validated
-              ? COLORS.main
-              : COLORS.red
+                ? COLORS.main
+                : COLORS.red
           }
         />
       </Box>
@@ -144,7 +137,7 @@ const FarmerItem = ({ item, route, farmerType }) => {
                 ownerId: item._id,
                 farmersIDs: item?.farmersIDs,
                 farmerType: "Indivíduo",
-              })
+              });
             }}
           >
             <Text
@@ -215,8 +208,8 @@ const FarmerItem = ({ item, route, farmerType }) => {
                             ? COLORS.danger
                             : farmlandStatus ===
                               resourceValidation.status.validated
-                            ? COLORS.main
-                            : COLORS.red,
+                              ? COLORS.main
+                              : COLORS.red,
                         justifyContent: "space-between",
                       }}
                     >
@@ -236,10 +229,10 @@ const FarmerItem = ({ item, route, farmerType }) => {
                             ? "pending-actions"
                             : farmlandStatus ===
                               resourceValidation.status.validated
-                            ? "check-circle"
-                            : item?.farmlandsList.length === 0
-                            ? "error-outline"
-                            : "dangerous"
+                              ? "check-circle"
+                              : item?.farmlandsList.length === 0
+                                ? "error-outline"
+                                : "dangerous"
                         }
                         size={wp("6%")}
                         color={
@@ -247,8 +240,8 @@ const FarmerItem = ({ item, route, farmerType }) => {
                             ? COLORS.danger
                             : farmlandStatus ===
                               resourceValidation.status.validated
-                            ? COLORS.main
-                            : COLORS.red
+                              ? COLORS.main
+                              : COLORS.red
                         }
                       />
                       {/* </Box> */}
@@ -266,7 +259,7 @@ const FarmerItem = ({ item, route, farmerType }) => {
       <Stack
         direction="row"
         w="100%"
-        // style={{ paddingTop: 5,  }}
+      // style={{ paddingTop: 5,  }}
       >
         <Box w="100%">
           <Text
@@ -281,8 +274,8 @@ const FarmerItem = ({ item, route, farmerType }) => {
           </Text>
         </Box>
       </Stack>
-    </Animated.View>
-  )
-}
+    </View>
+  );
+};
 
-export default FarmerItem
+export default FarmerItem;

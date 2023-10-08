@@ -58,9 +58,9 @@ const InstitutionItem = ({ item, route }) => {
   }, [item])
 
   return (
-    <Animated.View
+    <View
       // entering={LightSpeedInLeft}
-      exiting={LightSpeedOutRight}
+      // exiting={LightSpeedOutRight}
       // layout={Layout.springify()}
       style={{
         paddingHorizontal: 10,
@@ -259,7 +259,7 @@ const InstitutionItem = ({ item, route }) => {
           </Text>
         </Box>
       </Stack>
-    </Animated.View>
+    </View>
   )
 }
 

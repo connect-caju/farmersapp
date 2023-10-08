@@ -58,9 +58,9 @@ const GroupItem = ({ item, route }) => {
   }, [item])
 
   return (
-    <Animated.View
+    <View
       // entering={LightSpeedInLeft}
-      exiting={LightSpeedOutRight}
+      // exiting={LightSpeedOutRight}
       // layout={Layout.springify()}
       style={{
         paddingHorizontal: wp("1%"),
@@ -256,7 +256,7 @@ const GroupItem = ({ item, route }) => {
           </Text>
         </Box>
       </Stack>
-    </Animated.View>
+    </View>
   )
 }
 
