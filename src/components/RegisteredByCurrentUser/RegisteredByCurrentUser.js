@@ -11,7 +11,7 @@ import GroupItem from "../GroupItem/GroupItem";
 import FarmerItem from "../FarmerItem/FarmerItem";
 import InstitutionItem from "../InstitutionItem/InstitutionItem";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import {  faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import COLORS from "../../consts/colors";
 const { useRealm } = realmContext;
 
@@ -25,7 +25,7 @@ const RegisteredByCurrentUser = ({ farmerType, route, navigation }) => {
         userProvince: customUserData?.userProvince,
         userId: customUserData?.userId,
         role: customUserData?.role,
-      };
+    };
 
     let farmers;
     let serviceProviders;
@@ -35,7 +35,7 @@ const RegisteredByCurrentUser = ({ farmerType, route, navigation }) => {
         farmers = realm
             .objects("Actor")
             // .filtered("userDistrict == $0", customUserData?.userDistrict);
-          .filtered("userId == $0", customUserData?.userId);
+            .filtered("userId == $0", customUserData?.userId);
         serviceProviders = realm
             .objects("SprayingServiceProvider")
             .filtered("userDistrict == $0", customUserData?.userDistrict);
@@ -53,7 +53,7 @@ const RegisteredByCurrentUser = ({ farmerType, route, navigation }) => {
         farmers = realm
             .objects("Group")
             // .filtered("userDistrict == $0", customUserData?.userDistrict);
-          .filtered("userId == $0", customUserData?.userId);
+            .filtered("userId == $0", customUserData?.userId);
 
         serviceProviders = realm
             .objects("SprayingServiceProvider")
@@ -72,7 +72,7 @@ const RegisteredByCurrentUser = ({ farmerType, route, navigation }) => {
         farmers = realm
             .objects("Institution")
             // .filtered("userDistrict == $0", customUserData?.userDistrict);
-          .filtered("userId == $0", customUserData?.userId);
+            .filtered("userId == $0", customUserData?.userId);
 
         serviceProviders = realm
             .objects("SprayingServiceProvider")
@@ -89,125 +89,129 @@ const RegisteredByCurrentUser = ({ farmerType, route, navigation }) => {
         );
     }
 
-  //   useEffect(()=>{
-  //     if (farmerType === "Indivíduo") {
-  //         realm.subscriptions.update((mutableSubs) => {
-  //         //   mutableSubs.removeByName(districtSingleFarmers);
-  //           mutableSubs.add(
-  //             realm
-  //               .objects("Actor")
-  //               .filtered(`userId == "${user?.customData?.userId}"`),
-  //             // { name: districtSingleFarmers },
-  //           );
-  //         });
-  //       } else if (farmerType === "Grupo") {
-  //         realm.subscriptions.update((mutableSubs) => {
-  //         //   mutableSubs.removeByName(invalidatedSingleFarmers);
-  //           mutableSubs.add(
-  //             realm.objects("Group").filtered(`userId == "${user?.customData?.userId}"`),
-  //             // { name: invalidatedSingleFarmers },
-  //           );
-  //         });
-  //       } else if (farmerType === "Instituição") {
-  //         realm.subscriptions.update((mutableSubs) => {
-  //         //   mutableSubs.removeByName(districtSingleFarmers);
-  //           mutableSubs.add(
-  //             realm
-  //               .objects("Institution")
-  //               .filtered(`userId == "${user?.customData?.userId}"`),
-  //             // { name: districtSingleFarmers },
-  //           );
-  //         });
-  //       }
+    //   useEffect(()=>{
+    //     if (farmerType === "Indivíduo") {
+    //         realm.subscriptions.update((mutableSubs) => {
+    //         //   mutableSubs.removeByName(districtSingleFarmers);
+    //           mutableSubs.add(
+    //             realm
+    //               .objects("Actor")
+    //               .filtered(`userId == "${user?.customData?.userId}"`),
+    //             // { name: districtSingleFarmers },
+    //           );
+    //         });
+    //       } else if (farmerType === "Grupo") {
+    //         realm.subscriptions.update((mutableSubs) => {
+    //         //   mutableSubs.removeByName(invalidatedSingleFarmers);
+    //           mutableSubs.add(
+    //             realm.objects("Group").filtered(`userId == "${user?.customData?.userId}"`),
+    //             // { name: invalidatedSingleFarmers },
+    //           );
+    //         });
+    //       } else if (farmerType === "Instituição") {
+    //         realm.subscriptions.update((mutableSubs) => {
+    //         //   mutableSubs.removeByName(districtSingleFarmers);
+    //           mutableSubs.add(
+    //             realm
+    //               .objects("Institution")
+    //               .filtered(`userId == "${user?.customData?.userId}"`),
+    //             // { name: districtSingleFarmers },
+    //           );
+    //         });
+    //       }
 
-  // }, [ farmerType, realm, user ]);
+    // }, [ farmerType, realm, user ]);
 
     const keyExtractor = (item, index) => index.toString();
 
     return (
-      <>
-      {farmers.length > 0 ?
-          <View>
-              <FlatList
-                  StickyHeaderComponent={() => (
-                      <View
-                          style={{
-                              //   height: hp("10%"),
-                              justifyContent: "center",
-                              alignItems: "center",
-                          }}
-                      >
-                          {/* <Text>Hello! Here is the sticky header!</Text> */}
-                      </View>
-                  )}
-                  stickyHeaderHiddenOnScroll={true}
-                  data={farmers}
-                  keyExtractor={keyExtractor}
-                  // onEndReached={handleEndReached}
-                  onEndReachedThreshold={0.1}
-                  renderItem={({ item }) => {
-                      // add all the IDs to each item to allow swiping between screens...
-                      // when the user open any item from the list
-                      if (item.flag === "Grupo") {
-                          return <GroupItem route={route} item={item} />;
-                      } else if (item.flag === "Indivíduo") {
-                          return (
-                              <FarmerItem
-                                  route={route}
-                                  navigation={navigation}
-                                  item={item}
-                              />
-                          );
-                      } else if (item.flag === "Instituição") {
-                          return <InstitutionItem route={route} item={item} />;
-                      }
-                  }}
-                  ListFooterComponent={() => {
-                      //   if (!isEndReached) {
-                      //     return (
-                      //       <Box
-                      //         style={{
-                      //           // height: 10,
-                      //           backgroundColor: COLORS.ghostwhite,
-                      //           paddingBottom: 15,
-                      //           marginBottom: 100,
-                      //         }}
-                      //       ></Box>
-                      //     );
-                      //   }
-                      return null;
-                  }}
-              />
+        <>
+            {farmers.length > 0 ?
+                <View
+                    style={{
+                        height: "80%",
+                    }}
+                >
+                    <FlatList
+                        StickyHeaderComponent={() => (
+                            <View
+                                style={{
+                                    //   height: hp("10%"),
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                }}
+                            >
+                                {/* <Text>Hello! Here is the sticky header!</Text> */}
+                            </View>
+                        )}
+                        stickyHeaderHiddenOnScroll={true}
+                        data={farmers}
+                        keyExtractor={keyExtractor}
+                        // onEndReached={handleEndReached}
+                        onEndReachedThreshold={0.1}
+                        renderItem={({ item }) => {
+                            // add all the IDs to each item to allow swiping between screens...
+                            // when the user open any item from the list
+                            if (item.flag === "Grupo") {
+                                return <GroupItem route={route} item={item} />;
+                            } else if (item.flag === "Indivíduo") {
+                                return (
+                                    <FarmerItem
+                                        route={route}
+                                        navigation={navigation}
+                                        item={item}
+                                    />
+                                );
+                            } else if (item.flag === "Instituição") {
+                                return <InstitutionItem route={route} item={item} />;
+                            }
+                        }}
+                        ListFooterComponent={() => {
+                            //   if (!isEndReached) {
+                            //     return (
+                            //       <Box
+                            //         style={{
+                            //           // height: 10,
+                            //           backgroundColor: COLORS.ghostwhite,
+                            //           paddingBottom: 15,
+                            //           marginBottom: 100,
+                            //         }}
+                            //       ></Box>
+                            //     );
+                            //   }
+                            return null;
+                        }}
+                    />
 
-          </View>
-          :
-          <View
-              style={{
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "80%",
-                  paddingHorizontal: 30,
-              }}
-          >
-              <FontAwesomeIcon 
-                  icon={faInfoCircle}
-                  size={45}
-                  color={COLORS.grey}
-              />
-              <Text
-                  style={{
-                      color: COLORS.grey,
-                      fontSize: 15,
-                      fontFamily: "JosefinSans-Regular",
-                      textAlign: "center",
-                      lineHeight: 24,
-                  }}
-              >
-                  Nenhum registo
-              </Text>
-          </View>
-      }
-  </>
+                </View>
+                :
+                <View
+                    style={{
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "80%",
+                        paddingHorizontal: 30,
+                    }}
+                >
+                    <FontAwesomeIcon
+                        icon={faInfoCircle}
+                        size={45}
+                        color={COLORS.grey}
+                    />
+                    <Text
+                        style={{
+                            color: COLORS.grey,
+                            fontSize: 15,
+                            fontFamily: "JosefinSans-Regular",
+                            textAlign: "center",
+                            lineHeight: 24,
+                        }}
+                    >
+                        Nenhum registo
+                    </Text>
+                </View>
+            }
+        </>
 
     );
 };

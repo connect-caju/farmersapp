@@ -129,7 +129,11 @@ const InvalidatedFarmers = ({ farmerType, route, navigation }) => {
     return (
         <>
             {farmers.length > 0 ?
-                <View>
+                <View
+                    style={{
+                        height: "80%",
+                    }}
+                >
                     <FlatList
                         StickyHeaderComponent={() => (
                             <View
@@ -191,7 +195,7 @@ const InvalidatedFarmers = ({ farmerType, route, navigation }) => {
                         paddingHorizontal: 30,
                     }}
                 >
-                    <FontAwesomeIcon 
+                    <FontAwesomeIcon
                         icon={faInfoCircle}
                         size={45}
                         color={COLORS.grey}

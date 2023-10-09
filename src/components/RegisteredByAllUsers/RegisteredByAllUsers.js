@@ -9,17 +9,13 @@ import GroupItem from "../GroupItem/GroupItem";
 import FarmerItem from "../FarmerItem/FarmerItem";
 import InstitutionItem from "../InstitutionItem/InstitutionItem";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faCheck, faInfo, faInfoCircle, faWarning } from "@fortawesome/free-solid-svg-icons";
+import { faInfoCircle, } from "@fortawesome/free-solid-svg-icons";
 import COLORS from "../../consts/colors";
-import Animated, {
-    Layout,
-    LightSpeedInLeft,
-    LightSpeedOutRight,
-  } from "react-native-reanimated";
 
 import { useUser } from "@realm/react";
 import { realmContext } from "../../models/realmContext";
-import { useEffect } from "react";
+
+
 const { useRealm } = realmContext;
 
 const RegisteredByAllUsers = ({ farmerType, route, navigation }) => {
@@ -33,7 +29,7 @@ const RegisteredByAllUsers = ({ farmerType, route, navigation }) => {
         userProvince: customUserData?.userProvince,
         userId: customUserData?.userId,
         role: customUserData?.role,
-      };
+    };
 
     let farmers;
     let serviceProviders;
@@ -57,7 +53,7 @@ const RegisteredByAllUsers = ({ farmerType, route, navigation }) => {
             customUserData,
             "Indivíduo",
         );
-     
+
     } else if (farmerType === "Grupo") {
         farmers = realm
             .objects("Group")
@@ -98,50 +94,16 @@ const RegisteredByAllUsers = ({ farmerType, route, navigation }) => {
         );
     }
 
-    // useEffect(()=>{
-    //     if (farmerType === "Indivíduo") {
-    //         realm.subscriptions.update((mutableSubs) => {
-    //         //   mutableSubs.removeByName(districtSingleFarmers);
-    //           mutableSubs.add(
-    //             realm
-    //               .objects("Actor")
-    //               .filtered(`userDistrict == "${user?.customData?.userDistrict}"`),
-    //             // { name: districtSingleFarmers },
-    //           );
-    //         });
-    //       } else if (farmerType === "Grupo") {
-    //         realm.subscriptions.update((mutableSubs) => {
-    //         //   mutableSubs.removeByName(invalidatedSingleFarmers);
-    //           mutableSubs.add(
-    //             realm.objects("Group").filtered(`userDistrict == "${user?.customData?.userDistrict}"`),
-    //             // { name: invalidatedSingleFarmers },
-    //           );
-    //         });
-    //       } else if (farmerType === "Instituição") {
-    //         realm.subscriptions.update((mutableSubs) => {
-    //         //   mutableSubs.removeByName(districtSingleFarmers);
-    //           mutableSubs.add(
-    //             realm
-    //               .objects("Institution")
-    //               .filtered(`userDistrict == "${user?.customData?.userDistrict}"`),
-    //             // { name: districtSingleFarmers },
-    //           );
-    //         });
-    //       }
-
-    // }, [ farmerType, realm, user ]);
-
-
     const keyExtractor = (item, index) => index.toString();
 
-
-
     return (
-        <View
-            entering={LightSpeedInLeft}
-        >
+        <View>
             {farmers.length > 0 ?
-                <View>
+                <View
+                    style={{
+                        height: "80%",
+                    }}
+                >
                     <FlatList
                         StickyHeaderComponent={() => (
                             <View
@@ -203,7 +165,7 @@ const RegisteredByAllUsers = ({ farmerType, route, navigation }) => {
                         paddingHorizontal: 30,
                     }}
                 >
-                    <FontAwesomeIcon 
+                    <FontAwesomeIcon
                         icon={faInfoCircle}
                         size={45}
                         color={COLORS.grey}

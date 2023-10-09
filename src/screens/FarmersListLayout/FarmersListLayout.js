@@ -7,7 +7,7 @@ import { SafeAreaView } from "react-native";
 import COLORS from "../../consts/colors";
 import { TouchableOpacity } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faEllipsisVertical, faPeopleGroup, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faEllipsisVertical, faSearch } from "@fortawesome/free-solid-svg-icons";
 import CustomDivider from "../../components/Divider/CustomDivider";
 import { FlatList } from "react-native";
 import { useState } from "react";
@@ -47,6 +47,12 @@ const FarmersListLayout = ({ route, navigation }) => {
 
     const handleFocusedOption = (option) => {
         setFocusedOption(option);
+    };
+
+    const handleNavigationToSearchScreen = () => {
+        navigation.navigate("FarmersSearch", {
+            farmerType
+        });
     };
 
     useEffect(() => {
@@ -164,7 +170,7 @@ const FarmersListLayout = ({ route, navigation }) => {
                                     backgroundColor: COLORS.lightgrey,
                                     padding: 6,
                                 }}
-                                onPress={() => { }}
+                                onPress={() => handleNavigationToSearchScreen()}
                             >
                                 <FontAwesomeIcon
                                     icon={faSearch}
@@ -237,7 +243,7 @@ const FarmersListLayout = ({ route, navigation }) => {
                                 >
                                     <Text
                                         style={{
-                                            fontSize: 20,
+                                            fontSize: 16,
                                             color:
                                                 focusedOption === item.focusedOption
                                                     ? COLORS.white
@@ -255,6 +261,12 @@ const FarmersListLayout = ({ route, navigation }) => {
                 </View>
 
             </View>
+            <View
+                    style={{
+                        height: 10,
+                        backgroundColor: COLORS.main,
+                    }}
+                />
             {
                 loadingActivitiyIndicator ?
                     <View

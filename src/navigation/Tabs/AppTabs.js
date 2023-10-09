@@ -1,8 +1,9 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable prettier/prettier */
-import React from "react"
-import { StatusBar } from "react-native"
-import { NavigationContainer } from "@react-navigation/native"
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import React from "react";
+import { StatusBar } from "react-native";
+import { NavigationContainer, getFocusedRouteNameFromRoute } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Icon } from "@rneui/themed";
 import {
   widthPercentageToDP as wp,
@@ -66,7 +67,7 @@ export default function AppTabs() {
             component={HomeStackScreen}
           />
           <Tab.Screen
-            options={{
+            options={({ route }) => ({
               tabBarIcon: (tabInfo) => (
                 <Icon
                   name="people"
@@ -75,7 +76,17 @@ export default function AppTabs() {
                 />
               ),
               tabBarLabel: "Produtores",
-            }}
+
+              tabBarStyle: ((route) => {
+                const routeName = getFocusedRouteNameFromRoute(route) ?? "";
+               
+                if (routeName === "FarmersSearch") {
+                  return { display: "none" };
+                }
+                return;
+              })(route),
+
+            })}
             name="FarmersStack"
             component={FarmersStackScreen}
           />
@@ -93,5 +104,5 @@ export default function AppTabs() {
         </Tab.Navigator>
       </NavigationContainer>
     </>
-  )
+  );
 }
