@@ -10,30 +10,21 @@ import {
 } from "react-native-responsive-screen";
 
 import { responsiveFontSize } from "react-native-responsive-dimensions";
-import Animated, {
-  Layout,
-  LightSpeedInLeft,
-  LightSpeedOutRight,
-} from "react-native-reanimated";
 
 import { Box, Center, Stack } from "native-base";
-import { getInitials } from "../../helpers/getInitials";
 import { useNavigation } from "@react-navigation/native";
 import COLORS from "../../consts/colors";
-import { months } from "../../helpers/dates";
 import { resourceValidation } from "../../consts/resourceValidation";
 
-import { useUser } from "@realm/react";
-import { realmContext } from "../../models/realmContext";
-const { useRealm, useQuery, useObject } = realmContext;
+// import { useUser } from "@realm/react";
+// import { realmContext } from "../../models/realmContext";
+// const { useRealm, useQuery, useObject } = realmContext;
 
-const subScribedFarmlands = "subScribedFarmlands";
+// const subScribedFarmlands = "subScribedFarmlands";
 
 const FarmerItem = ({ item, route, farmerType }) => {
   const navigation = useNavigation();
   const [farmlandStatus, setFarmlandStatus] = useState("");
-
-  //  console.log("IDs: ", item.farmersIDs);
 
   useEffect(() => {
     if (item?.farmlandsList?.length > 0) {
@@ -60,9 +51,6 @@ const FarmerItem = ({ item, route, farmerType }) => {
 
   return (
     <View
-      // entering={LightSpeedInLeft}
-      // exiting={LightSpeedOutRight}
-      // layout={Layout.springify()}
       style={{
         paddingHorizontal: 10,
         marginVertical: hp("1%"),

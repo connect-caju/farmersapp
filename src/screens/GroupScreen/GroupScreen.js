@@ -165,7 +165,9 @@ export default function GroupScreen({ route, navigation }) {
             <Box>
               <Pressable
                 onPress={() => {
-                  navigation.navigate("Farmers")
+                  navigation.navigate("FarmersListLayout", {
+                    farmerType: "Grupo",
+                  });
                 }}
                 style={{
                   position: "absolute",

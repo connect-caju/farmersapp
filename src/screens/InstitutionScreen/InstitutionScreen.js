@@ -1,3 +1,5 @@
+/* eslint-disable semi */
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect, useRef } from "react"
 import {
   View,
@@ -161,7 +163,9 @@ export default function InstitutionScreen({ route, navigation }) {
             <Box>
               <Pressable
                 onPress={() => {
-                  navigation.navigate("Farmers")
+                  navigation.navigate("FarmersListLayout", {
+                    farmerType: "Instituição",
+                  })
                 }}
                 style={{
                   position: "absolute",

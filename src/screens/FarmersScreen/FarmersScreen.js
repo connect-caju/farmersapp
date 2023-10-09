@@ -17,11 +17,10 @@ import {
   ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
-import { ListItem, Avatar, Icon } from "@rneui/themed";
+import { Icon } from "@rneui/themed";
 import { Box, Center, Pressable, Stack } from "native-base";
 import { useFocusEffect } from "@react-navigation/native";
 import {
-  faUserTie,
   faPeopleGroup,
   faInstitution,
   faPerson,
@@ -30,8 +29,6 @@ import {
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-  listenOrientationChange as lor,
-  removeOrientationListener as rol,
 } from "react-native-responsive-screen";
 
 import {

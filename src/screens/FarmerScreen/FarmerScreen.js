@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { useEffect, useState, useCallback, useRef, useMemo } from "react";
 import {
   View,
@@ -202,7 +203,9 @@ export default function FarmerScreen({ route, navigation }) {
           <Box>
             <Pressable
               onPress={() => {
-                navigation.navigate("Farmers");
+                navigation.navigate("FarmersListLayout", {
+                  farmerType: "Indivíduo",
+                });
               }}
               style={{
                 position: "absolute",

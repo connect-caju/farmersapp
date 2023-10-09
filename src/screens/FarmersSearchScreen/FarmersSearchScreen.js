@@ -1,22 +1,21 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable linebreak-style */
 /* eslint-disable prettier/prettier */
-import { View, Text, Pressable, TouchableOpacity, FlatList, TextInput, KeyboardNavigation } from "react-native";
-import React, { useEffect } from "react";
+import { View, Text, Pressable, TouchableOpacity, FlatList, TextInput, SafeAreaView, Keyboard, TouchableWithoutFeedback } from "react-native";
+import React, { useEffect, useState } from "react";
 import Animated, { SlideInRight } from "react-native-reanimated";
 import COLORS from "../../consts/colors";
-import { Icon } from "@rneui/themed";
+import { Avatar, Icon } from "@rneui/themed";
 import CustomDivider from "../../components/Divider/CustomDivider";
-import { useState } from "react";
-import { SafeAreaView } from "react-native";
 import { searchCriteria } from "../../consts/searchCriteria";
-import administrativePosts from "../../consts/administrativePosts";
-import villages from "../../consts/villages";
+// import administrativePosts from "../../consts/administrativePosts";
+// import villages from "../../consts/villages";
 import { getAdminPostsByDistrict } from "../../helpers/getAdminPostsByDistrict";
 import { getVillagesByDistrict } from "../../helpers/getVillagesByDistrict";
 
 import { useUser } from "@realm/react";
 import { realmContext } from "../../models/realmContext";
+import { customizeItem } from "../../helpers/customizeItem";
 const { useRealm } = realmContext;
 
 const filterByCriteria = [
@@ -48,7 +47,7 @@ const filterByCriteria = [
 ];
 
 
-const SearchCriteriaItem = ({ item, handleSearchByCriteriaItem, farmerType }) => {
+const SearchCriteriaItem = ({ item, handleSearchByCriteriaItem, criteria }) => {
 
     return (
         <TouchableOpacity
@@ -62,7 +61,7 @@ const SearchCriteriaItem = ({ item, handleSearchByCriteriaItem, farmerType }) =>
                 // 
 
             }}
-            onPress={() => handleSearchByCriteriaItem(item)}
+            onPress={() => handleSearchByCriteriaItem(item, criteria)}
         >
             <Icon
                 name="search"
@@ -166,24 +165,50 @@ const FarmersSearchScreen = ({ navigation, route }) => {
         navigation.pop();
     };
 
-    const handleSearchByCriteriaItem = (item) => {
+    // fetch resources by the selected criteria (adminPost || village)
+    const handleSearchByCriteriaItem = (item, criteria) => {
         let farmers = [];
-        if (farmerType === "Indivíduo") {
-            farmers = realm
-                .objects("Actor")
-                .filtered("address.adminPost == $0", item);
+        if (criteria === searchCriteria.adminPost) {
+            if (farmerType === "Indivíduo") {
+                farmers = realm
+                    .objects("Actor")
+                    .filtered("address.adminPost == $0", item);
+    
+            } else if (farmerType === "Grupo") {
+                farmers = realm
+                    .objects("Group")
+                    .filtered("address.adminPost == $0", item);
+            } else if (farmerType === "Instituição") {
+                farmers = realm
+                    .objects("Institution")
+                    .filtered("address.adminPost == $0", item);
+            }
 
-        } else if (farmerType === "Grupo") {
-            farmers = realm
-                .objects("Group")
-                .filtered("address.adminPost == $0", item);
-        } else if (farmerType === "Instituição") {
-            farmers = realm
-                .objects("Institution")
-                .filtered("address.adminPost == $0", item);
         }
-        setSearchResults(farmers);
+        else if (criteria === searchCriteria.village){
+            if (farmerType === "Indivíduo") {
+                farmers = realm
+                    .objects("Actor")
+                    .filtered("address.village == $0", item);
+    
+            } else if (farmerType === "Grupo") {
+                farmers = realm
+                    .objects("Group")
+                    .filtered("address.village == $0", item);
+            } else if (farmerType === "Instituição") {
+                farmers = realm
+                    .objects("Institution")
+                    .filtered("address.village == $0", item);
+            }
+        }
+
+        setSearchResults(customizeItem(farmers, [], [], {}, farmerType));
+        setCriteria(null);
+        setCriteriaSuggestions([]);
+        setFocusedOption(false);
     };
+
+    console.log("searchResults:", searchResults);
 
     useEffect(() => {
 
@@ -197,335 +222,350 @@ const FarmersSearchScreen = ({ navigation, route }) => {
             setCriteriaSuggestions(suggestions);
         }
 
-
     }, [searchQuery, criteria, user]);
 
     const keyExtractor = (item, index) => index.toString();
 
-    console.log("searchResults:", searchResults);
+
 
     return (
         <SafeAreaView
             style={{
             }}
         >
-            {/* <KeyboardNavigation
-                oneTapToTriggerAction={() => console.log("Keyboard closed")}
+            {/* <TouchableWithoutFeedback
+                onPress={Keyboard.dismiss}
+                accessible={false}
             > */}
 
-                <Animated.View
-                    entering={SlideInRight}
+            <Animated.View
+                entering={SlideInRight}
+                style={{
+                    height: "100%",
+                    width: "100%",
+                    backgroundColor: COLORS.white,
+                }}
+            >
+                <View
                     style={{
-                        height: "100%",
+
                         width: "100%",
-                        backgroundColor: COLORS.white,
+                        padding: 5,
+                        backgroundColor: COLORS.fourth,
                     }}
                 >
+
                     <View
                         style={{
-
-                            width: "100%",
-                            padding: 5,
-                            backgroundColor: COLORS.fourth,
+                            flexDirection: "row",
                         }}
                     >
-
-                        <View
+                        <Pressable
+                            onPress={() => handleNavigationToPreviousScreen()}
                             style={{
-                                flexDirection: "row",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                marginRight: 5,
                             }}
                         >
-                            <Pressable
-                                onPress={() => handleNavigationToPreviousScreen()}
+                            <Icon name="arrow-back" size={35} color={COLORS.grey} />
+                        </Pressable>
+                        <View
+
+                            style={{
+                                alignItems: "center",
+                                justifyContent: "center",
+                                width: "90%",
+                                paddingBottom: 5,
+                            }}
+                        >
+                            <View
                                 style={{
-                                    justifyContent: "center",
-                                    alignItems: "center",
+                                    position: "absolute",
+                                    top: 8,
+                                    right: 12,
+                                    zIndex: 10,
+                                    borderRadius: 50,
+                                }}
+                            >
+                                <Icon
+                                    name={!(searchQuery || criteria) ? "search" : "close"}
+                                    size={25}
+                                    style={{
+                                        transform: [{ rotateY: "15deg" }, { rotateZ: "90deg" }],
+                                    }}
+                                    color={COLORS.grey}
+                                    onPress={() => {
+                                        if (searchQuery) {
+                                            handleTextInputChange("");
+                                        }
+
+                                        if (criteria) {
+                                            handleSearchCriteria(null);
+                                        }
+                                    }}
+                                />
+                            </View>
+                            <TextInput
+                                autoFocus={isSearching ? true : false}
+                                placeholder="Procurar"
+                                placeholderTextColor={COLORS.lightgrey}
+                                style={{
+                                    width: "98%",
+                                    height: 40,
                                     marginRight: 5,
+                                    backgroundColor: COLORS.white,
+                                    borderRadius: 15,
+                                    color: COLORS.grey,
+                                    fontFamily: "JosefinSans-Regular",
+                                    borderWidth: 1,
+                                    textAlign: "left",
+                                    paddingLeft: 20,
+                                    fontSize: 16,
+                                    borderColor: COLORS.white,
                                 }}
-                            >
-                                <Icon name="arrow-back" size={35} color={COLORS.grey} />
-                            </Pressable>
-                            <View
-
-                                style={{
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    width: "90%",
-                                    paddingBottom: 5,
+                                value={searchQuery}
+                                onFocus={() => {
+                                    setFocusedOption(true);
                                 }}
-                            >
-                                <View
-                                    style={{
-                                        position: "absolute",
-                                        top: 8,
-                                        right: 12,
-                                        zIndex: 10,
-                                        borderRadius: 50,
-                                    }}
-                                >
-                                    <Icon
-                                        name={!(searchQuery || criteria) ? "search" : "close"}
-                                        size={25}
-                                        style={{
-                                            transform: [{ rotateY: "15deg" }, { rotateZ: "90deg" }],
-                                        }}
-                                        color={COLORS.grey}
-                                        onPress={() => {
-                                            if (searchQuery) {
-                                                handleTextInputChange("");
-                                            }
-
-                                            if (criteria) {
-                                                handleSearchCriteria(null);
-                                            }
-                                        }}
-                                    />
-                                </View>
-                                <TextInput
-                                    autoFocus={isSearching ? true : false}
-                                    placeholder="Procurar"
-                                    placeholderTextColor={COLORS.lightgrey}
-                                    style={{
-                                        width: "98%",
-                                        height: 40,
-                                        marginRight: 5,
-                                        backgroundColor: COLORS.white,
-                                        borderRadius: 15,
-                                        color: COLORS.grey,
-                                        fontFamily: "JosefinSans-Regular",
-                                        borderWidth: 1,
-                                        textAlign: "left",
-                                        paddingLeft: 20,
-                                        fontSize: 16,
-                                        borderColor: COLORS.white,
-                                    }}
-                                    value={searchQuery}
-                                    onFocus={() => {
-                                        setFocusedOption(true);
-                                    }}
-                                    onEndEditing={() => {
-                                        setFocusedOption(false);
-                                    }}
-                                    onChangeText={handleTextInputChange}
-                                />
-                            </View>
+                                onEndEditing={() => {
+                                    setFocusedOption(false);
+                                }}
+                                onChangeText={handleTextInputChange}
+                            />
                         </View>
-                        <CustomDivider thickness={1} color={COLORS.lightgrey} />
-                        {!criteria &&
-                            <View
-                                style={{
-                                    marginTop: 5,
-                                    flexDirection: "row",
-                                    justifyContent: "space-around",
-                                }}
-                            >
-                                <FlatList
-                                    data={filterByCriteria}
-                                    keyExtractor={keyExtractor}
-                                    horizontal
-                                    showsHorizontalScrollIndicator={false}
-                                    // ListHeaderComponent={<View style={{ width: 6, }} />}
-                                    snapToInterval={86}
-                                    decelerationRate="fast"
-                                    renderItem={({ item }) => {
-                                        return (
-                                            <TouchableOpacity
-                                                disabled={criteria ? true : false}
-                                                style={{
-                                                    marginRight: 10,
-                                                    backgroundColor:
-                                                        focusedOption === item.focusedOption
-                                                            ? COLORS.main
-                                                            : COLORS.fourth,
-                                                    borderColor:
-                                                        focusedOption === item.focusedOption
-                                                            ? COLORS.main
-                                                            : COLORS.lightgrey,
-                                                    borderWidth: 1,
-                                                    alignItems: "center",
-                                                    justifyContent: "center",
-                                                    paddingHorizontal: 6,
-                                                    paddingBottom: 5,
-                                                    borderRadius: 100,
-                                                    elevation: 1,
-                                                }}
-                                                onPress={() => handleFocusedOption(item.focusedOption)}
-                                            >
-                                                <Text
-                                                    style={{
-                                                        fontSize: 16,
-                                                        color:
-                                                            focusedOption === item.focusedOption
-                                                                ? COLORS.white
-                                                                : COLORS.grey,
-                                                        fontFamily: "JosefinSans-Regular",
-                                                        textAlign: "center",
-                                                    }}
-                                                >
-                                                    {item.criteriaType}
-                                                </Text>
-                                            </TouchableOpacity>
-                                        );
-                                    }}
-                                />
-                            </View>
-                        }
-
                     </View>
+                    <CustomDivider thickness={1} color={COLORS.lightgrey} />
                     {!criteria &&
                         <View
                             style={{
-                                height: 10,
-                                backgroundColor: criteria ? "rgba(0,0,0,0.5)" : COLORS.main,
-                            }}
-                        />}
-
-                    <View
-                        style={{
-                            opacity: criteria ? 0.2 : 1,
-                            backgroundColor: criteria ? "rgba(0,0,0,0.5)" : COLORS.white,
-                            height: criteria && "100%",
-                        }}
-                    >
-                        {!criteria &&
-                            <View>
-
-                                <Text
-                                    style={{
-                                        fontSize: 18,
-                                        color: COLORS.black,
-                                        fontFamily: "JosefinSans-Regular",
-                                        padding: 20,
-                                    }}
-                                >
-                                    Tenta procurar registos por
-                                </Text>
-                                <View
-                                    style={{
-                                        paddingLeft: 20,
-                                        height: 100,
-                                        justifyContent: "space-around",
-                                    }}
-                                >
-                                    <TouchableOpacity
-                                        style={{
-                                            flexDirection: "row",
-                                        }}
-                                        onPress={() => handleSearchCriteria(searchCriteria.adminPost)}
-                                    >
-                                        <Icon name="search" size={30} color={COLORS.grey} />
-                                        <Text
-                                            style={{
-                                                paddingLeft: 15,
-                                                fontSize: 18,
-                                                color: COLORS.grey,
-                                                fontFamily: "JosefinSans-Regular",
-
-                                            }}
-                                        >Posto Administrativo</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        style={{
-                                            flexDirection: "row",
-                                        }}
-                                        onPress={() => handleSearchCriteria(searchCriteria.village)}
-                                    >
-                                        <Icon name="search" size={30} color={COLORS.grey} />
-                                        <Text
-                                            style={{
-                                                paddingLeft: 15,
-                                                fontSize: 18,
-                                                color: COLORS.grey,
-                                                fontFamily: "JosefinSans-Regular",
-                                            }}
-                                        >Localidade</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        }
-                    </View>
-
-
-                    {(criteria === searchCriteria.adminPost || criteria === searchCriteria.village)
-                        && <View
-                            style={{
-                                borderRadius: 5,
-                                position: "absolute",
-                                top: 48,
-                                left: 50,
-                                zIndex: 10,
-                                width: "85%",
-                                height: 500,
-                                // elevation: 1,
+                                marginTop: 5,
+                                flexDirection: "row",
+                                justifyContent: "space-around",
                             }}
                         >
                             <FlatList
-                                data={criteriaSuggestions}
+                                data={filterByCriteria}
                                 keyExtractor={keyExtractor}
-                                ItemSeparatorComponent={
-                                    <CustomDivider />
-                                }
-                                showsVerticalScrollIndicator={false}
+                                horizontal
+                                showsHorizontalScrollIndicator={false}
+                                // ListHeaderComponent={<View style={{ width: 6, }} />}
                                 snapToInterval={86}
                                 decelerationRate="fast"
                                 renderItem={({ item }) => {
                                     return (
-                                        <SearchCriteriaItem
-                                            item={item}
-                                            handleSearchByCriteriaItem={handleSearchByCriteriaItem}
-                                            farmerType={farmerType}
-                                        />
+                                        <TouchableOpacity
+                                            disabled={criteria ? true : false}
+                                            style={{
+                                                marginRight: 10,
+                                                backgroundColor:
+                                                    focusedOption === item.focusedOption
+                                                        ? COLORS.main
+                                                        : COLORS.fourth,
+                                                borderColor:
+                                                    focusedOption === item.focusedOption
+                                                        ? COLORS.main
+                                                        : COLORS.lightgrey,
+                                                borderWidth: 1,
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                                paddingHorizontal: 6,
+                                                paddingBottom: 5,
+                                                borderRadius: 100,
+                                                elevation: 1,
+                                            }}
+                                            onPress={() => handleFocusedOption(item.focusedOption)}
+                                        >
+                                            <Text
+                                                style={{
+                                                    fontSize: 16,
+                                                    color:
+                                                        focusedOption === item.focusedOption
+                                                            ? COLORS.white
+                                                            : COLORS.grey,
+                                                    fontFamily: "JosefinSans-Regular",
+                                                    textAlign: "center",
+                                                }}
+                                            >
+                                                {item.criteriaType}
+                                            </Text>
+                                        </TouchableOpacity>
                                     );
                                 }}
                             />
                         </View>
                     }
 
+                </View>
+                {!criteria &&
                     <View
                         style={{
-                            height: "90%",
+                            height: 10,
+                            backgroundColor: criteria ? "rgba(0,0,0,0.5)" : COLORS.main,
+                        }}
+                    />}
+
+                <View
+                    style={{
+                        opacity: criteria ? 0.2 : 1,
+                        backgroundColor: criteria ? "rgba(0,0,0,0.5)" : COLORS.white,
+                        height: criteria && "100%",
+                    }}
+                >
+                    {(!criteria && searchResults.length === 0) &&
+                        <View>
+
+                            <Text
+                                style={{
+                                    fontSize: 18,
+                                    color: COLORS.black,
+                                    fontFamily: "JosefinSans-Regular",
+                                    padding: 20,
+                                }}
+                            >
+                                Tenta procurar registos por
+                            </Text>
+                            <View
+                                style={{
+                                    paddingLeft: 20,
+                                    height: 100,
+                                    justifyContent: "space-around",
+                                }}
+                            >
+                                <TouchableOpacity
+                                    style={{
+                                        flexDirection: "row",
+                                    }}
+                                    onPress={() => handleSearchCriteria(searchCriteria.adminPost)}
+                                >
+                                    <Icon name="search" size={30} color={COLORS.grey} />
+                                    <Text
+                                        style={{
+                                            paddingLeft: 15,
+                                            fontSize: 18,
+                                            color: COLORS.grey,
+                                            fontFamily: "JosefinSans-Regular",
+
+                                        }}
+                                    >Posto Administrativo</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={{
+                                        flexDirection: "row",
+                                    }}
+                                    onPress={() => handleSearchCriteria(searchCriteria.village)}
+                                >
+                                    <Icon name="search" size={30} color={COLORS.grey} />
+                                    <Text
+                                        style={{
+                                            paddingLeft: 15,
+                                            fontSize: 18,
+                                            color: COLORS.grey,
+                                            fontFamily: "JosefinSans-Regular",
+                                        }}
+                                    >Localidade</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    }
+                </View>
+
+
+                {(criteria === searchCriteria.adminPost || criteria === searchCriteria.village)
+                    && <View
+                        style={{
+                            borderRadius: 5,
+                            position: "absolute",
+                            top: 48,
+                            left: 50,
+                            zIndex: 10,
+                            width: "85%",
+                            height: 500,
                         }}
                     >
                         <FlatList
-                            data={searchResults}
+                            data={criteriaSuggestions}
                             keyExtractor={keyExtractor}
+                            ItemSeparatorComponent={
+                                <CustomDivider />
+                            }
                             showsVerticalScrollIndicator={false}
-                            // ListHeaderComponent={<View style={{ width: 6, }} />}
                             snapToInterval={86}
                             decelerationRate="fast"
                             renderItem={({ item }) => {
                                 return (
-                                    <TouchableOpacity
-                                        style={{
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            paddingHorizontal: 6,
-                                            paddingBottom: 5,
-                                            borderRadius: 100,
-                                            elevation: 1,
-                                        }}
-                                        onPress={() => {
+                                    <SearchCriteriaItem
+                                        item={item}
+                                        handleSearchByCriteriaItem={handleSearchByCriteriaItem}
+                                        criteria={criteria}
+                                    />
+                                );
+                            }}
+                        />
+                    </View>
+                }
+                <View
+                    style={{
+                        height: "90%",
+                    }}
+                >
+                    <FlatList
+                        data={searchResults}
+                        keyExtractor={keyExtractor}
+                        showsVerticalScrollIndicator={false}
+                        ItemSeparatorComponent={
+                            <CustomDivider />
+                        }
+                        // ListHeaderComponent={<View style={{ width: 6, }} />}
+                        snapToInterval={86}
+                        decelerationRate="fast"
+                        renderItem={({ item }) => {
+                            return (
+                                <TouchableOpacity
+                                    style={{
+                                        flexDirection: "row",
+                                        marginHorizontal: 10,
+                                        marginVertical: 5,
+                                        elevation: 1,
+                                    }}
+                                    onPress={() => {
 
+                                    }}
+                                >
+                                    <Avatar
+                                        size={50}
+                                        rounded
+                                        title={item.imageAlt}
+                                        containerStyle={{ backgroundColor: COLORS.grey }}
+                                        source={{
+                                            uri: item.image,
+                                        }}
+                                    />
+                                    <View
+                                        style={{
+                                            flexDirection: "row",
+                                            alignItems: "center",
+                                            marginLeft: 15,
+                                            paddingBottom: 5,
                                         }}
                                     >
                                         <Text
                                             style={{
                                                 fontSize: 16,
+                                                color: COLORS.black,
                                                 fontFamily: "JosefinSans-Regular",
-                                                textAlign: "center",
                                             }}
                                         >
-                                            {"item"}
+                                            {item.name}
                                         </Text>
-                                    </TouchableOpacity>
-                                );
-                            }}
-                        />
-                    </View>
 
-                </Animated.View>
-            {/* </KeyboardNavigation> */}
-
+                                    </View>
+                                </TouchableOpacity>
+                            );
+                        }}
+                    />
+                </View>
+            </Animated.View>
         </SafeAreaView>
     );
 };
