@@ -51,7 +51,7 @@ const FarmersListLayout = ({ route, navigation }) => {
 
     const handleNavigationToSearchScreen = () => {
         navigation.navigate("FarmersSearch", {
-            farmerType
+            farmerType: farmerType,
         });
     };
 

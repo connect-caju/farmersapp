@@ -215,7 +215,7 @@ export default function FarmerScreen({ route, navigation }) {
                 alignItems: "center",
               }}
             >
-              <Icon name="arrow-back-ios" color={COLORS.main} size={wp("8%")} />
+              <Icon name="arrow-back" color={COLORS.main} size={wp("8%")} />
             </Pressable>
           </Box>
 

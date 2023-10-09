@@ -227,7 +227,7 @@ const ProfileScreen = ({ route, navigation }) => {
             >
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate("FarmersList", {
+                  navigation.navigate("FarmersListLayout", {
                     farmerType: farmerType,
                   })
                 }}

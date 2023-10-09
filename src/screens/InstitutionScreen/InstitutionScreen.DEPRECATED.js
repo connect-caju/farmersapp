@@ -1,3 +1,5 @@
+/* eslint-disable semi */
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect, useRef } from "react"
 import {
   View,
@@ -5,9 +7,9 @@ import {
   ScrollView,
   StyleSheet,
   SafeAreaView,
-  TouchableOpacity,
   Image,
   Pressable,
+  TouchableOpacity,
   Dimensions,
 } from "react-native"
 import { Box, Stack, Center } from "native-base"
@@ -30,15 +32,15 @@ import {
   useDimensionsChange,
 } from "react-native-responsive-dimensions"
 
+import styles from "./styles"
 import FarmlandData from "../../components/FarmlandData/FarmlandData"
-import GroupData from "../../components/GroupData/GroupData"
+import InstitutionData from "../../components/InstitutionData/InstitutionData"
 import COLORS from "../../consts/colors"
 import PhotoModal from "../../components/Modals/PhotoModal"
-import styles from "./styles"
 
 import { realmContext } from "../../models/realmContext"
-import { roles } from "../../consts/roles"
 import { useUser } from "@realm/react"
+import { roles } from "../../consts/roles"
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome"
 import { faTree } from "@fortawesome/free-solid-svg-icons"
 import CustomActivityIndicator from "../../components/ActivityIndicator/CustomActivityIndicator"
@@ -50,17 +52,16 @@ import PhotoBottomSheet from "../../components/BottomSheet/PhotoBottomSheet"
 import { SuccessLottie } from "../../components/LottieComponents/SuccessLottie"
 const { useRealm, useQuery, useObject } = realmContext
 
-const group = "group"
-const groupFarmlands = "groupFarmlands"
+const institution = "institution"
+const institutionFarmlands = "institutionFarmlands"
 
-export default function GroupScreen({ route, navigation }) {
+export default function InstitutionScreen({ route, navigation }) {
   const ownerId = route.params.ownerId
   const farmersIDs = route.params?.farmersIDs
   const realm = useRealm()
   const user = useUser()
   const customUserData = user?.customData
-  const farmer = realm.objectForPrimaryKey("Group", ownerId)
-
+  const farmer = realm.objectForPrimaryKey("Institution", ownerId)
   const [isAddPhoto, setIsAddPhoto] = useState(false)
   const [isPhotoModalVisible, setIsPhotoModalVisible] = useState(false)
   const farmlands = realm
@@ -103,17 +104,18 @@ export default function GroupScreen({ route, navigation }) {
 
   useEffect(() => {
     realm.subscriptions.update((mutableSubs) => {
-      mutableSubs.removeByName(group)
-      mutableSubs.add(realm.objects("Group").filtered(`_id == "${ownerId}"`), {
-        name: group,
-      })
+      mutableSubs.removeByName(institution)
+      mutableSubs.add(
+        realm.objects("Institution").filtered(`_id == "${ownerId}"`),
+        { name: institution },
+      )
     })
 
     realm.subscriptions.update((mutableSubs) => {
-      mutableSubs.removeByName(groupFarmlands)
+      mutableSubs.removeByName(institutionFarmlands)
       mutableSubs.add(
         realm.objects("Farmland").filtered(`farmerId == "${ownerId}"`),
-        { name: groupFarmlands },
+        { name: institutionFarmlands },
       )
     })
   }, [realm])
@@ -126,48 +128,44 @@ export default function GroupScreen({ route, navigation }) {
           backgroundColor: COLORS.ghostwhite,
         }}
       >
-        <AwesomeAlert
-          show={isAddPhoto}
-          showProgress={false}
-          title="Fotografia"
-          message="Pretendes carregar uma nova fotografia?"
-          closeOnTouchOutside={false}
-          closeOnHardwareBackPress={false}
-          showCancelButton={true}
-          showConfirmButton={true}
-          cancelText="   Não   "
-          confirmText="   Sim   "
-          confirmButtonColor={COLORS.main}
-          cancelButtonColor={COLORS.danger}
-          onCancelPressed={() => {
-            setIsAddPhoto(false)
-          }}
-          onConfirmPressed={() => {
-            setIsAddPhoto(false)
-          }}
-        />
-
         <View
           style={{
             width: "100%",
             paddingHorizontal: 5,
             paddingVertical: hp("1%"),
             backgroundColor: "#EBEBE4",
-            borderTopWidth: 0,
-            borderColor: "#EBEBE4",
-            borderBottomWidth: 3,
-            borderLeftWidth: 3,
-            borderRightWidth: 3,
             alignItems: "center",
+            justifyContent: "center",
           }}
         >
+          <AwesomeAlert
+            show={isAddPhoto}
+            showProgress={false}
+            title="Fotografia"
+            message="Pretendes carregar uma nova fotografia?"
+            closeOnTouchOutside={false}
+            closeOnHardwareBackPress={false}
+            showCancelButton={true}
+            showConfirmButton={true}
+            cancelText="   Não   "
+            confirmText="   Sim   "
+            confirmButtonColor={COLORS.main}
+            cancelButtonColor={COLORS.danger}
+            onCancelPressed={() => {
+              setIsAddPhoto(false)
+            }}
+            onConfirmPressed={() => {
+              setIsAddPhoto(false)
+            }}
+          />
+
           <Stack direction="row" w="100%">
             <Box>
               <Pressable
                 onPress={() => {
                   navigation.navigate("FarmersListLayout", {
-                    farmerType: "Grupo",
-                  });
+                    farmerType: "Instituição",
+                  })
                 }}
                 style={{
                   position: "absolute",
@@ -178,7 +176,7 @@ export default function GroupScreen({ route, navigation }) {
                 }}
               >
                 <Icon
-                  name="arrow-back-ios"
+                  name="arrow-back"
                   color={COLORS.main}
                   size={wp("8%")}
                 />
@@ -194,18 +192,24 @@ export default function GroupScreen({ route, navigation }) {
                     color: COLORS.main,
                   }}
                 >
-                  {farmer?.type}
+                  Produtor Institucional
                 </Text>
 
                 <Stack direction="row" space={2}>
                   <Center>
                     <Text
-                      style={{ fontFamily: "JosefinSans-Regular", fonSize: 14 }}
+                      style={{
+                        fontFamily: "JosefinSans-Regular",
+                        fonSize: 14,
+                      }}
                     ></Text>
                   </Center>
                   <Center>
                     <Text
-                      style={{ fontFamily: "JosefinSans-Regular", fonSize: 14 }}
+                      style={{
+                        fontFamily: "JosefinSans-Regular",
+                        fonSize: 14,
+                      }}
                     ></Text>
                   </Center>
                 </Stack>
@@ -241,7 +245,7 @@ export default function GroupScreen({ route, navigation }) {
               }}
               onPress={() => {
                 setLoadingActivityIndicator(true)
-                navigation.navigate("Group", {
+                navigation.navigate("Institution", {
                   ownerId: currentNode?.prev,
                   farmersIDs,
                 })
@@ -279,7 +283,7 @@ export default function GroupScreen({ route, navigation }) {
               }}
               onPress={() => {
                 setLoadingActivityIndicator(true)
-                navigation.navigate("Group", {
+                navigation.navigate("Institution", {
                   ownerId: currentNode?.next,
                   farmersIDs,
                 })
@@ -293,6 +297,7 @@ export default function GroupScreen({ route, navigation }) {
             </TouchableOpacity>
           )}
         </Box>
+
         {loadingActivitiyIndicator ? (
           <CustomActivityIndicator
             loadingActivitiyIndicator={loadingActivitiyIndicator}
@@ -318,7 +323,7 @@ export default function GroupScreen({ route, navigation }) {
                 // onPress={handlePresentModal}
                 onPress={() => {
                   navigation.navigate("Camera", {
-                    ownerType: "Grupo",
+                    ownerType: "Instituição",
                     ownerId: farmer?._id,
                     farmersIDs,
                   })
@@ -360,7 +365,7 @@ export default function GroupScreen({ route, navigation }) {
                   top: -50,
                 }}
               >
-                {farmer?.name}
+                {farmer?.manager?.fullname}
               </Text>
               <Text
                 style={{
@@ -372,9 +377,13 @@ export default function GroupScreen({ route, navigation }) {
                   top: -50,
                 }}
               >
-                {farmer?.type}
+                (Responsável)
               </Text>
             </Box>
+
+            {/* 
+        Personal Data Child Component
+    */}
             <View
               style={{
                 marginTop: 40,
@@ -393,7 +402,7 @@ export default function GroupScreen({ route, navigation }) {
                 {farmer?.identifier}
               </Text>
 
-              <GroupData farmer={farmer} />
+              <InstitutionData farmer={farmer} />
             </View>
 
             <Box
@@ -426,7 +435,6 @@ export default function GroupScreen({ route, navigation }) {
               >
                 ({farmlands?.length})
               </Text>
-
               {customUserData?.role !== roles.provincialManager && (
                 <Stack direction="row" w="100%" p="4">
                   <Box w="50%"></Box>
@@ -446,7 +454,7 @@ export default function GroupScreen({ route, navigation }) {
                           ownerName: `${farmer?.type} ${farmer?.name}`,
                           ownerImage: farmer?.image,
                           ownerAddress: farmer?.address,
-                          flag: "Grupo",
+                          flag: "Instituição",
                         })
                       }
                     >
@@ -509,7 +517,7 @@ export default function GroupScreen({ route, navigation }) {
             }}
           >
             <PhotoBottomSheet 
-              ownerType={'Grupo'} 
+              ownerType={'Instituição'} 
               ownerId={farmer?._id} 
               farmersIDs={farmersIDs} 
             />
@@ -519,7 +527,7 @@ export default function GroupScreen({ route, navigation }) {
             <PhotoModal
               realm={realm}
               photoOwner={farmer}
-              photoOwnerType={"Grupo"}
+              photoOwnerType={"Instituição"}
               isPhotoModalVisible={isPhotoModalVisible}
               setIsPhotoModalVisible={setIsPhotoModalVisible}
               userRole={customUserData?.role}
