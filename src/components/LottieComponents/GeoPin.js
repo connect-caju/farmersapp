@@ -1,25 +1,26 @@
-import { View, Text, Pressable, Animated } from "react-native"
-import React, { useRef, useState } from "react"
-import LottieView from "lottie-react-native"
+/* eslint-disable prettier/prettier */
+import { View, Text, Pressable, Animated } from "react-native";
+import React, { useRef, useState } from "react";
+import LottieView from "lottie-react-native";
 
 //  const
 
 const GeoPin = ({ styles, onPress }) => {
-  const progress = useRef(new Animated.Value(0)).current
-  const [isAddButtonPressed, setIsAddButtonPressed] = useState(false)
+  const progress = useRef(new Animated.Value(0)).current;
+  const [isAddButtonPressed, setIsAddButtonPressed] = useState(false);
 
   const handleAdd = () => {
-    const newValue = isAddButtonPressed ? 0 : 1
+    const newValue = isAddButtonPressed ? 0 : 1;
     Animated.timing(progress, {
       toValue: newValue,
       duration: 2000,
       useNativeDriver: true,
-    }).start()
+    }).start();
     setTimeout(() => {
-      onPress()
-    }, 500)
-    setIsAddButtonPressed(!isAddButtonPressed)
-  }
+      onPress();
+    }, 500);
+    setIsAddButtonPressed(!isAddButtonPressed);
+  };
 
   return (
     // <Pressable
@@ -41,7 +42,7 @@ const GeoPin = ({ styles, onPress }) => {
       />
     </View>
     // </Pressable>
-  )
-}
+  );
+};
 
-export default GeoPin
+export default GeoPin;

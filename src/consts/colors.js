@@ -9,6 +9,7 @@ const COLORS = {
   sixth: "#f7d7f7",
   grey: "grey",
   lightgrey: "lightgrey",
+  lightestgrey: "#eee",
   ghostwhite: "ghostwhite",
   black: "#000",
   white: "#fff",

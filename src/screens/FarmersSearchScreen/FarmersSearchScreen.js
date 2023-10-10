@@ -16,38 +16,16 @@ import { getVillagesByDistrict } from "../../helpers/getVillagesByDistrict";
 import { useUser } from "@realm/react";
 import { realmContext } from "../../models/realmContext";
 import { customizeItem } from "../../helpers/customizeItem";
+import { farmerTypes } from "../../consts/farmerTypes";
+import { filterByCriteria } from "../../consts/filterByCriteria";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faInfo } from "@fortawesome/free-solid-svg-icons";
+import SearchNotFound from "../../components/LottieComponents/SearchNotFound";
 const { useRealm } = realmContext;
 
-const filterByCriteria = [
-    {
-        criteriaType: "Comerciais",
-        iconName: "all-inclusive",
-        focusedOption: 1,
-    },
-    {
-        criteriaType: "Familiares",
-        iconName: "all-inclusive",
-        focusedOption: 2,
-    },
-    {
-        criteriaType: "Não categorizados",
-        iconName: "all-inclusive",
-        focusedOption: 3,
-    },
-    {
-        criteriaType: "Pendentes",
-        iconName: "all-inclusive",
-        focusedOption: 4,
-    },
-    {
-        criteriaType: "Validados",
-        iconName: "all-inclusive",
-        focusedOption: 5,
-    },
-];
 
 
-const SearchCriteriaItem = ({ item, handleSearchByCriteriaItem, criteria }) => {
+const SuggestedCriteriaItem = ({ item, handleSearchByCriteriaItem, selectedCriteria }) => {
 
     return (
         <TouchableOpacity
@@ -61,7 +39,7 @@ const SearchCriteriaItem = ({ item, handleSearchByCriteriaItem, criteria }) => {
                 // 
 
             }}
-            onPress={() => handleSearchByCriteriaItem(item, criteria)}
+            onPress={() => handleSearchByCriteriaItem(item, selectedCriteria)}
         >
             <Icon
                 name="search"
@@ -87,42 +65,93 @@ const SearchCriteriaItem = ({ item, handleSearchByCriteriaItem, criteria }) => {
     );
 };
 
+const CriteriaItem = ({ item, handleFocusedOption, focusedOption, selectedCriteria }) => {
 
-const ResourceItem = ({ item }) => {
     return (
         <TouchableOpacity
+            disabled={selectedCriteria ? true : false}
             style={{
                 marginRight: 10,
-                padding: 15,
-                paddingLeft: 20,
-                backgroundColor: COLORS.white,
-                width: "100%",
-                flexDirection: "row",
-                // 
-
+                backgroundColor:
+                    focusedOption === item.focusedOption
+                        ? COLORS.main
+                        : COLORS.fourth,
+                borderColor:
+                    focusedOption === item.focusedOption
+                        ? COLORS.main
+                        : COLORS.lightgrey,
+                borderWidth: 1,
+                alignItems: "center",
+                justifyContent: "center",
+                paddingHorizontal: 6,
+                paddingBottom: 5,
+                borderRadius: 100,
+                elevation: 1,
             }}
-        // onPress={() => handleFocusedOption(item.focusedOption)}
+            onPress={() => handleFocusedOption(item.focusedOption)}
         >
-            <Icon
-                name="search"
-                size={25}
-                style={{
-                    // transform: [{ rotateY: "15deg" }, { rotateZ: "90deg" }],
-                }}
-                color={COLORS.grey}
-                onPress={() => {
-
-                }}
-            />
             <Text
                 style={{
                     fontSize: 16,
+                    color:
+                        focusedOption === item.focusedOption
+                            ? COLORS.white
+                            : COLORS.grey,
                     fontFamily: "JosefinSans-Regular",
-                    paddingLeft: 15,
+                    textAlign: "center",
                 }}
             >
-                {item}
+                {item.criteriaType}
             </Text>
+        </TouchableOpacity>
+    );
+};
+
+
+const FoundFarmerItem = ({ item, navigation, route, farmerType }) => {
+    return (
+        <TouchableOpacity
+            style={{
+                flexDirection: "row",
+                marginHorizontal: 10,
+                marginVertical: 5,
+                elevation: 1,
+            }}
+            onPress={() => {
+                navigation.navigate("Profile", {
+                    ownerId: item._id,
+                    farmerType,
+                });
+            }}
+        >
+            <Avatar
+                size={50}
+                rounded
+                title={item.imageAlt}
+                containerStyle={{ backgroundColor: COLORS.grey }}
+                source={{
+                    uri: item.image,
+                }}
+            />
+            <View
+                style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginLeft: 15,
+                    paddingBottom: 5,
+                }}
+            >
+                <Text
+                    style={{
+                        fontSize: 16,
+                        color: COLORS.black,
+                        fontFamily: "JosefinSans-Regular",
+                    }}
+                >
+                    {item.name}
+                </Text>
+
+            </View>
         </TouchableOpacity>
     );
 };
@@ -133,18 +162,20 @@ const FarmersSearchScreen = ({ navigation, route }) => {
 
     const farmerType = route.params?.farmerType || "Indivíduo";
     const [focusedOption, setFocusedOption] = useState(null);
-    const [isSearching, setIsSearching] = useState(true);
+    const [isTextInputFocused, setIsTextInputFocused] = useState(false);
+    const [isSearching, setIsSearching] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
-    const [criteria, setCriteria] = useState(null);
+    const [selectedCriteria, setSelectedCriteria] = useState(null);
     const [criteriaSuggestions, setCriteriaSuggestions] = useState([]);
     const [searchResults, setSearchResults] = useState([]);
+    const [filteredCriteria, setFilteredCriteria] = useState([]);
     const user = useUser();
     const customUserData = user?.customData;
     const realm = useRealm();
 
 
-    const handleSearchCriteria = (criteria) => {
-        setCriteria(criteria);
+    const handleSearchCriteria = (selectedCriteria) => {
+        setSelectedCriteria(selectedCriteria);
     };
 
 
@@ -161,19 +192,30 @@ const FarmersSearchScreen = ({ navigation, route }) => {
         setSearchQuery(text);
     };
 
+
     const handleNavigationToPreviousScreen = () => {
-        navigation.pop();
+        // if the found farmers are still displayed, remove
+        if (searchResults.length > 0) {
+            setSearchResults([]);
+            setIsSearching(false);
+        }
+        // else remove the search screen and navigate back
+        else {
+            navigation.pop();
+        }
     };
 
-    // fetch resources by the selected criteria (adminPost || village)
-    const handleSearchByCriteriaItem = (item, criteria) => {
+    // fetch resources by the selected selectedCriteria (adminPost || village)
+    const handleSearchByCriteriaItem = (item, selectedCriteria) => {
         let farmers = [];
-        if (criteria === searchCriteria.adminPost) {
+
+        // in case the selectedCriteria is an Administrative Post
+        if (selectedCriteria === searchCriteria.adminPost) {
             if (farmerType === "Indivíduo") {
                 farmers = realm
                     .objects("Actor")
                     .filtered("address.adminPost == $0", item);
-    
+
             } else if (farmerType === "Grupo") {
                 farmers = realm
                     .objects("Group")
@@ -185,12 +227,13 @@ const FarmersSearchScreen = ({ navigation, route }) => {
             }
 
         }
-        else if (criteria === searchCriteria.village){
+        // in case the selectedCriteria is a village
+        else if (selectedCriteria === searchCriteria.village) {
             if (farmerType === "Indivíduo") {
                 farmers = realm
                     .objects("Actor")
                     .filtered("address.village == $0", item);
-    
+
             } else if (farmerType === "Grupo") {
                 farmers = realm
                     .objects("Group")
@@ -203,26 +246,37 @@ const FarmersSearchScreen = ({ navigation, route }) => {
         }
 
         setSearchResults(customizeItem(farmers, [], [], {}, farmerType));
-        setCriteria(null);
         setCriteriaSuggestions([]);
         setFocusedOption(false);
+        setIsSearching(true);
+        setSelectedCriteria(null);
+
     };
 
-    console.log("searchResults:", searchResults);
-
     useEffect(() => {
-
-        if (criteria === searchCriteria.adminPost) {
+        // set the list of AdminPosts of the current user's district 
+        if (selectedCriteria === searchCriteria.adminPost) {
             const suggestions = getAdminPostsByDistrict(customUserData?.userDistrict);
             setCriteriaSuggestions(suggestions);
         }
 
-        if (criteria === searchCriteria.village) {
+        // set the list of villages of the current user's district
+        if (selectedCriteria === searchCriteria.village) {
             const suggestions = getVillagesByDistrict(customUserData?.userDistrict);
             setCriteriaSuggestions(suggestions);
         }
 
-    }, [searchQuery, criteria, user]);
+    }, [searchQuery, selectedCriteria, user]);
+
+    useEffect(() => {
+        // filter the list of criterii according to the farmerType
+        // Individuo: comerciais, farmiliares, pendentes, validados
+        // Grupo: legalizados, em processo de legalizacao, nao legalizados, pendentes, validados
+        // Instituicao: privados, publicos, pendentes, validados
+        const filtered = filterByCriteria.filter((criteria) => criteria.farmerType === farmerType);
+        setFilteredCriteria(filtered);
+
+    }, [farmerType]);
 
     const keyExtractor = (item, index) => index.toString();
 
@@ -233,11 +287,6 @@ const FarmersSearchScreen = ({ navigation, route }) => {
             style={{
             }}
         >
-            {/* <TouchableWithoutFeedback
-                onPress={Keyboard.dismiss}
-                accessible={false}
-            > */}
-
             <Animated.View
                 entering={SlideInRight}
                 style={{
@@ -261,6 +310,7 @@ const FarmersSearchScreen = ({ navigation, route }) => {
                         }}
                     >
                         <Pressable
+
                             onPress={() => handleNavigationToPreviousScreen()}
                             style={{
                                 justifyContent: "center",
@@ -289,7 +339,7 @@ const FarmersSearchScreen = ({ navigation, route }) => {
                                 }}
                             >
                                 <Icon
-                                    name={!(searchQuery || criteria) ? "search" : "close"}
+                                    name={!(searchQuery || selectedCriteria) ? "search" : "close"}
                                     size={25}
                                     style={{
                                         transform: [{ rotateY: "15deg" }, { rotateZ: "90deg" }],
@@ -300,14 +350,14 @@ const FarmersSearchScreen = ({ navigation, route }) => {
                                             handleTextInputChange("");
                                         }
 
-                                        if (criteria) {
+                                        if (selectedCriteria) {
                                             handleSearchCriteria(null);
                                         }
                                     }}
                                 />
                             </View>
                             <TextInput
-                                autoFocus={isSearching ? true : false}
+                                autoFocus={isTextInputFocused ? true : false}
                                 placeholder="Procurar"
                                 placeholderTextColor={COLORS.lightgrey}
                                 style={{
@@ -336,7 +386,7 @@ const FarmersSearchScreen = ({ navigation, route }) => {
                         </View>
                     </View>
                     <CustomDivider thickness={1} color={COLORS.lightgrey} />
-                    {!criteria &&
+                    {!selectedCriteria &&
                         <View
                             style={{
                                 marginTop: 5,
@@ -345,7 +395,7 @@ const FarmersSearchScreen = ({ navigation, route }) => {
                             }}
                         >
                             <FlatList
-                                data={filterByCriteria}
+                                data={filteredCriteria}
                                 keyExtractor={keyExtractor}
                                 horizontal
                                 showsHorizontalScrollIndicator={false}
@@ -354,42 +404,12 @@ const FarmersSearchScreen = ({ navigation, route }) => {
                                 decelerationRate="fast"
                                 renderItem={({ item }) => {
                                     return (
-                                        <TouchableOpacity
-                                            disabled={criteria ? true : false}
-                                            style={{
-                                                marginRight: 10,
-                                                backgroundColor:
-                                                    focusedOption === item.focusedOption
-                                                        ? COLORS.main
-                                                        : COLORS.fourth,
-                                                borderColor:
-                                                    focusedOption === item.focusedOption
-                                                        ? COLORS.main
-                                                        : COLORS.lightgrey,
-                                                borderWidth: 1,
-                                                alignItems: "center",
-                                                justifyContent: "center",
-                                                paddingHorizontal: 6,
-                                                paddingBottom: 5,
-                                                borderRadius: 100,
-                                                elevation: 1,
-                                            }}
-                                            onPress={() => handleFocusedOption(item.focusedOption)}
-                                        >
-                                            <Text
-                                                style={{
-                                                    fontSize: 16,
-                                                    color:
-                                                        focusedOption === item.focusedOption
-                                                            ? COLORS.white
-                                                            : COLORS.grey,
-                                                    fontFamily: "JosefinSans-Regular",
-                                                    textAlign: "center",
-                                                }}
-                                            >
-                                                {item.criteriaType}
-                                            </Text>
-                                        </TouchableOpacity>
+                                        <CriteriaItem
+                                            item={item}
+                                            handleFocusedOption={handleFocusedOption}
+                                            selectedCriteria={selectedCriteria}
+                                            focusedOption={focusedOption}
+                                        />
                                     );
                                 }}
                             />
@@ -397,33 +417,35 @@ const FarmersSearchScreen = ({ navigation, route }) => {
                     }
 
                 </View>
-                {!criteria &&
+                {!selectedCriteria &&
                     <View
                         style={{
                             height: 10,
-                            backgroundColor: criteria ? "rgba(0,0,0,0.5)" : COLORS.main,
+                            backgroundColor: selectedCriteria ? "rgba(0,0,0,0.5)" : COLORS.main,
                         }}
                     />}
 
                 <View
                     style={{
-                        opacity: criteria ? 0.2 : 1,
-                        backgroundColor: criteria ? "rgba(0,0,0,0.5)" : COLORS.white,
-                        height: criteria && "100%",
+                        opacity: selectedCriteria ? 0.2 : 1,
+                        backgroundColor: selectedCriteria ? "rgba(0,0,0,0.5)" : COLORS.white,
+                        height: selectedCriteria && "100%",
                     }}
                 >
-                    {(!criteria && searchResults.length === 0) &&
+                    {(!selectedCriteria && searchResults.length === 0) &&
                         <View>
 
                             <Text
                                 style={{
-                                    fontSize: 18,
+                                    fontSize: 16,
                                     color: COLORS.black,
-                                    fontFamily: "JosefinSans-Regular",
+                                    fontFamily: "JosefinSans-Bold",
                                     padding: 20,
+                                    marginRight: 20,
+                                    lineHeight: 25,
                                 }}
                             >
-                                Tenta procurar registos por
+                                Tenta procurar registos de {farmerType === farmerTypes.farmer ? "Produtores Singulares" : farmerType === farmerTypes.group ? "Produtores Agrupados" : "Produtores Institucionais"} por
                             </Text>
                             <View
                                 style={{
@@ -438,7 +460,7 @@ const FarmersSearchScreen = ({ navigation, route }) => {
                                     }}
                                     onPress={() => handleSearchCriteria(searchCriteria.adminPost)}
                                 >
-                                    <Icon name="search" size={30} color={COLORS.grey} />
+                                    <Icon name="search" size={25} color={COLORS.grey} />
                                     <Text
                                         style={{
                                             paddingLeft: 15,
@@ -455,7 +477,7 @@ const FarmersSearchScreen = ({ navigation, route }) => {
                                     }}
                                     onPress={() => handleSearchCriteria(searchCriteria.village)}
                                 >
-                                    <Icon name="search" size={30} color={COLORS.grey} />
+                                    <Icon name="search" size={25} color={COLORS.grey} />
                                     <Text
                                         style={{
                                             paddingLeft: 15,
@@ -471,7 +493,7 @@ const FarmersSearchScreen = ({ navigation, route }) => {
                 </View>
 
 
-                {(criteria === searchCriteria.adminPost || criteria === searchCriteria.village)
+                {(selectedCriteria === searchCriteria.adminPost || selectedCriteria === searchCriteria.village)
                     && <View
                         style={{
                             borderRadius: 5,
@@ -494,77 +516,91 @@ const FarmersSearchScreen = ({ navigation, route }) => {
                             decelerationRate="fast"
                             renderItem={({ item }) => {
                                 return (
-                                    <SearchCriteriaItem
+                                    <SuggestedCriteriaItem
                                         item={item}
                                         handleSearchByCriteriaItem={handleSearchByCriteriaItem}
-                                        criteria={criteria}
+                                        selectedCriteria={selectedCriteria}
                                     />
                                 );
                             }}
                         />
                     </View>
                 }
-                <View
-                    style={{
-                        height: "90%",
-                    }}
-                >
-                    <FlatList
-                        data={searchResults}
-                        keyExtractor={keyExtractor}
-                        showsVerticalScrollIndicator={false}
-                        ItemSeparatorComponent={
-                            <CustomDivider />
-                        }
-                        // ListHeaderComponent={<View style={{ width: 6, }} />}
-                        snapToInterval={86}
-                        decelerationRate="fast"
-                        renderItem={({ item }) => {
-                            return (
-                                <TouchableOpacity
-                                    style={{
-                                        flexDirection: "row",
-                                        marginHorizontal: 10,
-                                        marginVertical: 5,
-                                        elevation: 1,
-                                    }}
-                                    onPress={() => {
+                {(isSearching && searchResults.length > 0)
+                    && <View
+                        style={{
+                            height: "90%",
+                        }}
+                    >
+                        <FlatList
+                            data={searchResults}
+                            keyExtractor={keyExtractor}
+                            showsVerticalScrollIndicator={false}
+                            ItemSeparatorComponent={
+                                <CustomDivider />
+                            }
+                            // ListHeaderComponent={<View style={{ width: 6, }} />}
+                            snapToInterval={86}
+                            decelerationRate="fast"
+                            renderItem={({ item }) => {
+                                return (
+                                    <FoundFarmerItem item={item} navigation={navigation} route={route} farmerType={farmerType} />
+                                );
+                            }}
+                        />
+                    </View>
+                }
+                {(isSearching && searchResults.length === 0) &&
+                    (
+                        <View
+                            style={{
+                                justifyContent: "center",
+                                alignItems: "center",
+                                height: "30%",
+                                paddingHorizontal: 30,
+                            }}
+                        >
+                            <View
+                                style={{
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                }}
 
+                            >
+                                <SearchNotFound />
+                            </View>
+                            <View
+                                style={{
+                                    backgroundColor: COLORS.lightestgrey,
+                                    padding: 10,
+                                    borderRadius: 6,
+                                    width: 220,
+                                }}
+                            >
+                                <Text
+                                    style={{
+                                        color: COLORS.grey,
+                                        fontSize: 15,
+                                        fontFamily: "JosefinSans-Regular",
+                                        textAlign: "center",
                                     }}
                                 >
-                                    <Avatar
-                                        size={50}
-                                        rounded
-                                        title={item.imageAlt}
-                                        containerStyle={{ backgroundColor: COLORS.grey }}
-                                        source={{
-                                            uri: item.image,
-                                        }}
-                                    />
-                                    <View
-                                        style={{
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            marginLeft: 15,
-                                            paddingBottom: 5,
-                                        }}
-                                    >
-                                        <Text
-                                            style={{
-                                                fontSize: 16,
-                                                color: COLORS.black,
-                                                fontFamily: "JosefinSans-Regular",
-                                            }}
-                                        >
-                                            {item.name}
-                                        </Text>
-
-                                    </View>
-                                </TouchableOpacity>
-                            );
-                        }}
-                    />
-                </View>
+                                    Nenhum registo encontrado
+                                </Text>
+                                <Text
+                                    style={{
+                                        color: COLORS.grey,
+                                        fontSize: 14,
+                                        fontFamily: "JosefinSans-Regular",
+                                        textAlign: "center",
+                                    }}
+                                >
+                                    Tenta usar parâmetros de pesquisa diferentes
+                                </Text>
+                            </View>
+                        </View>
+                    )
+                }
             </Animated.View>
         </SafeAreaView>
     );

@@ -1,17 +1,12 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable linebreak-style */
 /* eslint-disable prettier/prettier */
-import { View, Text } from "react-native";
-import React from "react";
-import { SafeAreaView } from "react-native";
+import { View, Text, SafeAreaView, TouchableOpacity, FlatList } from "react-native";
 import COLORS from "../../consts/colors";
-import { TouchableOpacity } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faEllipsisVertical, faSearch } from "@fortawesome/free-solid-svg-icons";
 import CustomDivider from "../../components/Divider/CustomDivider";
-import { FlatList } from "react-native";
-import { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import CustomActivityIndicator from "../../components/ActivityIndicator/CustomActivityIndicator";
 import RegisteredByCurrentUser from "../../components/RegisteredByCurrentUser/RegisteredByCurrentUser";
 import InvalidatedFarmers from "../../components/InvalidatedFarmers/InvalidatedFarmers";
@@ -68,6 +63,8 @@ const FarmersListLayout = ({ route, navigation }) => {
                 flex: 1,
             }}
         >
+  
+
             <View
                 style={{
                     // minHeight: "15%",
@@ -297,6 +294,7 @@ const FarmersListLayout = ({ route, navigation }) => {
                         }
                     </View>
             }
+
 
         </SafeAreaView>
     );

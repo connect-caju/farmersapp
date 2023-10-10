@@ -11,7 +11,7 @@ import GroupItem from "../GroupItem/GroupItem";
 import FarmerItem from "../FarmerItem/FarmerItem";
 import InstitutionItem from "../InstitutionItem/InstitutionItem";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faInfo, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import COLORS from "../../consts/colors";
 const { useRealm } = realmContext;
 
@@ -136,12 +136,10 @@ const RegisteredByCurrentUser = ({ farmerType, route, navigation }) => {
                         StickyHeaderComponent={() => (
                             <View
                                 style={{
-                                    //   height: hp("10%"),
                                     justifyContent: "center",
                                     alignItems: "center",
                                 }}
                             >
-                                {/* <Text>Hello! Here is the sticky header!</Text> */}
                             </View>
                         )}
                         stickyHeaderHiddenOnScroll={true}
@@ -193,11 +191,24 @@ const RegisteredByCurrentUser = ({ farmerType, route, navigation }) => {
                         paddingHorizontal: 30,
                     }}
                 >
-                    <FontAwesomeIcon
-                        icon={faInfoCircle}
-                        size={45}
-                        color={COLORS.grey}
-                    />
+                    <View
+                        style={{
+                            borderWidth: 2,
+                            borderRadius: 100,
+                            borderColor: COLORS.main,
+                            height: 35,
+                            width: 35,
+                            justifyContent: "center",
+                            alignItems: "center",
+                        }}
+                    >
+                        <FontAwesomeIcon
+                            icon={faInfo}
+                            size={20}
+                            color={COLORS.main}
+                        />
+
+                    </View>
                     <Text
                         style={{
                             color: COLORS.grey,
