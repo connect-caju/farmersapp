@@ -5,9 +5,6 @@ import COLORS from "../../consts/colors"
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column",
-    justifyContent: "center",
-    // paddingHorizontal: 10,
     marginBottom: 10,
     backgroundColor: "ghostwhite",
   },

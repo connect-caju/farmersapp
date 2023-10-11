@@ -37,18 +37,23 @@ export default function FarmerDetailsCard({
       {/* ellipsis option */}
       <TouchableOpacity
         style={{
-          width: "10%",
-          // justifiyContent: 'center',
           alignSelf: "flex-end",
         }}
-        //  onPress={()=>onPressEllipsis(bottomSheetFlags.farmerDetails)}
         onPress={handlePresentModalPress}
       >
-        <FontAwesomeIcon
-          icon={faEllipsisVertical}
-          size={30}
-          color={COLORS.main}
-        />
+        <View
+          style={{
+            padding: 6,
+            borderRadius: 100,
+            backgroundColor: COLORS.lightgrey,
+          }}
+        >
+          <FontAwesomeIcon
+            icon={faEllipsisVertical}
+            size={20}
+            color={COLORS.black}
+          />
+        </View>
       </TouchableOpacity>
 
       <View
@@ -338,9 +343,8 @@ export default function FarmerDetailsCard({
                     fontFamily: "JosefinSans-Regular",
                   }}
                 >
-                  {`${new Date(farmer?.birthDate).getDate()}/${
-                    new Date(farmer?.birthDate).getMonth() + 1
-                  }/${new Date(farmer?.birthDate).getFullYear()}`}{" "}
+                  {`${new Date(farmer?.birthDate).getDate()}/${new Date(farmer?.birthDate).getMonth() + 1
+                    }/${new Date(farmer?.birthDate).getFullYear()}`}{" "}
                   ({calculateAge(farmer?.birthDate)} anos)
                 </Text>
                 <Text

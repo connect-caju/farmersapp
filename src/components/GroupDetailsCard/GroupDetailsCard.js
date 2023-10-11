@@ -7,19 +7,19 @@ import {
   faObjectGroup,
   faPeopleGroup,
   faUserGroup,
-} from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome"
-import { Icon } from "@rneui/base"
-import { Stack, Box, Center } from "native-base"
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { Icon } from "@rneui/base";
+import { Stack, Box, Center } from "native-base";
 
-import React from "react"
-import { View, Text, TouchableOpacity, Image } from "react-native"
-import Animated from "react-native-reanimated"
-import CustomDivider from "../Divider/CustomDivider"
-import COLORS from "../../consts/colors"
-import { bottomSheetFlags } from "../../consts/bottomSheetFlags"
-import { calculateAge } from "../../helpers/dates"
-import { groupAffiliationStatus } from "../../consts/groupAffiliationStatus"
+import React from "react";
+import { View, Text, TouchableOpacity, Image } from "react-native";
+import Animated from "react-native-reanimated";
+import CustomDivider from "../Divider/CustomDivider";
+import COLORS from "../../consts/colors";
+import { bottomSheetFlags } from "../../consts/bottomSheetFlags";
+import { calculateAge } from "../../helpers/dates";
+import { groupAffiliationStatus } from "../../consts/groupAffiliationStatus";
 
 export default function GroupDetailsCard({
   handlePresentModalPress,
@@ -86,8 +86,8 @@ export default function GroupDetailsCard({
             {groupManager?._id
               ? `${groupManager?.names.otherNames} ${groupManager?.names.surname}`
               : farmer?.type === "Cooperativa"
-              ? "Sem Presidente"
-              : "Sem Representante"}
+                ? "Sem Presidente"
+                : "Sem Representante"}
           </Text>
           {groupManager?._id && (
             <Text
@@ -111,16 +111,20 @@ export default function GroupDetailsCard({
             alignItems: "center",
           }}
         >
-          <TouchableOpacity
-            style={{}}
-            //  onPress={()=>onPressEllipsis(bottomSheetFlags.groupDetails)}
-            onPress={handlePresentModalPress}
-          >
-            <FontAwesomeIcon
-              icon={faEllipsisVertical}
-              size={20}
-              color={COLORS.main}
-            />
+          <TouchableOpacity style={{}} onPress={handlePresentModalPress}>
+            <View
+              style={{
+                padding: 6,
+                borderRadius: 100,
+                backgroundColor: COLORS.lightgrey,
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faEllipsisVertical}
+                size={20}
+                color={COLORS.black}
+              />
+            </View>
           </TouchableOpacity>
         </View>
       </Stack>
@@ -274,16 +278,16 @@ export default function GroupDetailsCard({
                 {((groupManager?.contact?.primaryPhone === 0 &&
                   groupManager?.contact?.secondaryPhone === 0) ||
                   !groupManager) && (
-                  <Text
-                    style={{
-                      color: "grey",
-                      fontSize: 13,
-                      fontFamily: "JosefinSans-Regular",
-                    }}
-                  >
-                    Tel: Nenhum
-                  </Text>
-                )}
+                    <Text
+                      style={{
+                        color: "grey",
+                        fontSize: 13,
+                        fontFamily: "JosefinSans-Regular",
+                      }}
+                    >
+                      Tel: Nenhum
+                    </Text>
+                  )}
               </View>
             </View>
           </View>
@@ -479,8 +483,8 @@ export default function GroupDetailsCard({
                   Finalidade:{" "}
                   {farmer?.assets?.length > 0
                     ? farmer?.assets
-                        ?.map((asset) => asset.subcategory)
-                        ?.join("; ")
+                      ?.map((asset) => asset.subcategory)
+                      ?.join("; ")
                     : "Não específica"}
                 </Text>
               </View>
@@ -719,5 +723,5 @@ export default function GroupDetailsCard({
         )}
       </View>
     </Animated.View>
-  )
+  );
 }

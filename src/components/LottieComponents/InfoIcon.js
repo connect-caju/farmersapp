@@ -4,7 +4,7 @@ import LottieView from "lottie-react-native";
 import { View } from "react-native";
 import React from "react";
 
-const SearchNotFound = () => {
+const InfoIcon = () => {
     return (
         <View
             style={{
@@ -13,7 +13,7 @@ const SearchNotFound = () => {
             }}
         >
             <LottieView
-                source={require("../../../assets/lottie/searchNotFound.json")}
+                source={require("../../../assets/lottie/infoIcon.json")}
                 style={{}}
                 autoPlay
                 loop
@@ -22,4 +22,4 @@ const SearchNotFound = () => {
     );
 };
 
-export default SearchNotFound;
+export default InfoIcon;

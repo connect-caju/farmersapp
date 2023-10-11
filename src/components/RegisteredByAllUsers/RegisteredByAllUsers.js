@@ -14,6 +14,7 @@ import COLORS from "../../consts/colors";
 
 import { useUser } from "@realm/react";
 import { realmContext } from "../../models/realmContext";
+import InfoIcon from "../LottieComponents/InfoIcon";
 
 
 const { useRealm } = realmContext;
@@ -165,35 +166,26 @@ const RegisteredByAllUsers = ({ farmerType, route, navigation }) => {
                         paddingHorizontal: 30,
                     }}
                 >
+                    <InfoIcon />
                     <View
                         style={{
-                            borderWidth: 2,
-                            borderRadius: 100,
-                            borderColor: COLORS.main,
-                            height: 35,
-                            width: 35,
-                            justifyContent: "center",
-                            alignItems: "center",
+                            backgroundColor: COLORS.lightestgrey,
+                            padding: 10,
+                            borderRadius: 6,
+                            width: 220,
                         }}
                     >
-                        <FontAwesomeIcon
-                            icon={faInfo}
-                            size={20}
-                            color={COLORS.main}
-                        />
-
+                        <Text
+                            style={{
+                                color: COLORS.grey,
+                                fontSize: 15,
+                                fontFamily: "JosefinSans-Regular",
+                                textAlign: "center",
+                            }}
+                        >
+                            Nenhum registo
+                        </Text>
                     </View>
-                    <Text
-                        style={{
-                            color: COLORS.grey,
-                            fontSize: 15,
-                            fontFamily: "JosefinSans-Regular",
-                            textAlign: "center",
-                            lineHeight: 24,
-                        }}
-                    >
-                        Nenhum registo
-                    </Text>
                 </View>
             }
         </View>

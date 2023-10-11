@@ -15,17 +15,17 @@ import RegisteredByAllUsers from "../../components/RegisteredByAllUsers/Register
 
 const filterByCriteria = [
     {
-        criteriaType: "Meus",
+        criteriaName: "Meus",
         iconName: "all-inclusive",
         focusedOption: 1,
     },
     {
-        criteriaType: "Devolvidos",
+        criteriaName: "Devolvidos",
         iconName: "all-inclusive",
         focusedOption: 2,
     },
     {
-        criteriaType: "Todos",
+        criteriaName: "Todos",
         iconName: "all-inclusive",
         focusedOption: 3,
     },
@@ -63,11 +63,8 @@ const FarmersListLayout = ({ route, navigation }) => {
                 flex: 1,
             }}
         >
-  
-
             <View
                 style={{
-                    // minHeight: "15%",
                     width: "100%",
                     paddingHorizontal: 10,
                     paddingBottom: 10,
@@ -88,13 +85,7 @@ const FarmersListLayout = ({ route, navigation }) => {
                             alignItems: "center",
                         }}
                     >
-                        <View
-                            style={
-                                {
-                                    // width: "70%",
-                                }
-                            }
-                        >
+                        <View>
                             {farmerType === "Grupo" &&
                                 <View
                                     style={{
@@ -150,20 +141,16 @@ const FarmersListLayout = ({ route, navigation }) => {
                                     </Text>
                                 </View>
                             }
-
                         </View>
                         <View
                             style={{
                                 flexDirection: "row",
                                 justifyContent: "space-around",
-                                // width: "30%",
                             }}
                         >
                             <TouchableOpacity
                                 style={{
                                     borderRadius: 100,
-                                    borderWidth: 1,
-                                    borderColor: COLORS.lightgrey,
                                     backgroundColor: COLORS.lightgrey,
                                     padding: 6,
                                 }}
@@ -171,17 +158,14 @@ const FarmersListLayout = ({ route, navigation }) => {
                             >
                                 <FontAwesomeIcon
                                     icon={faSearch}
-                                    size={25}
+                                    size={20}
                                     color={COLORS.black}
-                                    fade
                                 />
                             </TouchableOpacity>
-                            <View style={{ width: 6 }} />
+                            <View style={{ width: 16 }} />
                             <TouchableOpacity
                                 style={{
                                     borderRadius: 100,
-                                    borderWidth: 1,
-                                    borderColor: COLORS.lightgrey,
                                     backgroundColor: COLORS.lightgrey,
                                     padding: 6,
                                 }}
@@ -191,7 +175,7 @@ const FarmersListLayout = ({ route, navigation }) => {
                             >
                                 <FontAwesomeIcon
                                     icon={faEllipsisVertical}
-                                    size={25}
+                                    size={20}
                                     color={COLORS.black}
                                     fade
                                 />
@@ -249,21 +233,20 @@ const FarmersListLayout = ({ route, navigation }) => {
                                             textAlign: "center",
                                         }}
                                     >
-                                        {item.criteriaType}
+                                        {item.criteriaName}
                                     </Text>
                                 </TouchableOpacity>
                             );
                         }}
                     />
                 </View>
-
             </View>
             <View
-                    style={{
-                        height: 10,
-                        backgroundColor: COLORS.main,
-                    }}
-                />
+                style={{
+                    height: 10,
+                    backgroundColor: COLORS.main,
+                }}
+            />
             {
                 loadingActivitiyIndicator ?
                     <View
@@ -294,7 +277,6 @@ const FarmersListLayout = ({ route, navigation }) => {
                         }
                     </View>
             }
-
 
         </SafeAreaView>
     );

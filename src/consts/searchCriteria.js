@@ -3,6 +3,8 @@
 export const searchCriteria = {
     village: "village",
     adminPost: "adminPost",
-    commercial: "commercial",
-    smallHolder: "smallHolder",
+    farmerSubcategory: "subcategory",
+    isPrivateInstitution: "private",
+    groupType: "type",
+    status: "status",
 };

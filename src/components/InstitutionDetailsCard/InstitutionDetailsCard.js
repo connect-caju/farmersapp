@@ -87,16 +87,20 @@ export default function InstitutionDetailsCard({
             alignItems: "center",
           }}
         >
-          <TouchableOpacity
-            style={{}}
-            //  onPress={()=>onPressEllipsis(bottomSheetFlags.institutionDetails)}
-            onPress={handlePresentModalPress}
-          >
-            <FontAwesomeIcon
-              icon={faEllipsisVertical}
-              size={30}
-              color={COLORS.main}
-            />
+          <TouchableOpacity style={{}} onPress={handlePresentModalPress}>
+            <View
+              style={{
+                padding: 6,
+                borderRadius: 100,
+                backgroundColor: COLORS.lightgrey,
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faEllipsisVertical}
+                size={20}
+                color={COLORS.black}
+              />
+            </View>
           </TouchableOpacity>
         </View>
       </Stack>

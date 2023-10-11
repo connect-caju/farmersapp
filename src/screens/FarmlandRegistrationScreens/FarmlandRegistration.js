@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable prettier/prettier */
 import {
   Text,
   ScrollView,
@@ -7,180 +9,164 @@ import {
   TouchableOpacity,
   Pressable,
   Image,
-  View,
-  useNativeDriver,
-} from "react-native"
-import React, { useEffect, useState, useCallback, useRef, useMemo } from "react"
-import { Icon, Button, CheckBox, Chip } from "@rneui/themed"
+} from "react-native";
+import React, { useEffect, useState, useCallback, useRef, } from "react";
+import { Icon, Chip } from "@rneui/themed";
 import {
   Box,
   FormControl,
   Stack,
-  Select,
-  CheckIcon,
   Center,
-  Radio,
-} from "native-base"
-import { MultipleSelectList } from "react-native-dropdown-select-list"
-import AwesomeAlert from "react-native-awesome-alerts"
+} from "native-base";
+import { MultipleSelectList } from "react-native-dropdown-select-list";
+import AwesomeAlert from "react-native-awesome-alerts";
 import Animated, {
-  FadeInLeft,
   SlideInLeft,
-  FadeOutRight,
-} from "react-native-reanimated"
+} from "react-native-reanimated";
 
-import CustomActivityIndicator from "../../components/ActivityIndicator/CustomActivityIndicator"
-import styles from "./styles"
-import { CustomInput } from "../../components/Inputs/CustomInput"
-import { crops } from "../../consts/crops"
-import cloneList from "../../consts/clones"
-import { getFullYears } from "../../helpers/dates"
-import { plantingTypes } from "../../consts/plantingTypes"
-import FarmlandModal from "../../components/Modals/FarmlandModal"
-import validateFarmlandData from "../../helpers/validateFarmlandData"
+import CustomActivityIndicator from "../../components/ActivityIndicator/CustomActivityIndicator";
+import styles from "./styles";
+import { CustomInput } from "../../components/Inputs/CustomInput";
+import { crops } from "../../consts/crops";
 
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome"
-import { faTree } from "@fortawesome/free-solid-svg-icons"
-import SuccessAlert from "../../components/Alerts/SuccessAlert"
-import COLORS from "../../consts/colors"
-import validateFarmlandMainData from "../../helpers/validateFarmlandMainData"
-import { assetTypes } from "../../consts/assetTypes"
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faTree } from "@fortawesome/free-solid-svg-icons";
+import SuccessAlert from "../../components/Alerts/SuccessAlert";
+import COLORS from "../../consts/colors";
+import validateFarmlandMainData from "../../helpers/validateFarmlandMainData";
+import { assetTypes } from "../../consts/assetTypes";
 
-import { v4 as uuidv4 } from "uuid"
-import {
-  BottomSheetModal,
-  BottomSheetScrollView,
-  BottomSheetModalProvider,
-} from "@gorhom/bottom-sheet"
+import { v4 as uuidv4 } from "uuid";
 
-import { categorizeFarmer } from "../../helpers/categorizeFarmer"
-import FarmlandBlockRegistration from "../../components/FarmlandBlockRegistration/FarmlandBlockRegistration"
 
-import categories from "../../consts/categories"
-import validateBlockData from "../../helpers/validateBlockData"
-import CustomDivider from "../../components/Divider/CustomDivider"
-import { normalizeBlockList } from "../../helpers/normalizeBlockList"
+import { categorizeFarmer } from "../../helpers/categorizeFarmer";
+import FarmlandBlockRegistration from "../../components/FarmlandBlockRegistration/FarmlandBlockRegistration";
 
-import { useUser } from "@realm/react"
-import { realmContext } from "../../models/realmContext"
-import { errorMessages } from "../../consts/errorMessages"
-import { resourceValidation } from "../../consts/resourceValidation"
-import { ordinalNumberings } from "../../consts/ordinalNumberings"
-import { SuccessLottie } from "../../components/LottieComponents/SuccessLottie"
-import { farmerTypes } from "../../consts/farmerTypes"
-const { useRealm, useQuery, useObject } = realmContext
+import categories from "../../consts/categories";
+import validateBlockData from "../../helpers/validateBlockData";
+import CustomDivider from "../../components/Divider/CustomDivider";
+import { normalizeBlockList } from "../../helpers/normalizeBlockList";
 
-const farmlandResourceMessage = "farmlandResourceMessage"
+import { useUser } from "@realm/react";
+import { realmContext } from "../../models/realmContext";
+import { errorMessages } from "../../consts/errorMessages";
+import { resourceValidation } from "../../consts/resourceValidation";
+import { ordinalNumberings } from "../../consts/ordinalNumberings";
+import { SuccessLottie } from "../../components/LottieComponents/SuccessLottie";
+import { farmerTypes } from "../../consts/farmerTypes";
+const { useRealm, useQuery, } = realmContext;
+
+const farmlandResourceMessage = "farmlandResourceMessage";
 
 export default function FarmlandRegistration({ route, navigation }) {
-  const realm = useRealm()
-  const user = useUser()
-  const customUserData = user?.customData
-  const [farmlandId, setFarmlandId] = useState("")
+  const realm = useRealm();
+  const user = useUser();
+  const customUserData = user?.customData;
+  const [farmlandId, setFarmlandId] = useState("");
 
   // SuccessLottie
-  const [successLottieVisible, setSuccessLottieVisible] = useState(false)
+  const [successLottieVisible, setSuccessLottieVisible] = useState(false);
 
   const currentUserStat = useQuery("UserStat").filtered(
     "userId == $0",
     customUserData?.userId,
-  )[0]
-  const farmland = realm.objectForPrimaryKey("Farmland", farmlandId)
+  )[0];
+  const farmland = realm.objectForPrimaryKey("Farmland", farmlandId);
 
   // extract farmland owner id, name from the previous screen
-  const { ownerId, ownerName, flag, ownerImage, ownerAddress } = route.params
+  const { ownerId, ownerName, flag, ownerImage, ownerAddress } = route.params;
 
   // go back to the previous screen
   // if farmerId is undefined
   if (!ownerId || !flag) {
-    navigation.goBack()
-    return
+    navigation.goBack();
+    return;
   }
 
   const [isCoordinatesModalVisible, setIsCoordinatesModalVisible] =
-    useState(false)
-  const [loadingButton, setLoadingButton] = useState(false)
+    useState(false);
+  const [loadingButton, setLoadingButton] = useState(false);
 
-  const [consociatedCrops, setConsociatedCrops] = useState([])
-  const [otherConsociatedCrops, setOtherConsociatedCrops] = useState([])
-  const [newCrop, setNewCrop] = useState("")
+  const [consociatedCrops, setConsociatedCrops] = useState([]);
+  const [otherConsociatedCrops, setOtherConsociatedCrops] = useState([]);
+  const [newCrop, setNewCrop] = useState("");
 
-  const [description, setDescription] = useState("")
-  const [plantingYear, setPlantingYear] = useState("")
-  const [trees, setTrees] = useState("")
+  const [description, setDescription] = useState("");
+  const [plantingYear, setPlantingYear] = useState("");
+  const [trees, setTrees] = useState("");
 
-  const [blockTrees, setBlockTrees] = useState("")
+  const [blockTrees, setBlockTrees] = useState("");
 
-  const [totalArea, setTotalArea] = useState("")
-  const [totalTrees, setTotalTrees] = useState("")
-  const [usedArea, setUsedArea] = useState("")
-  const [densityWidth, setDensityWidth] = useState("")
-  const [densityLength, setDensityLength] = useState("")
-  const [plantTypes, setPlantTypes] = useState([])
-  const [clones, setClones] = useState([])
-  const [isDensityModeIrregular, setIsDensityModeIrregular] = useState(false)
-  const [isDensityModeRegular, setIsDensityModeRegular] = useState(false)
-  const [sameTypeTreesList, setSameTypeTreesList] = useState([])
+  const [totalArea, setTotalArea] = useState("");
+  const [totalTrees, setTotalTrees] = useState("");
+  const [usedArea, setUsedArea] = useState("");
+  const [densityWidth, setDensityWidth] = useState("");
+  const [densityLength, setDensityLength] = useState("");
+  const [plantTypes, setPlantTypes] = useState([]);
+  const [clones, setClones] = useState([]);
+  const [isDensityModeIrregular, setIsDensityModeIrregular] = useState(false);
+  const [isDensityModeRegular, setIsDensityModeRegular] = useState(false);
+  const [sameTypeTreesList, setSameTypeTreesList] = useState([]);
 
-  const [errorAlert, setErrorAlert] = useState(false)
-  const [refresh, setRefresh] = useState(false)
+  const [errorAlert, setErrorAlert] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
-  const [isDeleteBlockOn, setIsDeleteBlockOn] = useState(false)
+  const [isDeleteBlockOn, setIsDeleteBlockOn] = useState(false);
 
   // count all blocks associated to the farmland
-  const [blockCount, setBlockCount] = useState(0)
+  const [blockCount, setBlockCount] = useState(0);
 
-  const [treesFlag, setTreesFlag] = useState(0)
-  const [areaFlag, setAreaFlag] = useState(0)
+  const [treesFlag, setTreesFlag] = useState(0);
+  const [areaFlag, setAreaFlag] = useState(0);
 
   // const [blocks, setBlocks] = useState([]);
-  const [isOverlayVisible, setIsOverlayVisible] = useState(false)
-  const scale = useRef(new NativeAnimated.Value(0)).current
+  const [isOverlayVisible, setIsOverlayVisible] = useState(false);
+  const scale = useRef(new NativeAnimated.Value(0)).current;
 
   // loading activity indicator
   const [loadingActivitiyIndicator, setLoadingActivityIndicator] =
-    useState(false)
+    useState(false);
 
   // ------------------------------------------
-  const [alert, setAlert] = useState(false)
+  const [alert, setAlert] = useState(false);
 
-  const [messageAlert, setMessageAlert] = useState("")
-  const [titleAlert, setTitleAlert] = useState("")
-  const [cancelText, setCancelText] = useState("")
-  const [confirmText, setConfirmText] = useState("")
-  const [showCancelButton, setShowCancelButton] = useState(false)
-  const [showConfirmButton, setShowConfirmButton] = useState(false)
+  const [messageAlert, setMessageAlert] = useState("");
+  const [titleAlert, setTitleAlert] = useState("");
+  const [cancelText, setCancelText] = useState("");
+  const [confirmText, setConfirmText] = useState("");
+  const [showCancelButton, setShowCancelButton] = useState(false);
+  const [showConfirmButton, setShowConfirmButton] = useState(false);
 
-  const [logFlag, setLogFlag] = useState("")
-  const [invalidationMessage, setInvalidationMessage] = useState("")
+  const [logFlag, setLogFlag] = useState("");
+  const [invalidationMessage, setInvalidationMessage] = useState("");
 
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState({});
 
   // // ---------------------------------------------
   // BottomSheet
-  const bottomSheetModalRef = useRef(null)
+  const bottomSheetModalRef = useRef(null);
 
-  const snapPoints = ["50%", "75%", "90%"]
+  const snapPoints = ["50%", "75%", "90%"];
 
   function handlePresentModal() {
-    bottomSheetModalRef.current?.present()
+    bottomSheetModalRef.current?.present();
   }
 
   function handleDismissModal() {
-    bottomSheetModalRef.current?.dismiss()
+    bottomSheetModalRef.current?.dismiss();
   }
 
   useEffect(() => {
     if (successLottieVisible) {
       setTimeout(() => {
-        setSuccessLottieVisible(false)
-      }, 3000)
+        setSuccessLottieVisible(false);
+      }, 3000);
     }
-  }, [successLottieVisible])
+  }, [successLottieVisible]);
 
   const toggleOverlay = () => {
-    setIsOverlayVisible(!isOverlayVisible)
-  }
+    setIsOverlayVisible(!isOverlayVisible);
+  };
 
   const visualizeBlockData = () => {
     let blockData = {
@@ -194,22 +180,22 @@ export default function FarmlandRegistration({ route, navigation }) {
       isDensityModeIrregular,
       isDensityModeRegular,
       sameTypeTreesList,
-    }
+    };
     // if any required data is not validated
     // a alert message is sent to the user
     if (!validateBlockData(blockData, errors, setErrors)) {
-      setAlert(true)
+      setAlert(true);
 
-      setTitleAlert(errorMessages.farmlandError.title)
-      setMessageAlert(errorMessages.farmlandError.message)
-      setShowCancelButton(errorMessages.farmlandError.showCancelButton)
-      setShowConfirmButton(errorMessages.farmlandError.showConfirmButton)
-      setCancelText(errorMessages.farmlandError.cancelText)
-      setConfirmText(errorMessages.farmlandError.confirmText)
-      return
+      setTitleAlert(errorMessages.farmlandError.title);
+      setMessageAlert(errorMessages.farmlandError.message);
+      setShowCancelButton(errorMessages.farmlandError.showCancelButton);
+      setShowConfirmButton(errorMessages.farmlandError.showConfirmButton);
+      setCancelText(errorMessages.farmlandError.cancelText);
+      setConfirmText(errorMessages.farmlandError.confirmText);
+      return;
     }
     // created the validated data object to be passed to the FarmlandModal component
-    let retrievedBlockData = validateBlockData(blockData, errors, setErrors)
+    let retrievedBlockData = validateBlockData(blockData, errors, setErrors);
 
     const block = {
       _id: uuidv4(),
@@ -222,32 +208,32 @@ export default function FarmlandRegistration({ route, navigation }) {
       userName: customUserData?.name,
       createdAt: new Date(),
       modifiedAt: new Date(),
-    }
+    };
 
-    onAddBlock(block, farmlandId, realm)
+    onAddBlock(block, farmlandId, realm);
 
-    turnOffOverlay()
-  }
+    turnOffOverlay();
+  };
 
   const invalidateFarmland = useCallback(
     (farmlandId, invalidationMessage, realm) => {
-      const foundFarmland = realm.objectForPrimaryKey("Farmland", farmlandId)
+      const foundFarmland = realm.objectForPrimaryKey("Farmland", farmlandId);
 
       realm.write(() => {
         if (foundFarmland) {
-          foundFarmland.status = resourceValidation.status.invalidated
-          foundFarmland.checkedBy = customUserData?.name
+          foundFarmland.status = resourceValidation.status.invalidated;
+          foundFarmland.checkedBy = customUserData?.name;
         }
-      })
+      });
 
       try {
-        addInvalidationMessage(farmlandId, invalidationMessage, realm)
+        addInvalidationMessage(farmlandId, invalidationMessage, realm);
       } catch (error) {
-        console.log("could not add invalidation message:", { cause: error })
+        console.log("could not add invalidation message:", { cause: error });
       }
     },
     [realm, farmlandId],
-  )
+  );
 
   const addInvalidationMessage = useCallback(
     (farmlandId, message, realm) => {
@@ -256,7 +242,7 @@ export default function FarmlandRegistration({ route, navigation }) {
         message: message,
         ownerName: customUserData?.name,
         createdAt: new Date(),
-      }
+      };
 
       realm.write(async () => {
         const newResourceMessage = await realm.create("InvalidationMotive", {
@@ -265,161 +251,161 @@ export default function FarmlandRegistration({ route, navigation }) {
           resourceName: "Farmland",
           messages: [newMessageObject],
           createdAt: new Date(),
-        })
-      })
+        });
+      });
     },
     [realm, farmlandId],
-  )
+  );
 
   useEffect(() => {
     realm.subscriptions.update((mutableSubs) => {
-      mutableSubs.removeByName(farmlandResourceMessage)
+      mutableSubs.removeByName(farmlandResourceMessage);
       mutableSubs.add(
         realm
           .objects("InvalidationMotive")
           .filtered(`resourceId == "${farmlandId}"`),
         { name: farmlandResourceMessage },
-      )
-    })
-  }, [realm, farmlandId])
+      );
+    });
+  }, [realm, farmlandId]);
 
   const deleteBlock = useCallback(
     (farmlandId, realm) => {
-      const foundFarmland = realm.objectForPrimaryKey("Farmland", farmlandId)
+      const foundFarmland = realm.objectForPrimaryKey("Farmland", farmlandId);
 
       realm.write(() => {
-        foundFarmland.blocks.pop()
+        foundFarmland.blocks.pop();
 
-        setRefresh(!refresh)
-      })
+        setRefresh(!refresh);
+      });
     },
     [realm, farmlandId, farmland],
-  )
+  );
 
   const checkBlockConformity = (farmlandId, realm) => {
-    const farmland = realm.objectForPrimaryKey("Farmland", farmlandId)
+    const farmland = realm.objectForPrimaryKey("Farmland", farmlandId);
 
     const blocksTrees = farmland?.blocks
       ?.map((block) => parseInt(block?.trees))
-      ?.reduce((acc, el) => acc + el, 0)
+      ?.reduce((acc, el) => acc + el, 0);
     const blocksAreas = farmland?.blocks
       ?.map((block) => parseFloat(block?.usedArea))
       ?.reduce((acc, el) => acc + el, 0)
-      .toFixed(1)
-    const totalArea = Number(farmland?.totalArea.toFixed(1))
-    const totalTrees = parseInt(farmland?.trees)
+      .toFixed(1);
+    const totalArea = Number(farmland?.totalArea.toFixed(1));
+    const totalTrees = parseInt(farmland?.trees);
     if (
       blocksTrees === 0 &&
       totalTrees > 0 &&
       blocksAreas === 0 &&
       totalArea > 0
     ) {
-      setAlert(true)
-      setTitleAlert(errorMessages.farmlandWithNoBlockError.title)
-      setMessageAlert(errorMessages.farmlandWithNoBlockError.message)
+      setAlert(true);
+      setTitleAlert(errorMessages.farmlandWithNoBlockError.title);
+      setMessageAlert(errorMessages.farmlandWithNoBlockError.message);
       setShowCancelButton(
         errorMessages.farmlandWithNoBlockError.showCancelButton,
-      )
+      );
       setShowConfirmButton(
         errorMessages.farmlandWithNoBlockError.showConfirmButton,
-      )
-      setCancelText(errorMessages.farmlandWithNoBlockError.cancelText)
-      setConfirmText(errorMessages.farmlandWithNoBlockError.confirmText)
-      setLogFlag(errorMessages.farmlandWithNoBlockError.logFlag)
+      );
+      setCancelText(errorMessages.farmlandWithNoBlockError.cancelText);
+      setConfirmText(errorMessages.farmlandWithNoBlockError.confirmText);
+      setLogFlag(errorMessages.farmlandWithNoBlockError.logFlag);
       setInvalidationMessage(
         errorMessages.farmlandWithNoBlockError.invalidationMessage,
-      )
+      );
 
-      return false
+      return false;
     } else if (blocksTrees > 0 && blocksTrees !== totalTrees) {
-      setAlert(true)
-      setTitleAlert(errorMessages.blockTreesConformityError.title)
-      setMessageAlert(errorMessages.blockTreesConformityError.message)
+      setAlert(true);
+      setTitleAlert(errorMessages.blockTreesConformityError.title);
+      setMessageAlert(errorMessages.blockTreesConformityError.message);
       setShowCancelButton(
         errorMessages.blockTreesConformityError.showCancelButton,
-      )
+      );
       setShowConfirmButton(
         errorMessages.blockTreesConformityError.showConfirmButton,
-      )
-      setCancelText(errorMessages.blockTreesConformityError.cancelText)
-      setConfirmText(errorMessages.blockTreesConformityError.confirmText)
-      setLogFlag(errorMessages.blockTreesConformityError.logFlag)
+      );
+      setCancelText(errorMessages.blockTreesConformityError.cancelText);
+      setConfirmText(errorMessages.blockTreesConformityError.confirmText);
+      setLogFlag(errorMessages.blockTreesConformityError.logFlag);
       setInvalidationMessage(
         errorMessages.blockTreesConformityError.invalidationMessage,
-      )
+      );
 
-      return false
+      return false;
     }
     // this block of code is no longer used
     // the blocksAreas and totalAreas are not longer compared to each other at this point of the logic
     if (totalArea - blocksAreas < 0) {
-      console.log("areatotal:", totalArea)
-      console.log("area de blocos:", blocksAreas)
+      console.log("areatotal:", totalArea);
+      console.log("area de blocos:", blocksAreas);
 
-      setAlert(true)
-      setTitleAlert(errorMessages.blockAreaConformityError.title)
-      setMessageAlert(errorMessages.blockAreaConformityError.message)
+      setAlert(true);
+      setTitleAlert(errorMessages.blockAreaConformityError.title);
+      setMessageAlert(errorMessages.blockAreaConformityError.message);
       setShowCancelButton(
         errorMessages.blockAreaConformityError.showCancelButton,
-      )
+      );
       setShowConfirmButton(
         errorMessages.blockAreaConformityError.showConfirmButton,
-      )
-      setCancelText(errorMessages.blockAreaConformityError.cancelText)
-      setConfirmText(errorMessages.blockAreaConformityError.confirmText)
-      setLogFlag(errorMessages.blockAreaConformityError.logFlag)
+      );
+      setCancelText(errorMessages.blockAreaConformityError.cancelText);
+      setConfirmText(errorMessages.blockAreaConformityError.confirmText);
+      setLogFlag(errorMessages.blockAreaConformityError.logFlag);
       setInvalidationMessage(
         errorMessages.blockAreaConformityError.invalidationMessage,
-      )
+      );
 
-      return false
+      return false;
     }
-    return true
-  }
+    return true;
+  };
 
   useEffect(() => {
     if (isDeleteBlockOn) {
-      deleteBlock(farmlandId, realm)
-      setIsDeleteBlockOn(false)
+      deleteBlock(farmlandId, realm);
+      setIsDeleteBlockOn(false);
     }
-  }, [isDeleteBlockOn])
+  }, [isDeleteBlockOn]);
 
   const turnOffOverlay = () => {
-    setPlantingYear("")
-    setUsedArea("")
-    setBlockTrees("")
-    setClones([])
-    setPlantTypes([])
-    setDensityLength("")
-    setDensityWidth("")
-    setIsDensityModeIrregular(false)
-    setIsDensityModeRegular(false)
+    setPlantingYear("");
+    setUsedArea("");
+    setBlockTrees("");
+    setClones([]);
+    setPlantTypes([]);
+    setDensityLength("");
+    setDensityWidth("");
+    setIsDensityModeIrregular(false);
+    setIsDensityModeRegular(false);
 
     // setIsOverlayVisible(false);
-    resizeBlockBox(0)
-  }
+    resizeBlockBox(0);
+  };
 
   const onAddBlock = useCallback(
     (block, farmlandId, realm) => {
-      const farmland = realm.objectForPrimaryKey("Farmland", farmlandId)
+      const farmland = realm.objectForPrimaryKey("Farmland", farmlandId);
       realm.write(() => {
-        farmland?.blocks?.push(block)
+        farmland?.blocks?.push(block);
         if (
           farmland?.trees ===
           farmland?.blocks
             ?.map((block) => block.trees)
             ?.reduce((acc, el) => acc + el, 0)
         ) {
-          farmland.status = resourceValidation.status.pending
+          farmland.status = resourceValidation.status.pending;
         }
 
-        setBlockCount((prev) => prev + 1)
-      })
-      setRefresh(!refresh)
-      setSuccessLottieVisible(true)
+        setBlockCount((prev) => prev + 1);
+      });
+      setRefresh(!refresh);
+      setSuccessLottieVisible(true);
     },
     [realm, farmland, farmlandId],
-  )
+  );
 
   const visualizeFarmlandMainData = () => {
     let farmlandMainData = {
@@ -428,29 +414,29 @@ export default function FarmlandRegistration({ route, navigation }) {
       otherConsociatedCrops,
       totalArea,
       trees,
-    }
+    };
     // if any required data is not validated
     // a alert message is sent to the user
     if (!validateFarmlandMainData(farmlandMainData, errors, setErrors)) {
-      setAlert(true)
-      setTitleAlert(errorMessages.farmlandError.title)
-      setMessageAlert(errorMessages.farmlandError.message)
-      setShowCancelButton(errorMessages.farmlandError.showCancelButton)
-      setShowConfirmButton(errorMessages.farmlandError.showConfirmButton)
-      setCancelText(errorMessages.farmlandError.cancelText)
-      setConfirmText(errorMessages.farmlandError.confirmText)
+      setAlert(true);
+      setTitleAlert(errorMessages.farmlandError.title);
+      setMessageAlert(errorMessages.farmlandError.message);
+      setShowCancelButton(errorMessages.farmlandError.showCancelButton);
+      setShowConfirmButton(errorMessages.farmlandError.showConfirmButton);
+      setCancelText(errorMessages.farmlandError.cancelText);
+      setConfirmText(errorMessages.farmlandError.confirmText);
 
-      return
+      return;
     }
     // created the validated data object to be passed to the FarmlandModal component
     let retrievedFarmlandMainData = validateFarmlandMainData(
       farmlandMainData,
       errors,
       setErrors,
-    )
+    );
 
-    onAddFarmland(retrievedFarmlandMainData, realm)
-  }
+    onAddFarmland(retrievedFarmlandMainData, realm);
+  };
 
   const navigateBack = () => {
     // if (flag === 'Grupo'){
@@ -458,44 +444,33 @@ export default function FarmlandRegistration({ route, navigation }) {
       ownerId: ownerId,
       farmerType: farmerTypes.farmer,
       farmersIDs: [],
-    })
-    // }
-    // else if (flag === 'Indivíduo'){
-    //     navigation.navigate('Farmer', {
-    //         ownerId: ownerId,
-    //     });
-    // }
-    // else if(flag === 'Instituição') {
-    //     navigation.navigate('Institution', {
-    //         ownerId: ownerId,
-    //     });
-    // }
-  }
+    });
+  };
 
   const onAddFarmland = useCallback(
     (farmlandMainData, realm) => {
       const { description, consociatedCrops, trees, totalArea } =
-        farmlandMainData
+        farmlandMainData;
 
       if (!ownerId) {
         return {
           status: "FAILED",
           code: 404,
           message: "Indica o proprietário desta parcela!",
-        }
+        };
       }
 
-      let owner
-      let ownerType
+      let owner;
+      let ownerType;
       if (flag === "Indivíduo") {
-        owner = realm.objectForPrimaryKey("Actor", ownerId)
-        ownerType = "Single"
+        owner = realm.objectForPrimaryKey("Actor", ownerId);
+        ownerType = "Single";
       } else if (flag === "Grupo") {
-        owner = realm.objectForPrimaryKey("Group", ownerId)
-        ownerType = "Group"
+        owner = realm.objectForPrimaryKey("Group", ownerId);
+        ownerType = "Group";
       } else if (flag === "Instituição") {
-        owner = realm.objectForPrimaryKey("Institution", ownerId)
-        ownerType = "Institution"
+        owner = realm.objectForPrimaryKey("Institution", ownerId);
+        ownerType = "Institution";
       }
 
       if (!owner) {
@@ -503,10 +478,10 @@ export default function FarmlandRegistration({ route, navigation }) {
           status: "FAILED",
           code: 404,
           message: "O proprietário desta parcela ainda não foi registado!",
-        }
+        };
       }
 
-      let newFarmland
+      let newFarmland;
 
       realm.write(async () => {
         newFarmland = await realm.create("Farmland", {
@@ -522,36 +497,36 @@ export default function FarmlandRegistration({ route, navigation }) {
           userName: customUserData?.name,
           status: resourceValidation.status.invalidated,
           ownerType,
-        })
+        });
 
         // convert realm object to JS object
         const farmlandObject = {
           ...newFarmland,
-        }
+        };
 
         // set the farmlandId
-        setFarmlandId(newFarmland._id)
+        setFarmlandId(newFarmland._id);
 
         // setFarmland(farmlandObject);
-      })
+      });
 
       if (flag === "Indivíduo") {
         // categorize by 'comercial' | 'familiar' | 'nao-categorizado'
         const ownerFarmlands = realm
           .objects("Farmland")
-          .filtered("farmerId == $0", owner._id)
-        const subcategory = categorizeFarmer(ownerFarmlands)
-        let farmlandIds = ownerFarmlands?.map((farmland) => farmland._id)
+          .filtered("farmerId == $0", owner._id);
+        const subcategory = categorizeFarmer(ownerFarmlands);
+        let farmlandIds = ownerFarmlands?.map((farmland) => farmland._id);
 
         realm.write(() => {
-          let isAssetUpdated = false
+          let isAssetUpdated = false;
           for (let i = 0; i < owner?.assets?.length; i++) {
             if (owner.assets[i].assetType === "Pomar") {
-              owner.assets[i].subcategory = subcategory
-              owner.assets[i].assets = farmlandIds
+              owner.assets[i].subcategory = subcategory;
+              owner.assets[i].assets = farmlandIds;
 
               // asset is updated
-              isAssetUpdated = true
+              isAssetUpdated = true;
             }
           }
           // create assets if not found
@@ -561,26 +536,26 @@ export default function FarmlandRegistration({ route, navigation }) {
               category: categories.farmer.category,
               subcategory: subcategory,
               assets: farmlandIds,
-            }
-            owner.assets = [asset] // add new asset
+            };
+            owner.assets = [asset]; // add new asset
           }
-        })
+        });
       } else if (flag === "Grupo") {
         const ownerFarmlands = realm
           .objects("Farmland")
-          .filtered("farmerId == $0", owner._id)
-        let farmlandIds = ownerFarmlands?.map((farmland) => farmland._id)
+          .filtered("farmerId == $0", owner._id);
+        let farmlandIds = ownerFarmlands?.map((farmland) => farmland._id);
 
         realm.write(() => {
-          let isAssetUpdated = false
+          let isAssetUpdated = false;
           for (let i = 0; i < owner?.assets?.length; i++) {
             if (owner.assets[i].assetType === assetTypes.farmland) {
               owner.assets[i].subcategory =
-                categories.group.subcategories.production
-              owner.assets[i].assets = farmlandIds
+                categories.group.subcategories.production;
+              owner.assets[i].assets = farmlandIds;
 
               // asset is updated
-              isAssetUpdated = true
+              isAssetUpdated = true;
             }
           }
           // create assets if not found
@@ -590,26 +565,26 @@ export default function FarmlandRegistration({ route, navigation }) {
               category: categories.group.category,
               subcategory: categories.group.subcategories.production,
               assets: farmlandIds,
-            }
-            owner.assets = [asset] // add new asset
+            };
+            owner.assets = [asset]; // add new asset
           }
-        })
+        });
       } else if (flag === "Instituição") {
         const ownerFarmlands = realm
           .objects("Farmland")
-          .filtered("farmerId == $0", owner._id)
-        let farmlandIds = ownerFarmlands?.map((farmland) => farmland._id)
+          .filtered("farmerId == $0", owner._id);
+        let farmlandIds = ownerFarmlands?.map((farmland) => farmland._id);
 
         realm.write(() => {
-          let isAssetUpdated = false
+          let isAssetUpdated = false;
           for (let i = 0; i < owner?.assets?.length; i++) {
             if (owner.assets[i].assetType === assetTypes.farmland) {
               owner.assets[i].subcategory =
-                categories.institution.subcategories.production
-              owner.assets[i].assets = farmlandIds
+                categories.institution.subcategories.production;
+              owner.assets[i].assets = farmlandIds;
 
               // asset is updated
-              isAssetUpdated = true
+              isAssetUpdated = true;
             }
           }
           // create assets if not found
@@ -619,19 +594,19 @@ export default function FarmlandRegistration({ route, navigation }) {
               category: categories.institution.category,
               subcategory: categories.institution.subcategories.production,
               assets: farmlandIds,
-            }
+            };
 
-            owner.assets = [asset] // add new asset
+            owner.assets = [asset]; // add new asset
           }
-        })
+        });
       }
 
       // update user stat (1 more farmland registered by the user)
       if (currentUserStat) {
         realm.write(() => {
           currentUserStat.registeredFarmlands =
-            currentUserStat.registeredFarmlands + 1
-        })
+            currentUserStat.registeredFarmlands + 1;
+        });
       } else {
         realm.write(() => {
           const newStat = realm.create("UserStat", {
@@ -642,34 +617,34 @@ export default function FarmlandRegistration({ route, navigation }) {
             userProvince: customUserData.userProvince,
             userRole: customUserData.role,
             registeredFarmlands: 1,
-          })
-        })
+          });
+        });
       }
     },
     [realm, farmland],
-  )
+  );
 
-  useEffect(() => {}, [ownerId, farmlandId])
+  useEffect(() => { }, [ownerId, farmlandId]);
 
   useEffect(() => {
-    setLoadingActivityIndicator(true)
-  }, [navigation])
+    setLoadingActivityIndicator(true);
+  }, [navigation]);
 
   const resizeBlockBox = (to) => {
-    to === 1 && setIsOverlayVisible(true)
+    to === 1 && setIsOverlayVisible(true);
     NativeAnimated.timing(scale, {
       toValue: to,
       useNativeDriver: true,
       duration: 400,
       easing: Easing.linear,
-    }).start(() => to === 0 && setIsOverlayVisible(false))
-  }
+    }).start(() => to === 0 && setIsOverlayVisible(false));
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, {}]}>
       <Animated.View
         entering={SlideInLeft.duration(600)}
-        // exiting={SlideOuRight}
+      // exiting={SlideOuRight}
       >
         <AwesomeAlert
           show={errorAlert}
@@ -683,7 +658,7 @@ export default function FarmlandRegistration({ route, navigation }) {
           confirmText="   OK!   "
           confirmButtonColor={COLORS.danger}
           onConfirmPressed={() => {
-            setErrorAlert(false)
+            setErrorAlert(false);
           }}
         />
 
@@ -758,7 +733,7 @@ export default function FarmlandRegistration({ route, navigation }) {
           cancelButtonColor={COLORS.danger}
           confirmButtonColor={
             logFlag?.includes("inconsistencies") ||
-            logFlag?.includes("no blocks")
+              logFlag?.includes("no blocks")
               ? COLORS.main
               : COLORS.main
           }
@@ -768,70 +743,66 @@ export default function FarmlandRegistration({ route, navigation }) {
               logFlag?.includes("no blocks")
             ) {
               try {
-                invalidateFarmland(farmlandId, invalidationMessage, realm)
+                invalidateFarmland(farmlandId, invalidationMessage, realm);
                 // navigation.goBack();
-                navigateBack()
+                navigateBack();
               } catch (error) {
                 console.log("could not finish invalidation task: ", {
                   cause: error,
-                })
+                });
               }
             }
-            setAlert(false)
+            setAlert(false);
           }}
           onConfirmPressed={() => {
-            setAlert(false)
+            setAlert(false);
           }}
         />
 
+        <Box
+          w="100%"
+          style={{
+            backgroundColor: COLORS.fourth,
+            height: 50,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Pressable
+            onPress={() => {
+              if (farmlandId) {
+                if (checkBlockConformity(farmlandId, realm)) {
+                  navigateBack();
+                }
+              } else {
+                navigation.goBack();
+              }
+            }}
+            style={{
+              position: "absolute",
+              left: 6,
+              top: 6,
+            }}
+          >
+            <Icon name="arrow-back" color={COLORS.main} size={30} />
+          </Pressable>
+
+          <Text
+            style={{
+              fontFamily: "JosefinSans-Bold",
+              fontSize: 16,
+              color: COLORS.main,
+            }}
+          >
+            Pomar
+          </Text>
+        </Box>
         <ScrollView
           decelerationRate={"normal"}
           fadingEdgeLength={2}
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="handled"
         >
-          <Box
-            w="100%"
-            // alignItems={'center'}
-            style={{
-              backgroundColor: COLORS.fourth,
-              height: 50,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Pressable
-              onPress={() => {
-                if (farmlandId) {
-                  if (checkBlockConformity(farmlandId, realm)) {
-                    navigateBack()
-                  }
-                } else {
-                  navigation.goBack()
-                }
-              }}
-              style={{
-                position: "absolute",
-                left: 0,
-                top: 4,
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <Icon name="arrow-back-ios" color={COLORS.main} size={30} />
-            </Pressable>
-
-            <Text
-              style={{
-                textAlign: "center",
-                fontFamily: "JosefinSans-Bold",
-                fontSize: 16,
-                color: COLORS.main,
-              }}
-            >
-              Pomar
-            </Text>
-          </Box>
           <Stack direction="row" mt="1" pb="5">
             <Box w="5%"></Box>
             <Box
@@ -872,8 +843,8 @@ export default function FarmlandRegistration({ route, navigation }) {
                     color: COLORS.black,
                     lineHeight: 30,
                   }}
-                  // numberOfLines={2}
-                  // ellipsizeMode="tail"
+                // numberOfLines={2}
+                // ellipsizeMode="tail"
                 >
                   {ownerName?.includes("Outra")
                     ? `Instituição ${ownerName?.slice(6)}`
@@ -886,8 +857,8 @@ export default function FarmlandRegistration({ route, navigation }) {
                     color: COLORS.grey,
                     lineHeight: 25,
                   }}
-                  // numberOfLines={2}
-                  // ellipsizeMode="tail"
+                // numberOfLines={2}
+                // ellipsizeMode="tail"
                 >
                   {ownerAddress?.district}; {ownerAddress?.adminPost}
                 </Text>
@@ -961,8 +932,8 @@ export default function FarmlandRegistration({ route, navigation }) {
                     placeholder="Descrição da localização"
                     value={description}
                     onChangeText={(newDescription) => {
-                      setErrors((prev) => ({ ...prev, description: "" }))
-                      setDescription(newDescription)
+                      setErrors((prev) => ({ ...prev, description: "" }));
+                      setDescription(newDescription);
                     }}
                   />
                   {"description" in errors ? (
@@ -988,8 +959,8 @@ export default function FarmlandRegistration({ route, navigation }) {
                     <FormControl.Label>Culturas consociadas</FormControl.Label>
                     <MultipleSelectList
                       setSelected={(crop) => {
-                        setErrors((prev) => ({ ...prev, consociatedCrops: "" }))
-                        setConsociatedCrops(crop)
+                        setErrors((prev) => ({ ...prev, consociatedCrops: "" }));
+                        setConsociatedCrops(crop);
                       }}
                       data={crops}
                       notFoundText={"Tipo de cultura não encontrada"}
@@ -1084,7 +1055,7 @@ export default function FarmlandRegistration({ route, navigation }) {
                       >
                         <TouchableOpacity
                           onPress={() => {
-                            setOtherConsociatedCrops([])
+                            setOtherConsociatedCrops([]);
                           }}
                         >
                           <Icon
@@ -1118,8 +1089,8 @@ export default function FarmlandRegistration({ route, navigation }) {
                               borderColor={errors?.newCrop ? "red" : ""}
                               value={newCrop}
                               onChangeText={(crop) => {
-                                setErrors((prev) => ({ ...prev, newCrop: "" }))
-                                setNewCrop(crop)
+                                setErrors((prev) => ({ ...prev, newCrop: "" }));
+                                setNewCrop(crop);
                               }}
                             />
 
@@ -1164,13 +1135,13 @@ export default function FarmlandRegistration({ route, navigation }) {
                                 setOtherConsociatedCrops((prev) => [
                                   ...prev,
                                   newCrop,
-                                ])
-                                setNewCrop("")
+                                ]);
+                                setNewCrop("");
                               } else {
                                 setErrors((prev) => ({
                                   prev,
                                   newCrop: "Indica outra cultura",
-                                }))
+                                }));
                               }
                             }}
                           >
@@ -1203,8 +1174,8 @@ export default function FarmlandRegistration({ route, navigation }) {
                             placeholder="Hectares"
                             value={totalArea}
                             onChangeText={(newNumber) => {
-                              setErrors((prev) => ({ ...prev, totalArea: "" }))
-                              setTotalArea(Number(newNumber))
+                              setErrors((prev) => ({ ...prev, totalArea: "" }));
+                              setTotalArea(Number(newNumber));
                             }}
                           />
 
@@ -1248,8 +1219,8 @@ export default function FarmlandRegistration({ route, navigation }) {
                             placeholder="Cajueiros"
                             value={trees}
                             onChangeText={(newNumber) => {
-                              setErrors((prev) => ({ ...prev, trees: "" }))
-                              setTrees(newNumber)
+                              setErrors((prev) => ({ ...prev, trees: "" }));
+                              setTrees(newNumber);
                             }}
                           />
 
@@ -1421,25 +1392,25 @@ export default function FarmlandRegistration({ route, navigation }) {
                               onPress={() => {
                                 setAreaFlag(
                                   (prev) => prev - parseFloat(block?.usedArea),
-                                )
+                                );
                                 setTreesFlag(
                                   (prev) => prev - parseInt(block?.trees),
-                                )
+                                );
 
-                                setIsDeleteBlockOn(true)
+                                setIsDeleteBlockOn(true);
                               }}
                             >
                               <Icon
                                 name={
                                   block?.position ===
-                                  farmland?.blocks?.length - 1
+                                    farmland?.blocks?.length - 1
                                     ? "delete-forever"
                                     : "check-circle"
                                 }
                                 size={35}
                                 color={
                                   block?.position ===
-                                  farmland?.blocks?.length - 1
+                                    farmland?.blocks?.length - 1
                                     ? COLORS.ghostwhite
                                     : COLORS.ghostwhite
                                 }
@@ -1515,8 +1486,8 @@ export default function FarmlandRegistration({ route, navigation }) {
                                   plant?.includes("enxert"),
                                 )
                                   ? `(clones: ${block?.plantTypes?.clones?.join(
-                                      "; ",
-                                    )})`
+                                    "; ",
+                                  )})`
                                   : ""}
                               </Text>
                             </Box>
@@ -1524,7 +1495,7 @@ export default function FarmlandRegistration({ route, navigation }) {
                         </Box>
                       </Box>
                     </Box>
-                  )
+                  );
                 })}
             </>
           )}
@@ -1560,7 +1531,7 @@ export default function FarmlandRegistration({ route, navigation }) {
                   <TouchableOpacity
                     onPress={() => {
                       if (checkBlockConformity(farmlandId, realm)) {
-                        setIsCoordinatesModalVisible(true)
+                        setIsCoordinatesModalVisible(true);
                       }
                     }}
                   >
@@ -1606,12 +1577,12 @@ export default function FarmlandRegistration({ route, navigation }) {
                       if (farmland) {
                         // make the block data form visible
                         // setIsOverlayVisible(true);
-                        resizeBlockBox(1)
+                        resizeBlockBox(1);
                       } else {
-                        setLoadingButton(true)
+                        setLoadingButton(true);
 
                         // visualize and save the farmland main data
-                        visualizeFarmlandMainData()
+                        visualizeFarmlandMainData();
                       }
                     }}
                   >
@@ -1700,8 +1671,8 @@ export default function FarmlandRegistration({ route, navigation }) {
             setShowConfirmButton={setShowConfirmButton}
             ownerImage={ownerImage}
 
-            // successLottieVisible={successLottieVisible}
-            // setSuccessLottieVisible={setSuccessLottieVisible}
+          // successLottieVisible={successLottieVisible}
+          // setSuccessLottieVisible={setSuccessLottieVisible}
           />
 
           {successLottieVisible && (
@@ -1724,5 +1695,5 @@ export default function FarmlandRegistration({ route, navigation }) {
         </ScrollView>
       </Animated.View>
     </SafeAreaView>
-  )
+  );
 }

@@ -509,10 +509,8 @@ const FarmersListScreen = ({ route, navigation }) => {
                 }}
                 value={searchQuery}
                 onFocus={() => {
-                  // setIsFocused(true);
                 }}
                 onEndEditing={() => {
-                  // setIsFocused(false);
                 }}
                 onChangeText={(text) => setSearchQuery(text)}
               />

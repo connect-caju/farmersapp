@@ -13,6 +13,7 @@ import InstitutionItem from "../InstitutionItem/InstitutionItem";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faInfo, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import COLORS from "../../consts/colors";
+import InfoIcon from "../LottieComponents/InfoIcon";
 const { useRealm } = realmContext;
 
 const RegisteredByCurrentUser = ({ farmerType, route, navigation }) => {
@@ -89,38 +90,6 @@ const RegisteredByCurrentUser = ({ farmerType, route, navigation }) => {
         );
     }
 
-    //   useEffect(()=>{
-    //     if (farmerType === "Indivíduo") {
-    //         realm.subscriptions.update((mutableSubs) => {
-    //         //   mutableSubs.removeByName(districtSingleFarmers);
-    //           mutableSubs.add(
-    //             realm
-    //               .objects("Actor")
-    //               .filtered(`userId == "${user?.customData?.userId}"`),
-    //             // { name: districtSingleFarmers },
-    //           );
-    //         });
-    //       } else if (farmerType === "Grupo") {
-    //         realm.subscriptions.update((mutableSubs) => {
-    //         //   mutableSubs.removeByName(invalidatedSingleFarmers);
-    //           mutableSubs.add(
-    //             realm.objects("Group").filtered(`userId == "${user?.customData?.userId}"`),
-    //             // { name: invalidatedSingleFarmers },
-    //           );
-    //         });
-    //       } else if (farmerType === "Instituição") {
-    //         realm.subscriptions.update((mutableSubs) => {
-    //         //   mutableSubs.removeByName(districtSingleFarmers);
-    //           mutableSubs.add(
-    //             realm
-    //               .objects("Institution")
-    //               .filtered(`userId == "${user?.customData?.userId}"`),
-    //             // { name: districtSingleFarmers },
-    //           );
-    //         });
-    //       }
-
-    // }, [ farmerType, realm, user ]);
 
     const keyExtractor = (item, index) => index.toString();
 
@@ -191,35 +160,26 @@ const RegisteredByCurrentUser = ({ farmerType, route, navigation }) => {
                         paddingHorizontal: 30,
                     }}
                 >
+                    <InfoIcon />
                     <View
                         style={{
-                            borderWidth: 2,
-                            borderRadius: 100,
-                            borderColor: COLORS.main,
-                            height: 35,
-                            width: 35,
-                            justifyContent: "center",
-                            alignItems: "center",
+                            backgroundColor: COLORS.lightestgrey,
+                            padding: 10,
+                            borderRadius: 6,
+                            width: 220,
                         }}
                     >
-                        <FontAwesomeIcon
-                            icon={faInfo}
-                            size={20}
-                            color={COLORS.main}
-                        />
-
+                        <Text
+                            style={{
+                                color: COLORS.grey,
+                                fontSize: 15,
+                                fontFamily: "JosefinSans-Regular",
+                                textAlign: "center",
+                            }}
+                        >
+                            Nenhum registo
+                        </Text>
                     </View>
-                    <Text
-                        style={{
-                            color: COLORS.grey,
-                            fontSize: 15,
-                            fontFamily: "JosefinSans-Regular",
-                            textAlign: "center",
-                            lineHeight: 24,
-                        }}
-                    >
-                        Nenhum registo
-                    </Text>
                 </View>
             }
         </>

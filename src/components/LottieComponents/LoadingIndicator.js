@@ -1,19 +1,24 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable prettier/prettier */
+import { View, Text } from "react-native";
 import LottieView from "lottie-react-native";
-import { View } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 
-const SearchNotFound = () => {
+const LoadingIndicator = ({ }) => {
+
+    useEffect(() => {
+
+    }, []);
+
     return (
         <View
             style={{
-                width: 100,
-                height: 100,
+                width: 500,
+                height: 500,
             }}
         >
             <LottieView
-                source={require("../../../assets/lottie/searchNotFound.json")}
+                source={require("../../../assets/lottie/loadingIndicator.json")}
                 style={{}}
                 autoPlay
                 loop
@@ -22,4 +27,4 @@ const SearchNotFound = () => {
     );
 };
 
-export default SearchNotFound;
+export default LoadingIndicator;

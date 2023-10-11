@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable prettier/prettier */
 import {
   faBirthdayCake,
   faCheck,
@@ -6,10 +8,10 @@ import {
   faHome,
   faIdCard,
   faRemove,
-} from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome"
-import { Icon } from "@rneui/base"
-import React, { useRef, useEffect, useState } from "react"
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { Icon } from "@rneui/base";
+import React, { useRef, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -20,39 +22,39 @@ import {
   Animated as NativeAnimated,
   Easing,
   useNativeDriverr,
-} from "react-native"
-import Animated, { BounceIn } from "react-native-reanimated"
-import CustomDivider from "../Divider/CustomDivider"
-import COLORS from "../../consts/colors"
-import { bottomSheetFlags } from "../../consts/bottomSheetFlags"
-import { calculateAge } from "../../helpers/dates"
-import { useIsFocused, useNavigation } from "@react-navigation/native"
+} from "react-native";
+import Animated, { BounceIn } from "react-native-reanimated";
+import CustomDivider from "../Divider/CustomDivider";
+import COLORS from "../../consts/colors";
+import { bottomSheetFlags } from "../../consts/bottomSheetFlags";
+import { calculateAge } from "../../helpers/dates";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 
-import { useUser } from "@realm/react"
-import { realmContext } from "../../models/realmContext"
-import GroupMemberItem from "../GroupMemberItem/GroupMemberItem"
-const { useRealm, useQuery, useObject } = realmContext
+import { useUser } from "@realm/react";
+import { realmContext } from "../../models/realmContext";
+import GroupMemberItem from "../GroupMemberItem/GroupMemberItem";
+const { useRealm, useQuery, useObject } = realmContext;
 
 export default function GroupMembersCard({
   setPresentGroupMemberOptions,
   handlePresentModalPress,
   group,
 }) {
-  const realm = useRealm()
-  const navigation = useNavigation()
-  const isFocused = useIsFocused()
-  const scale = useRef(new NativeAnimated.Value(0)).current
-  let members = []
+  const realm = useRealm();
+  const navigation = useNavigation();
+  const isFocused = useIsFocused();
+  const scale = useRef(new NativeAnimated.Value(0)).current;
+  let members = [];
   if (group?.members?.length > 0) {
-    const memberIDs = Array.from(group?.members)
+    const memberIDs = Array.from(group?.members);
     for (let i = 0; i < memberIDs.length; i++) {
       members.push(
         realm.objects("Actor").filtered("_id == $0", memberIDs[i])[0],
-      )
+      );
     }
   }
 
-  const keyExtractor = (item, index) => index.toString()
+  const keyExtractor = (item, index) => index.toString();
 
   useEffect(() => {
     NativeAnimated.timing(scale, {
@@ -60,8 +62,8 @@ export default function GroupMembersCard({
       duration: 1000, // animation duration
       easing: Easing.inOut(Easing.ease),
       useNativeDriver: true, // using the native driver improves performance
-    }).start()
-  }, [isFocused])
+    }).start();
+  }, [isFocused]);
 
   return (
     <Animated.View
@@ -83,6 +85,7 @@ export default function GroupMembersCard({
           backgroundColor: COLORS.main,
           borderTopStartRadius: 10,
           borderTopEndRadius: 10,
+          paddingRight: 10,
         }}
       >
         <View
@@ -123,21 +126,27 @@ export default function GroupMembersCard({
 
         <TouchableOpacity
           onPress={() => {
-            handlePresentModalPress()
-            setPresentGroupMemberOptions(true)
+            handlePresentModalPress();
+            setPresentGroupMemberOptions(true);
           }}
           style={{
-            width: "10%",
-            // alignSelf: 'flex-end',
-            paddingTop: 10,
-            paddingHorizontal: 10,
+            paddingTop: 5,
+            alignItems: "flex-end",
           }}
         >
-          <FontAwesomeIcon
-            icon={faEllipsisVertical}
-            size={30}
-            color={COLORS.lightgrey}
-          />
+          <View
+            style={{
+              padding: 6,
+              borderRadius: 100,
+              backgroundColor: COLORS.lightgrey,
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faEllipsisVertical}
+              size={20}
+              color={COLORS.black}
+            />
+          </View>
         </TouchableOpacity>
       </View>
 
@@ -209,5 +218,5 @@ export default function GroupMembersCard({
         )}
       </View>
     </Animated.View>
-  )
+  );
 }

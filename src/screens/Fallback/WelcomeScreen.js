@@ -25,6 +25,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
+import BcryptReactNative from "bcrypt-react-native";
 
 import { responsiveFontSize } from "react-native-responsive-dimensions";
 
@@ -82,12 +83,39 @@ export default function WelcomeScreen() {
   // ---------------------------------------------------
 
   // -------------------------------------------
-  // const [connectionStatus, setConnectionStatus] = useState(false)
 
   const [loadingActivitiyIndicator, setLoadingActivityIndicator] =
     useState(false);
 
   const app = useApp();
+
+  // on user login
+  const onLogin = useCallback(async (email, password) => {
+    
+    // try {
+    // } catch (error) {
+    //   console.log("Could not encrypt password:", { cause: error })
+    // }
+    try {
+      let hashedPassword = password;
+      if (!app?.currentUser) {
+        // const salt = await BcryptReactNative.getSalt(10);
+        // hashedPassword = await BcryptReactNative.hash(salt, hashedPassword);
+        // console.log("hashed:", hashedPassword);
+        const creds = Realm.Credentials.emailPassword(
+          email,
+          // password,
+          hashedPassword
+        );
+        await app?.logIn(creds);
+      }
+      return app.currentUser;
+    } catch (error) {
+      setAlert(true);
+      setErrorFlag(error);
+      return;
+    }
+  }, [app, email, password]);
 
   // on user registration
   const onSignUp = useCallback(
@@ -917,20 +945,21 @@ export default function WelcomeScreen() {
                   onPress={async () => {
                     if (isLoggingIn) {
                       // app?.currentUser?.logOut();
-                      try {
-                        if (!app?.currentUser) {
-                          const creds = Realm.Credentials.emailPassword(
-                            email,
-                            password,
-                          );
-                          await app?.logIn(creds);
-                        }
-                        return app.currentUser;
-                      } catch (error) {
-                        setAlert(true);
-                        setErrorFlag(error);
-                        return;
-                      }
+                      // try {
+                      //   if (!app?.currentUser) {
+                      //     const creds = Realm.Credentials.emailPassword(
+                      //       email,
+                      //       password,
+                      //     );
+                      //     await app?.logIn(creds);
+                      //   }
+                      //   return app.currentUser;
+                      // } catch (error) {
+                      //   setAlert(true);
+                      //   setErrorFlag(error);
+                      //   return;
+                      // }
+                      await onLogin(email, password);
                     } else {
                       await onSignUp(
                         name,

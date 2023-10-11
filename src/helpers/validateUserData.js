@@ -3,7 +3,7 @@ import { roles } from "../consts/roles"
 import { capitalize } from "./capitalize"
 import BcryptReactNative from "bcrypt-react-native"
 
-const validateUserData = async (
+const validateUserData = (
   {
     name,
     email,
@@ -101,12 +101,12 @@ const validateUserData = async (
 
   let hashedPassword = retrievedPassword
 
-  try {
-    const salt = await BcryptReactNative.getSalt(10)
-    hashedPassword = await BcryptReactNative.hash(salt, retrievedPassword)
-  } catch (error) {
-    console.log("Could not encrypt password:", { cause: error })
-  }
+  // try {
+  //   const salt = await BcryptReactNative.getSalt(10)
+  //   hashedPassword = await BcryptReactNative.hash(salt, retrievedPassword)
+  // } catch (error) {
+  //   console.log("Could not encrypt password:", { cause: error })
+  // }
 
   return {
     name: retrievedName,

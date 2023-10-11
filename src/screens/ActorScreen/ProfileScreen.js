@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
@@ -8,18 +9,12 @@ import {
   Pressable,
   Image,
   Dimensions,
-  ScrollView,
-  SafeAreaView,
   Easing,
   Animated as NativeAnimated,
 } from "react-native";
 import COLORS from "../../consts/colors";
 import Animated, {
-  BounceIn,
-  FlipInYLeft,
   FlipOutYLeft,
-  FlipOutYRight,
-  SlideInLeft,
 } from "react-native-reanimated";
 import { Divider, Icon, Avatar } from "@rneui/base";
 
@@ -205,7 +200,6 @@ const ProfileScreen = ({ route, navigation }) => {
   return (
     <BottomSheetModalProvider>
       <Animated.ScrollView
-        // entering={FlipInYLeft.duration(400)}
         exiting={FlipOutYLeft}
         style={styles.container}
       >
@@ -230,15 +224,15 @@ const ProfileScreen = ({ route, navigation }) => {
                 width: "10%",
               }}
             >
-              <TouchableOpacity
+              <Pressable
                 onPress={() => {
                   navigation.navigate("FarmersListLayout", {
                     farmerType: farmerType,
                   });
                 }}
               >
-                <Icon name="arrow-back" color={COLORS.ghostwhite} size={25} />
-              </TouchableOpacity>
+                <Icon name="arrow-back" color={COLORS.ghostwhite} size={30} />
+              </Pressable>
             </View>
 
             <View
@@ -399,7 +393,6 @@ const ProfileScreen = ({ route, navigation }) => {
               <TouchableOpacity
                 onPress={() => {
                   setPresentFarmlandMenu(true);
-                  // handlePresentModalPress();
                 }}
                 style={{
                   alignSelf: "flex-end",
@@ -407,11 +400,19 @@ const ProfileScreen = ({ route, navigation }) => {
                   paddingHorizontal: 10,
                 }}
               >
-                <FontAwesomeIcon
-                  icon={faEllipsisVertical}
-                  size={30}
-                  color={COLORS.main}
-                />
+                <View
+                  style={{
+                    padding: 6,
+                    borderRadius: 100,
+                    backgroundColor: COLORS.lightgrey,
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={faEllipsisVertical}
+                    size={20}
+                    color={COLORS.black}
+                  />
+                </View>
               </TouchableOpacity>
             </View>
           )}
@@ -1251,17 +1252,6 @@ const ProfileScreen = ({ route, navigation }) => {
         </View>
       </BottomSheetModal>
 
-      {/* <EditDataBottomSheet 
-      ref={ref} 
-      bottomSheetFlag={bottomSheetFlag} 
-      setBottomSheetFlag={setBottomSheetFlag}
-      farmer={farmer}
-      resourceName="Farmer"
-      farmersIDs={farmersIDs}
-    >
-
-    </EditDataBottomSheet> */}
-
       {isFarmerOverlayVisible && (
         <EditFarmerData
           isOverlayVisible={isFarmerOverlayVisible}
@@ -1301,13 +1291,11 @@ const ProfileScreen = ({ route, navigation }) => {
           dataToBeUpdated={dataToBeUpdated}
           setNewDataObject={setNewDataObject}
           setOldDataObject={setOldDataObject}
-        // ownerName={ownerName}
         />
       )}
 
       {isConfirmDataVisible && (
         <ConfirmData
-          // setIsOverlayVisible={setIsOverlayVisible}
           isConfirmDataVisible={isConfirmDataVisible}
           setIsConfirmDataVisible={setIsConfirmDataVisible}
           ownerName={ownerName}
@@ -1318,11 +1306,6 @@ const ProfileScreen = ({ route, navigation }) => {
           resourceName={flag.resourceName}
         />
       )}
-
-      {/* {successLottieVisible &&  <SuccessLottie 
-    successLottieVisible={successLottieVisible}
-    setSuccessLottieVisible={setSuccessLottieVisible}
-  />} */}
     </BottomSheetModalProvider>
   );
 };
@@ -1330,7 +1313,6 @@ const ProfileScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // minHeight: '100%',
   },
   profileTypeText: {
     color: COLORS.ghostwhite,
