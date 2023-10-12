@@ -1,38 +1,27 @@
-import { TouchableOpacity, View, Text } from "react-native"
-import React, { useState, useEffect } from "react"
-import { Avatar, Icon } from "@rneui/themed"
+/* eslint-disable react/prop-types */
+/* eslint-disable linebreak-style */
+/* eslint-disable prettier/prettier */
+import { TouchableOpacity, View, Text } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Avatar, Icon } from "@rneui/themed";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-  listenOrientationChange as lor,
-  removeOrientationListener as rol,
-} from "react-native-responsive-screen"
+} from "react-native-responsive-screen";
 
 import {
   responsiveFontSize,
-  responsiveScreenFontSize,
-  responsiveHeight,
-  responsiveWidth,
-  responsiveScreenHeight,
-  responsiveScreenWidth,
-  useDimensionsChange,
-} from "react-native-responsive-dimensions"
-import Animated, {
-  Layout,
-  LightSpeedInLeft,
-  LightSpeedOutRight,
-} from "react-native-reanimated"
+} from "react-native-responsive-dimensions";
 
-import { Box, Center, Stack } from "native-base"
-import { getInitials } from "../../helpers/getInitials"
-import { useNavigation } from "@react-navigation/native"
-import COLORS from "../../consts/colors"
-import { months } from "../../helpers/dates"
-import { resourceValidation } from "../../consts/resourceValidation"
+import { Box, Center, Stack } from "native-base";
+import { getInitials } from "../../helpers/getInitials";
+import { useNavigation } from "@react-navigation/native";
+import COLORS from "../../consts/colors";
+import { resourceValidation } from "../../consts/resourceValidation";
 
 const InstitutionItem = ({ item, route }) => {
-  const navigation = useNavigation()
-  const [farmlandStatus, setFarmlandStatus] = useState("")
+  const navigation = useNavigation();
+  const [farmlandStatus, setFarmlandStatus] = useState("");
 
   useEffect(() => {
     if (item?.farmlandsList?.length > 0) {
@@ -42,56 +31,33 @@ const InstitutionItem = ({ item, route }) => {
             farmland.status === resourceValidation.status.invalidated,
         )
       ) {
-        setFarmlandStatus(resourceValidation.status.invalidated)
+        setFarmlandStatus(resourceValidation.status.invalidated);
       } else if (
         item?.farmlandsList.some(
           (farmland) => farmland.status === resourceValidation.status.pending,
         )
       ) {
-        setFarmlandStatus(resourceValidation.status.pending)
+        setFarmlandStatus(resourceValidation.status.pending);
       } else {
-        setFarmlandStatus(resourceValidation.status.validated)
+        setFarmlandStatus(resourceValidation.status.validated);
       }
     } else {
       // setFarmlandStatus(resourceValidation.status.invalidated);
     }
-  }, [item])
+  }, [item]);
 
   return (
     <View
-      // entering={LightSpeedInLeft}
-      // exiting={LightSpeedOutRight}
-      // layout={Layout.springify()}
       style={{
-        paddingHorizontal: 10,
-        marginVertical: hp("1%"),
-        // backgroundColor: COLORS.sixth,
-        borderTopColor: COLORS.sixth,
-        // borderTopWidth: 2,
-        borderTopEndRadius: 10,
-        borderTopLeftRadius: 10,
-        borderColor: COLORS.main,
-        height: 110,
-        width: "100%",
-        backgroundColor: "#F5F5F5",
-        flex: 1,
-        // shadowColor: COLORS.main,
-        // shadowOffset: {
-        //   width: 0,
-        //   height: 3,
-        // },
-        // shadowOpacity: 0.27,
-        // shadowRadius: 4.65,
-
-        elevation: 3,
-        opacity: 1,
+        paddingHorizontal: 8,
+        marginVertical: 5,
       }}
     >
       <Box
         style={{
           position: "absolute",
-          top: 1,
-          right: 1,
+          top: 20,
+          right: 5,
           zIndex: 1,
         }}
       >
@@ -100,16 +66,16 @@ const InstitutionItem = ({ item, route }) => {
             item?.status === resourceValidation.status.pending
               ? "pending-actions"
               : item?.status === resourceValidation.status.validated
-              ? "check-circle"
-              : "dangerous"
+                ? "check-circle"
+                : "dangerous"
           }
-          size={wp("6%")}
+          size={15}
           color={
             item?.status === resourceValidation.status.pending
               ? COLORS.danger
               : item?.status === resourceValidation.status.validated
-              ? COLORS.main
-              : COLORS.red
+                ? COLORS.main
+                : COLORS.red
           }
         />
       </Box>
@@ -123,43 +89,62 @@ const InstitutionItem = ({ item, route }) => {
             source={{ uri: item.image }}
           />
         </Center>
-        <Box w="80%">
+        <Box w="80%" pt="3">
           <TouchableOpacity
             onPress={() => {
               navigation.navigate("Profile", {
                 ownerId: item._id,
                 farmersIDs: item?.farmersIDs,
                 farmerType: "Instituição",
-              })
+              });
             }}
           >
-            <Box>
+            <Text
+              style={{
+                fontSize: 16,
+                fontFamily: "JosefinSans-Bold",
+                color: COLORS.black,
+              }}
+              numberOfLines={1}
+              ellipsizeMode={"tail"}
+            >
+              {item?.name}
               <Text
                 style={{
-                  fontSize: responsiveFontSize(2),
-                  fontFamily: "JosefinSans-Bold",
-                  color: COLORS.main,
+                  fontSize: 14,
+                  fontFamily: "JosefinSans-Italic",
+                  color: COLORS.black,
                 }}
-                numberOfLines={1}
-                ellipsizeMode={"tail"}
               >
-                {item?.name}
-                <Text
-                  style={{
-                    fontSize: responsiveFontSize(1.7),
-                    fontFamily: "JosefinSans-Italic",
-                    color: COLORS.main,
-                    paddingTop: 6,
-                  }}
-                >
-                  {" "}
-                  ({item?.type === "Outra" ? "Instituição" : item?.type})
-                </Text>
+                {" "}
+                ({item?.type === "Outra" ? "Instituição" : item?.type})
               </Text>
-            </Box>
-            <Stack direction="column">
-              <Stack direction="row">
-                <Box w="100%" style={{}}>
+            </Text>
+            <Text
+              style={{
+                fontSize: 14,
+                fontFamily: "JosefinSans-Italic",
+                color: item.farmlands === 0 ? COLORS.danger : COLORS.grey,
+
+              }}
+              numberOfLines={1}
+              ellipsizeMode={"tail"}
+            >
+              {item.farmlands === 0 ? "(Sem pomar ainda)" : item.farmlands === 1 ? `(Possui ${item.farmlands} pomar)` : `(Possui ${item.farmlands} pomares)`}
+            </Text>
+            <Text
+              style={{
+                textAlign: "right",
+                color: COLORS.grey,
+                fontFamily: "JosefinSans-Italic",
+                fontSize: 12,
+              }}
+            >
+              Registo: {item.createdAt} por {item.user}
+            </Text>
+            {/* <Stack direction="column">
+              <Stack direction="row"> */}
+            {/* <Box w="100%" style={{}}>
                   <Stack direction="row">
                     <Text
                       style={{
@@ -194,8 +179,8 @@ const InstitutionItem = ({ item, route }) => {
                             ? COLORS.danger
                             : farmlandStatus ===
                               resourceValidation.status.validated
-                            ? COLORS.main
-                            : COLORS.red,
+                              ? COLORS.main
+                              : COLORS.red,
                         justifyContent: "space-between",
                       }}
                     >
@@ -215,10 +200,10 @@ const InstitutionItem = ({ item, route }) => {
                             ? "pending-actions"
                             : farmlandStatus ===
                               resourceValidation.status.validated
-                            ? "check-circle"
-                            : item?.farmlands === 0
-                            ? "error-outline"
-                            : "dangerous"
+                              ? "check-circle"
+                              : item?.farmlands === 0
+                                ? "error-outline"
+                                : "dangerous"
                         }
                         size={wp("6%")}
                         color={
@@ -226,25 +211,23 @@ const InstitutionItem = ({ item, route }) => {
                             ? COLORS.danger
                             : farmlandStatus ===
                               resourceValidation.status.validated
-                            ? COLORS.main
-                            : COLORS.red
+                              ? COLORS.main
+                              : COLORS.red
                         }
                       />
                     </Box>
                     <Box w="5%"></Box>
                   </Stack>
-                </Box>
-              </Stack>
-            </Stack>
+                </Box> */}
+            {/* </Stack>
+            </Stack> */}
           </TouchableOpacity>
         </Box>
-        {/* <Box w="5%"></Box> */}
       </Stack>
 
-      <Stack
+      {/* <Stack
         direction="row"
         w="100%"
-        // style={{ paddingTop: 5,  }}
       >
         <Box w="100%">
           <Text
@@ -258,9 +241,9 @@ const InstitutionItem = ({ item, route }) => {
             Registo: {item.createdAt} por {item.user}
           </Text>
         </Box>
-      </Stack>
+      </Stack> */}
     </View>
-  )
-}
+  );
+};
 
-export default InstitutionItem
+export default InstitutionItem;

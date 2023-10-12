@@ -431,9 +431,7 @@ export default function FarmerRegistration({ route, navigation }) {
 
           }}
         >
-          {farmerType.length === 0 && <Text style={styles.description}>
-            Seleccione o tipo de produtor que pretendes registar
-          </Text>}
+
           {/* Radio Buttons allowing to choose the farmerType */}
           <FarmerTypeRadioButtons
             farmerType={farmerType}
@@ -547,10 +545,6 @@ export default function FarmerRegistration({ route, navigation }) {
               setGroupAdminPost={setGroupAdminPost}
               groupVillage={groupVillage}
               setGroupVillage={setGroupVillage}
-              // groupManagerName={groupManagerName}
-              // setGroupManagerName={setGroupManagerName}
-              // groupManagerPhone={groupManagerPhone}
-              // setGroupManagerPhone={setGroupManagerPhone}
               groupOperatingLicence={groupOperatingLicence}
               setGroupOperatingLicence={setGroupOperatingLicence}
               groupNuit={groupNuit}
@@ -582,7 +576,6 @@ export default function FarmerRegistration({ route, navigation }) {
           <Center
             mb="15"
             w="94%"
-          // style={{ backgroundColor: 'red'}}
           >
             {farmerType !== "" ? (
               <Button
@@ -595,11 +588,23 @@ export default function FarmerRegistration({ route, navigation }) {
                 onPress={() => addFarmer(farmerType, realm)}
               />
             ) : (
-              <Box>
-                <Center>
-                  <TickComponent />
-                </Center>
-              </Box>
+              <Center
+                mt="45"
+              >
+                <TickComponent />
+                <View
+                  style={{
+                    backgroundColor: COLORS.lightestgrey,
+                    marginTop: 10,
+                    width: 250,
+                  }}
+                >
+                  {farmerType.length === 0 && <Text style={styles.description}>
+                    Seleccione o tipo de produtor que pretendes registar
+                  </Text>}
+
+                </View>
+              </Center>
             )}
           </Center>
 
@@ -651,8 +656,6 @@ export default function FarmerRegistration({ route, navigation }) {
                 setGroupAffiliationYear={setGroupAffiliationYear}
                 setGroupAdminPost={setGroupAdminPost}
                 setGroupVillage={setGroupVillage}
-                // setGroupManagerName={setGroupManagerName}
-                // setGroupManagerPhone={setGroupManagerPhone}
                 setGroupOperatingLicence={setGroupOperatingLicence}
                 setGroupNuit={setGroupNuit}
                 setGroupMembersNumber={setGroupMembersNumber}

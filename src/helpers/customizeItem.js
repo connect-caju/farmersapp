@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable prettier/prettier */
 import { months } from "./dates";
 import { getInitials } from "./getInitials";

@@ -17,10 +17,10 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   description: {
-    textAlign: "left",
+    textAlign: "center",
     fontFamily: "JosefinSans-Regular",
     padding: 15,
-    width: "70%",
+    // width: "70%",
     color: COLORS.grey,
     fontSize: 14,
     lineHeight: 16,

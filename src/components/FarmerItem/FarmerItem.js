@@ -52,27 +52,15 @@ const FarmerItem = ({ item, route, farmerType }) => {
   return (
     <View
       style={{
-        paddingHorizontal: 10,
-        marginVertical: hp("1%"),
-        height: 110,
-        width: "100%",
-        backgroundColor: "#F5F5F5",
-        flex: 1,
-        borderTopColor: COLORS.second,
-        // borderTopWidth: 2,
-        borderTopEndRadius: 10,
-        borderTopLeftRadius: 10,
-        borderColor: COLORS.main,
-        shadowColor: COLORS.main,
-        elevation: 3,
-        opacity: 1,
+        paddingHorizontal: 8,
+        marginVertical: 5,
       }}
     >
       <Box
         style={{
           position: "absolute",
-          top: 1,
-          right: 1,
+          top: 20,
+          right: 5,
           zIndex: 1,
         }}
       >
@@ -84,7 +72,7 @@ const FarmerItem = ({ item, route, farmerType }) => {
                 ? "check-circle"
                 : "dangerous"
           }
-          size={wp("6%")}
+          size={15}
           color={
             item?.status === resourceValidation.status.pending
               ? COLORS.danger
@@ -109,16 +97,16 @@ const FarmerItem = ({ item, route, farmerType }) => {
             <Box
               style={{
                 position: "absolute",
-                bottom: -1,
-                left: -8,
+                bottom: 1,
+                left: 2,
               }}
             >
-              <Icon name="verified-user" size={wp("6%")} color="blue" />
+              <Icon name="verified-user" size={15} color="blue" />
             </Box>
           )}
         </Center>
 
-        <Box w="80%">
+        <Box w="80%" pt="3">
           <TouchableOpacity
             onPress={() => {
               navigation.navigate("Profile", {
@@ -130,48 +118,45 @@ const FarmerItem = ({ item, route, farmerType }) => {
           >
             <Text
               style={{
-                fontSize: responsiveFontSize(2),
+                fontSize: 16,
                 fontFamily: "JosefinSans-Bold",
-                color: COLORS.main,
+                color: COLORS.black,
               }}
               numberOfLines={1}
               ellipsizeMode={"tail"}
             >
               {item.name}
-              <Text
-                style={{
-                  fontSize: responsiveFontSize(1.7),
-                  fontFamily: "JosefinSans-Italic",
-                  color: COLORS.main,
-                  paddingTop: 6,
-                }}
-              ></Text>
             </Text>
+            {item.assets?.map((asset, index) => (
+              <Text
+                key={index}
+                style={{
+                  fontSize: 14,
+                  fontFamily: "JosefinSans-Italic",
+                  color: item.farmlands === 0 ? COLORS.danger : COLORS.grey,
 
-            <Stack direction="column">
-              <Stack direction="row">
+                }}
+                numberOfLines={1}
+                ellipsizeMode={"tail"}
+              >
+                {asset.subcategory} {item.farmlands > 0 ? `${item.gender === "Feminino" ? "(Dona" : "(Dono"} de ${item.farmlands} ${item.farmlands <= 1 ? "pomar" : "pomares"})` : "(Sem pomar ainda)"}
+              </Text>
+            ))}
+            <Text
+              style={{
+                textAlign: "right",
+                color: COLORS.grey,
+                fontFamily: "JosefinSans-Italic",
+                fontSize: 12,
+              }}
+            >
+              Registo: {item.createdAt} por {item.user}
+            </Text>
+            {/* </Box> */}
+
+            {/* <Stack direction="column"> */}
+            {/* <Stack direction="row">
                 <Box w="100%">
-                  <Box
-                    style={
-                      {
-                        // flexDirection: 'row',
-                      }
-                    }
-                  >
-                    {item.assets?.map((asset, index) => (
-                      <Text
-                        key={index}
-                        style={{
-                          fontSize: responsiveFontSize(1.7),
-                          fontFamily: "JosefinSans-Italic",
-                        }}
-                        numberOfLines={1}
-                        ellipsizeMode={"tail"}
-                      >
-                        {asset.category} {asset.subcategory}
-                      </Text>
-                    ))}
-                  </Box>
                   <Stack direction="row">
                     <Box w="50%">
                       <Text
@@ -183,13 +168,9 @@ const FarmerItem = ({ item, route, farmerType }) => {
                         Tel: {item.phone}
                       </Text>
                     </Box>
-                    {/* <Box w="50%"> */}
-                    {/* <Stack direction="row"> */}
                     <Box
-                      // w="30%"
                       style={{
                         flexDirection: "row",
-                        // borderWidth: 1,
                         borderRadius: 20,
                         borderColor:
                           farmlandStatus === resourceValidation.status.pending
@@ -232,25 +213,22 @@ const FarmerItem = ({ item, route, farmerType }) => {
                               : COLORS.red
                         }
                       />
-                      {/* </Box> */}
-                      {/* </Stack> */}
                     </Box>
                     <Box w="5%"></Box>
                   </Stack>
                 </Box>
-              </Stack>
-            </Stack>
+              </Stack> */}
+            {/* </Stack> */}
           </TouchableOpacity>
         </Box>
       </Stack>
 
-      <Stack
+      {/* <Stack
         direction="row"
         w="100%"
-      // style={{ paddingTop: 5,  }}
-      >
-        <Box w="100%">
-          <Text
+      > */}
+      {/* <Box w="100%"> */}
+      {/* <Text
             style={{
               textAlign: "right",
               color: COLORS.grey,
@@ -259,9 +237,9 @@ const FarmerItem = ({ item, route, farmerType }) => {
             }}
           >
             Registo: {item.createdAt} por {item.user}
-          </Text>
-        </Box>
-      </Stack>
+          </Text> */}
+      {/* </Box> */}
+      {/* </Stack> */}
     </View>
   );
 };

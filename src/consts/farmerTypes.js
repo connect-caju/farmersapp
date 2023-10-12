@@ -1,3 +1,4 @@
+/* eslint-disable semi */
 export const institutions = [
   "Escola Primária (EP1)",
   "Escola Primária (EP2)",
