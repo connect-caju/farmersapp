@@ -1,12 +1,14 @@
-import { useNavigation } from "@react-navigation/native"
-import { Center, Alert, Stack, Box } from "native-base"
-import React, { useState } from "react"
-import { Icon, CheckBox } from "@rneui/themed"
-import { Button, Text, View, Pressable, TouchableOpacity } from "react-native"
-import COLORS from "../../consts/colors"
-import Modal from "react-native-modal"
-import { farmerTypes } from "../../consts/farmerTypes"
-// import Modal from "react-native-modal";
+/* eslint-disable react/prop-types */
+/* eslint-disable prettier/prettier */
+import { useNavigation } from "@react-navigation/native";
+import { Center, Alert, Stack, Box } from "native-base";
+import React, { useState } from "react";
+import { Icon, CheckBox } from "@rneui/themed";
+import { Button, Text, View, Pressable, TouchableOpacity } from "react-native";
+import COLORS from "../../consts/colors";
+import Modal from "react-native-modal";
+import { farmerTypes } from "../../consts/farmerTypes";
+
 
 function SuccessAlert({
   isCoordinatesModalVisible,
@@ -17,7 +19,7 @@ function SuccessAlert({
   ownerId, // the ownerId (farmland owner) is used after a successful farmland registration
   flag, // the flag here refers to the resourceType (farmer= Single, Group or Institution); (farmland)
 }) {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
   // after any successful actor/farmland registration
   // the backward icon takes the user back to the respective registered actor main screen
@@ -32,7 +34,7 @@ function SuccessAlert({
           ownerId: farmerItem.ownerId,
           farmerType: farmerItem.flag,
           farmersIDs: [],
-        })
+        });
       }
     } else if (flag === "farmland") {
       // after a successful farmland registration
@@ -43,9 +45,9 @@ function SuccessAlert({
         ownerId: ownerId,
         farmerType: farmlandOwnerType,
         farmersIDs: [],
-      })
+      });
     }
-  }
+  };
 
   return (
     <Modal
@@ -80,8 +82,8 @@ function SuccessAlert({
               <Box>
                 <Pressable
                   onPress={() => {
-                    navigateBack()
-                    setIsCoordinatesModalVisible(false)
+                    navigateBack();
+                    setIsCoordinatesModalVisible(false);
                   }}
                   style={{
                     position: "absolute",
@@ -144,8 +146,8 @@ function SuccessAlert({
                 onPress={() => {
                   navigation.navigate("FarmlandAreaAudit", {
                     farmlandId,
-                  })
-                  setIsCoordinatesModalVisible(false)
+                  });
+                  setIsCoordinatesModalVisible(false);
                 }}
               >
                 <Box
@@ -181,8 +183,8 @@ function SuccessAlert({
             {farmerItem?.ownerId && (
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate("FarmlandForm1", farmerItem)
-                  setIsCoordinatesModalVisible(false)
+                  navigation.navigate("FarmlandForm1", farmerItem);
+                  setIsCoordinatesModalVisible(false);
                 }}
               >
                 <Box
@@ -215,7 +217,7 @@ function SuccessAlert({
         </View>
       </View>
     </Modal>
-  )
+  );
 }
 
-export default SuccessAlert
+export default SuccessAlert;

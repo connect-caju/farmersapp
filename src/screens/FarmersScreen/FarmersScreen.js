@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable react/prop-types */
 /* eslint-disable prettier/prettier */
 /* eslint-disable prettier/prettier */
@@ -15,6 +16,7 @@ import {
   TouchableOpacity,
   SectionList,
   ActivityIndicator,
+  useNativeDriver,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { Icon } from "@rneui/themed";
@@ -54,6 +56,8 @@ import { roles } from "../../consts/roles";
 import StatItem from "../../components/StatItem/StatItem";
 import FarmerTypeCard from "../../components/FarmerTypeCard/FarmerTypeCard";
 import CustomDivider from "../../components/Divider/CustomDivider";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import RegistrationButton from "../../components/RegistrationButton/RegistrationButton";
 const { useRealm, useQuery } = realmContext;
 
 const provincialStats = "provincialStats";
@@ -65,7 +69,7 @@ const farmersTypes = [
     description:
       "Produtores singulares categorizados em familiares e comerciais.",
     title: "Produtores Singulares",
-    backgroundColors: COLORS.darkyGreen,
+    iconColor: COLORS.main,
     borderColor: COLORS.darkyGreen,
     color: COLORS.main,
   },
@@ -74,7 +78,7 @@ const farmersTypes = [
     icon: faPeopleGroup,
     description: "Cooperativas, Associações, Grupos de produtores e EMC.",
     title: "Organizações de Produtores",
-    backgroundColors: COLORS.lightGreen,
+    iconColor: COLORS.main,
     borderColor: COLORS.darkyGreen,
     color: COLORS.main,
   },
@@ -83,10 +87,11 @@ const farmersTypes = [
     icon: faInstitution,
     description: "Instituições (públicas e privadas) produtoras de caju.",
     title: "Produtores Institucionais",
-    backgroundColors: COLORS.emerald,
+    iconColor: COLORS.main,
     borderColor: COLORS.darkyGreen,
     color: COLORS.main,
   },
+
 ];
 
 export default function FarmersScreen({ route, navigation }) {
@@ -117,6 +122,7 @@ export default function FarmersScreen({ route, navigation }) {
   const [fetchedGroups, setFetchedGroups] = useState([]);
   const [fetchedInstitutions, setFetchedInstitutions] = useState([]);
   const [refresh, setRefresh] = useState(false);
+
 
   const districts = Array.from(
     new Set(stats.map((stat) => stat?.userDistrict)),
@@ -249,6 +255,9 @@ export default function FarmersScreen({ route, navigation }) {
     );
   }
 
+
+
+
   return (
     <SafeAreaView
       style={{
@@ -257,7 +266,7 @@ export default function FarmersScreen({ route, navigation }) {
         backgroundColor: "ghostwhite",
       }}
     >
-      {/* 
+      {/*
     Show this if the user is a provincial manager
 */}
 
@@ -374,77 +383,80 @@ export default function FarmersScreen({ route, navigation }) {
         </View>
       )}
 
-      {/* 
+      {/*
    Show this if the user is a field agent only
 */}
 
       {customUserData?.role !== roles.provincialManager &&
         customUserData?.role !== roles.ampcmSupervisor && (
-          <Box>
+          <View
+            style={{
+            }}
+          >
             <View
               style={{
-                // minHeight: "15%",
                 width: "100%",
-                paddingHorizontal: 5,
+                height: 70,
+                paddingHorizontal: 15,
                 paddingVertical: 10,
-                backgroundColor: "#EBEBE4",
-                borderTopWidth: 0,
-                borderColor: "#EBEBE4",
-                borderBottomWidth: 3,
-                borderLeftWidth: 3,
-                borderRightWidth: 3,
+                backgroundColor: COLORS.fourth,
+                borderColor: COLORS.fourth,
               }}
             >
-              <Stack direction="row" w="100%">
-                <Center w="15%"></Center>
-
-                <Box w="65%">
-                  <Center w="100%">
-                    <TouchableOpacity
-                      onPress={() => {
-                        setRefresh(!refresh);
-                      }}
-                    >
-                      <Text
-                        numberOfLines={1}
-                        ellipsizeMode={"tail"}
-                        style={{
-                          fontFamily: "JosefinSans-Bold",
-                          fontSize: responsiveFontSize(2),
-                          color: COLORS.main,
-                        }}
-                      >
-                        {customUserData?.userDistrict}
-                      </Text>
-                    </TouchableOpacity>
-                  </Center>
-                </Box>
-                <Box
-                  w="20%"
-                  style={{
-                    justifyContent: "center",
-                    alignItems: "center",
+              <View
+                style={{
+                  width: "80%"
+                }}
+              >
+                <Pressable
+                  onPress={() => {
+                    setRefresh(!refresh);
                   }}
                 >
-                  <Box
+                  <Text
+                    numberOfLines={1}
+                    ellipsizeMode={"tail"}
                     style={{
-                      justifyContent: "center",
-                      borderRadius: 100,
-                      borderWidth: 1,
-                      borderColor: COLORS.main,
-                      backgroundColor: COLORS.main,
+                      fontFamily: "JosefinSans-Bold",
+                      fontSize: 24,
+                      color: COLORS.grey,
                     }}
                   >
-                    <TouchableOpacity onPress={addFarmer}>
-                      <Icon
-                        name="person-add"
-                        color={COLORS.ghostwhite}
-                        size={wp("12%")}
-                      />
-                    </TouchableOpacity>
-                  </Box>
-                </Box>
-              </Stack>
+                    {customUserData?.userDistrict}
+                  </Text>
+                </Pressable>
+              </View>
+              <View
+                style={{
+                  borderRadius: 100,
+                  backgroundColor: COLORS.main,
+                  padding: 4,
+                  elevation: 8,
+                  position: "absolute",
+                  right: 10,
+                  top: 5,
+                }}
+              >
+                <View
+                  style={{
+                    justifyContent: "center",
+                    borderRadius: 100,
+                    borderWidth: 3,
+                    borderColor: COLORS.lightestgrey,
+                    backgroundColor: COLORS.main,
+                    padding: 2,
+                  }}
+                >
+                  <TouchableOpacity onPress={addFarmer}>
+                    <Icon
+                      name="app-registration"
+                      color={COLORS.lightestgrey}
+                      size={30}
+                    />
+                  </TouchableOpacity>
+
+                </View>
+              </View>
             </View>
 
             {
@@ -497,8 +509,17 @@ export default function FarmersScreen({ route, navigation }) {
                 />
               </Box>
             }
-          </Box>
+          </View>
         )}
+
+      {
+        customUserData?.role !== roles.provincialManager &&
+        customUserData?.role !== roles.ampcmSupervisor &&
+        (
+          <RegistrationButton customUserData={customUserData} navigation={navigation} route={route} />
+        )
+      }
+
     </SafeAreaView>
   );
 }

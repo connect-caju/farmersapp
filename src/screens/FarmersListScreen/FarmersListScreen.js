@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from "react";
 import {
@@ -526,66 +527,6 @@ const FarmersListScreen = ({ route, navigation }) => {
               justifyContent: "space-around",
             }}
           >
-            {/* <TouchableOpacity onPress={() => handleFocusedOption(1)}>
-              <Text
-                style={{
-                  color: focusedOption === 1 ? COLORS.main : COLORS.grey,
-                  fontFamily: "JosefinSans-Bold",
-                  fontSize: 16,
-                }}
-              >
-                Meus
-              </Text>
-              <View
-                style={{
-                  borderBottomColor:
-                    focusedOption === 1 ? COLORS.main : COLORS.grey,
-                  borderBottomWidth: focusedOption === 1 ? 2 : 0,
-                  paddingTop: 5,
-                  // width: "100%",
-                }}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleFocusedOption(2)}>
-              <Text
-                style={{
-                  color: focusedOption === 2 ? COLORS.main : COLORS.grey,
-                  fontFamily: "JosefinSans-Bold",
-                  fontSize: 16,
-                }}
-              >
-                Devolvidos
-              </Text>
-              <View
-                style={{
-                  borderBottomColor:
-                    focusedOption === 2 ? COLORS.main : COLORS.grey,
-                  borderBottomWidth: focusedOption === 2 ? 2 : 0,
-                  paddingTop: 5,
-                  // width: "100%",
-                }}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleFocusedOption(3)}>
-              <Text
-                style={{
-                  color: focusedOption === 3 ? COLORS.main : COLORS.grey,
-                  fontFamily: "JosefinSans-Bold",
-                  fontSize: 16,
-                }}
-              >
-                Todos
-              </Text>
-              <View
-                style={{
-                  borderBottomColor:
-                    focusedOption === 3 ? COLORS.main : COLORS.grey,
-                  borderBottomWidth: focusedOption === 3 ? 2 : 0,
-                  paddingTop: 5,
-                  // width: "100%",
-                }}
-              />
-            </TouchableOpacity> */}
             <FlatList
               data={filterByCriteria}
               keyExtractor={keyExtractor2}

@@ -70,7 +70,7 @@ export default function AppTabs() {
             options={({ route }) => ({
               tabBarIcon: (tabInfo) => (
                 <Icon
-                  name="people"
+                  name="app-registration"
                   color={tabInfo.focused ? COLORS.main : COLORS.grey}
                   size={wp("10%")}
                 />

@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable linebreak-style */
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-shadow */
 /* eslint-disable prettier/prettier */
@@ -108,7 +110,7 @@ export default function IndividualFarmerForm({
   );
 
   return (
-    <Box px="3" my="6">
+    <Box px="3" my="3">
       <Box w="100%">
         <FormControl isRequired isInvalid={"isSprayingAgent" in errors}>
           <FormControl.Label>
@@ -212,21 +214,19 @@ export default function IndividualFarmerForm({
               />
             </Box>
           </Stack>
-          {"isSprayingAgent" in errors ? (
+          {"isSprayingAgent" in errors && (
             <FormControl.ErrorMessage
               leftIcon={<Icon name="error-outline" size={16} color="red" />}
               _text={{ fontSize: "xs" }}
             >
               { }
             </FormControl.ErrorMessage>
-          ) : (
-            <FormControl.HelperText />
           )}
         </FormControl>
       </Box>
 
       <Box w="100%" alignItems="center">
-        <FormControl isRequired my="1" isInvalid={"surname" in errors}>
+        <FormControl isRequired my="0" isInvalid={"surname" in errors}>
           <FormControl.Label>Apelido</FormControl.Label>
           <CustomInput
             width="100%"
@@ -357,7 +357,7 @@ export default function IndividualFarmerForm({
           </Box>
         </Stack>
 
-        <CustomDivider marginVertical="2" thickness={2} bg={COLORS.main} />
+        {/* <CustomDivider marginVertical="2" thickness={2} bg={COLORS.main} /> */}
 
         <Center>
           <Text style={styles.formSectionDescription}>Endereço e Contacto</Text>
@@ -525,7 +525,7 @@ export default function IndividualFarmerForm({
           </Box>
         </Stack>
 
-        <CustomDivider marginVertical="2" thickness={2} bg={COLORS.main} />
+        {/* <CustomDivider marginVertical="2" thickness={2} bg={COLORS.main} /> */}
 
         <Center>
           <Text style={styles.formSectionDescription}>Dados de Nascimento</Text>
@@ -577,51 +577,13 @@ export default function IndividualFarmerForm({
                 endYear={2012}
               />
 
-              {/* <Datepicker
-                        placeholder="Nascim."
-                        min={new Date(1900, 0, 0)}
-                        max={new Date(2010, 0, 0)}
-                        size="large"
-
-                        placement="top"
-                        style={styles.datepicker}
-                        date={birthDate}
-                        dateService={localeDateService}
-                        // {...localePickerState}
-                        accessoryLeft={
-                            !birthDate
-                                &&  <Icon
-                                        name="date-range"
-                                        size={20}
-                                        color={COLORS.main}
-                                    />
-                        }
-
-                        accessoryRight={
-                            birthDate
-                                && <Icon
-                                        name="close"
-                                        size={20}
-                                        color={COLORS.grey}
-                                        onPress={()=>setBirthDate(null)}
-                                    />
-
-                        }
-
-                        onSelect={nextDate => {
-                            setErrors(prev=>({...prev, birthDate: null }))
-                            setBirthDate(nextDate)
-                    }}
-                /> */}
-              {"birthDate" in errors ? (
+              {"birthDate" in errors && (
                 <FormControl.ErrorMessage
                   leftIcon={<Icon name="error-outline" size={16} color="red" />}
                   _text={{ fontSize: "xs" }}
                 >
                   {errors?.birthDate}
                 </FormControl.ErrorMessage>
-              ) : (
-                <FormControl.HelperText />
               )}
             </FormControl>
           </Box>
@@ -666,15 +628,13 @@ export default function IndividualFarmerForm({
                   <Select.Item key={index} label={province} value={province} />
                 ))}
               </Select>
-              {"birthProvince" in errors ? (
+              {"birthProvince" in errors && (
                 <FormControl.ErrorMessage
                   leftIcon={<Icon name="error-outline" size={16} color="red" />}
                   _text={{ fontSize: "xs" }}
                 >
                   {errors?.birthProvince}
                 </FormControl.ErrorMessage>
-              ) : (
-                <FormControl.HelperText />
               )}
             </FormControl>
           </Box>
@@ -811,7 +771,7 @@ export default function IndividualFarmerForm({
                           ),
                         )}
                       </Select>
-                      {"birthAdminPost" in errors ? (
+                      {"birthAdminPost" in errors && (
                         <FormControl.ErrorMessage
                           leftIcon={
                             <Icon name="error-outline" size={16} color="red" />
@@ -820,8 +780,6 @@ export default function IndividualFarmerForm({
                         >
                           {errors?.birthAdminPost}
                         </FormControl.ErrorMessage>
-                      ) : (
-                        <FormControl.HelperText />
                       )}
                     </FormControl>
                   )}
@@ -878,38 +836,8 @@ export default function IndividualFarmerForm({
                     borderColor: COLORS.lightgrey,
                   }}
                 />
-                {/* <Select
-                selectedValue={birthDistrict}
-                accessibilityLabel="Escolha um distrito"
-                placeholder={birthProvince?.includes('Estrangeiro') ? "Escolha um país" : "Escolha um distrito"}
-                minHeight={55}
-                _selectedItem={{
-                    bg: 'teal.600',
-                    fontSize: 'lg',
-                    endIcon: <CheckIcon size="5" />,
-                }}
-              dropdownCloseIcon={birthDistrict
-                ? <Icon name="close" size={20} color="grey" onPress={()=>setBirthDistrict('')} />
-                : <Icon size={45} name="arrow-drop-down" color={COLORS.main} />
-            }
-            mt={1}
-            onValueChange={newDistrict => {
-                setErrors((prev)=>({...prev, birthDistrict: ''}));
-                setBirthDistrict(newDistrict);
-                }}
-            >
-            {   birthProvince === "País Estrangeiro"
-                ? countries?.map((country, index)=>(
-                    <Select.Item key={index} label={country} value={country} />
-                ))
-                :
-                districts[birthProvince]?.map((district, index)=>(
-                    <Select.Item key={index} label={district} value={district} />
-                    ))
-                }
-            </Select> */}
 
-                {"birthDistrict" in errors ? (
+                {"birthDistrict" in errors && (
                   <FormControl.ErrorMessage
                     leftIcon={
                       <Icon name="error-outline" size={16} color={COLORS.red} />
@@ -918,66 +846,13 @@ export default function IndividualFarmerForm({
                   >
                     {errors?.birthDistrict}
                   </FormControl.ErrorMessage>
-                ) : (
-                  <FormControl.HelperText />
                 )}
               </FormControl>
             </Box>
-            {/* <Box w="50%" px="1">
-
-{
-    (
-        !birthProvince?.includes('Estrangeiro') &&
-        !birthDistrict?.includes('Cidade') &&
-        !birthProvince?.includes('Maputo')
-
-    )
-    &&
-    (
-
-        <FormControl isRequired my="1" isInvalid={'birthAdminPost' in errors}>
-        <FormControl.Label>Posto Adm.</FormControl.Label>
-            <Select
-                selectedValue={birthProvince ? birthAdminPost: ''}
-                accessibilityLabel="Escolha um posto administrativo"
-                placeholder="Escolha um posto administrativo"
-                minHeight={55}
-                _selectedItem={{
-                    bg: 'teal.600',
-                    fontSize: 'lg',
-                    endIcon: <CheckIcon size="5" />,
-                }}
-                dropdownCloseIcon={birthAdminPost
-                    ? <Icon name="close" size={20} color="grey" onPress={()=>setBirthAdminPost('')} />
-                    : <Icon size={45} name="arrow-drop-down" color={COLORS.main} />
-                }
-                mt={1}
-            onValueChange={newAdminPost=> {
-                setErrors((prev)=>({...prev, birthAdminPost: ''}));
-                setBirthAdminPost(newAdminPost);
-            }}
-            >
-            {
-                administrativePosts[birthDistrict]?.map((adminPost, index)=>(
-                    <Select.Item key={index} label={adminPost} value={adminPost} />
-                    ))
-                }
-            </Select>
-        {
-            'birthAdminPost' in errors
-            ? <FormControl.ErrorMessage
-            leftIcon={<Icon name="error-outline" size={16} color="red" />}
-            _text={{ fontSize: 'xs'}}>{errors?.birthAdminPost}</FormControl.ErrorMessage>
-            : <FormControl.HelperText />
-        }
-    </FormControl>
-)
-}
-</Box> */}
           </Stack>
         )}
 
-        <CustomDivider marginVertical="2" thickness={2} bg={COLORS.main} />
+        {/* <CustomDivider marginVertical="2" thickness={2} bg={COLORS.main} /> */}
 
         <Center>
           <Text style={styles.formSectionDescription}>
@@ -1028,24 +903,14 @@ export default function IndividualFarmerForm({
                 {idDocTypes?.map((docType) => (
                   <Select.Item key={docType} label={docType} value={docType} />
                 ))}
-                {/* <Select.Item label="Bilhete de Identidade (BI)" value="Bilhete de Identidade" />
-                    <Select.Item label="Passaporte" value="Passaporte" />
-                    <Select.Item label="Carta de Condução" value="Carta de Condução" />
-                    <Select.Item label="Cédula" value="Cédula" />
-                    <Select.Item label="Cartão de Eleitor" value="Cartão de Eleitor" />
-                    <Select.Item label="DIRE" value="DIRE" />
-                    <Select.Item label="Cartão de Refugiado" value="Cartão de Refugiado" />
-                    <Select.Item label="Não tem" value="Não tem" /> */}
               </Select>
-              {"docType" in errors ? (
+              {"docType" in errors && (
                 <FormControl.ErrorMessage
                   leftIcon={<Icon name="error-outline" size={16} color="red" />}
                   _text={{ fontSize: "xs" }}
                 >
                   {errors?.docType}
                 </FormControl.ErrorMessage>
-              ) : (
-                <FormControl.HelperText />
               )}
             </FormControl>
           </Box>
@@ -1065,15 +930,13 @@ export default function IndividualFarmerForm({
                   setDocNumber(newDocNumber);
                 }}
               />
-              {"docNumber" in errors ? (
+              {"docNumber" in errors && (
                 <FormControl.ErrorMessage
                   leftIcon={<Icon name="error-outline" size={16} color="red" />}
                   _text={{ fontSize: "xs" }}
                 >
                   {errors?.docNumber}
                 </FormControl.ErrorMessage>
-              ) : (
-                <FormControl.HelperText />
               )}
             </FormControl>
           </Box>
@@ -1094,15 +957,13 @@ export default function IndividualFarmerForm({
                   setNuit(newNuit);
                 }}
               />
-              {"nuit" in errors ? (
+              {"nuit" in errors && (
                 <FormControl.ErrorMessage
                   leftIcon={<Icon name="error-outline" size={16} color="red" />}
                   _text={{ fontSize: "xs" }}
                 >
                   {errors?.nuit}
                 </FormControl.ErrorMessage>
-              ) : (
-                <FormControl.HelperText />
               )}
             </FormControl>
           </Box>
@@ -1112,7 +973,7 @@ export default function IndividualFarmerForm({
 
       {/* Organization */}
 
-      <CustomDivider marginVertical="2" thickness={2} bg={COLORS.main} />
+      {/* <CustomDivider marginVertical="2" thickness={2} bg={COLORS.main} /> */}
 
       <Center>
         <Text style={styles.formSectionDescription}>Organização</Text>

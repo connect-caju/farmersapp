@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { StyleSheet } from "react-native"
+import COLORS from "../../consts/colors"
 
 const styles = StyleSheet.create({
   container: {
@@ -18,9 +19,11 @@ const styles = StyleSheet.create({
   description: {
     textAlign: "left",
     fontFamily: "JosefinSans-Regular",
-    paddingVertical: 10,
-    color: "grey",
+    padding: 15,
+    width: "70%",
+    color: COLORS.grey,
     fontSize: 14,
+    lineHeight: 16,
   },
   secondDescription: {
     textAlign: "center",

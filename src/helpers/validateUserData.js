@@ -1,7 +1,7 @@
-/* eslint-disable semi */
-import { roles } from "../consts/roles"
-import { capitalize } from "./capitalize"
-import BcryptReactNative from "bcrypt-react-native"
+/* eslint-disable linebreak-style */
+/* eslint-disable prettier/prettier */
+import { roles } from "../consts/roles";
+import { capitalize } from "./capitalize";
 
 const validateUserData = (
   {
@@ -18,19 +18,19 @@ const validateUserData = (
   errors,
   setErrors,
 ) => {
-  const retrievedName = capitalize(name?.trim())
-  const retrievedEmail = email.trim()
-  const retrievedPassword = password?.trim()
-  const retrievedPasswordConfirm = passwordConfirm?.trim()
-  const retrievedRole = role?.trim()
-  const retrievedPhone = phone?.trim()
-  const retrievedUserDistrict = userDistrict?.trim()
-  const retrievedUserProvince = userProvince?.trim()
-  const retrievedCoop = coop?.trim()
+  const retrievedName = capitalize(name?.trim());
+  const retrievedEmail = email.trim();
+  const retrievedPassword = password?.trim();
+  const retrievedPasswordConfirm = passwordConfirm?.trim();
+  const retrievedRole = role?.trim();
+  const retrievedPhone = phone?.trim();
+  const retrievedUserDistrict = userDistrict?.trim();
+  const retrievedUserProvince = userProvince?.trim();
+  const retrievedCoop = coop?.trim();
 
   if (!retrievedName || retrievedName?.split(" ")?.length <= 1) {
-    setErrors({ ...errors, name: "Nome não completo." })
-    return false
+    setErrors({ ...errors, name: "Nome não completo." });
+    return false;
   }
 
   if (
@@ -39,8 +39,8 @@ const validateUserData = (
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
     )
   ) {
-    setErrors({ ...errors, email: "Endereço electrónico inválido." })
-    return false
+    setErrors({ ...errors, email: "Endereço electrónico inválido." });
+    return false;
   }
 
   if (
@@ -53,16 +53,16 @@ const validateUserData = (
       ...errors,
       password: "Senhas não iguais.",
       passwordConfirm: "Senhas não iguais.",
-    })
-    return false
+    });
+    return false;
   } else if (retrievedPassword?.length < 6) {
-    setErrors({ ...errors, password: "Pelo menos 6 caracteres." })
-    return false
+    setErrors({ ...errors, password: "Pelo menos 6 caracteres." });
+    return false;
   }
 
   if (!retrievedPhone || retrievedPhone === 0) {
-    setErrors({ ...errors, phone: "Número de telefone." })
-    return false
+    setErrors({ ...errors, phone: "Número de telefone." });
+    return false;
   } else if (
     retrievedPhone &&
     (!Number.isInteger(parseInt(retrievedPhone)) ||
@@ -70,21 +70,21 @@ const validateUserData = (
       parseInt(retrievedPhone.toString()[0]) !== 8 ||
       [2, 3, 4, 5, 6, 7].indexOf(parseInt(retrievedPhone?.toString()[1])) < 0)
   ) {
-    setErrors({ ...errors, phone: "Número de telefone inválido." })
-    return false
+    setErrors({ ...errors, phone: "Número de telefone inválido." });
+    return false;
   }
 
   if (!retrievedUserProvince) {
-    setErrors({ ...errors, userProvince: "Indica a província" })
-    return false
+    setErrors({ ...errors, userProvince: "Indica a província" });
+    return false;
   }
 
   if (
     !retrievedUserDistrict &&
     !retrievedRole.includes(roles.provincialManager)
   ) {
-    setErrors({ ...errors, userDistrict: "Indica o distrito" })
-    return false
+    setErrors({ ...errors, userDistrict: "Indica o distrito" });
+    return false;
   }
 
   if (
@@ -95,11 +95,11 @@ const validateUserData = (
     setErrors({
       ...errors,
       coop: "Indica a sua cooperativa",
-    })
-    return false
+    });
+    return false;
   }
 
-  let hashedPassword = retrievedPassword
+  let hashedPassword = retrievedPassword;
 
   // try {
   //   const salt = await BcryptReactNative.getSalt(10)
@@ -117,7 +117,7 @@ const validateUserData = (
     userProvince: retrievedUserProvince,
     userDistrict: retrievedUserDistrict ? retrievedUserDistrict : "NA",
     coop: retrievedCoop ? retrievedCoop : "",
-  }
-}
+  };
+};
 
-export default validateUserData
+export default validateUserData;

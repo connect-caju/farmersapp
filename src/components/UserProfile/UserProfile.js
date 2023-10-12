@@ -1,67 +1,69 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable prettier/prettier */
+/* eslint-disable linebreak-style */
 import {
-  View,
+  // View,
   Text,
-  InteractionManager,
-  SafeAreaView,
+  // InteractionManager,
+  // SafeAreaView,
   Image,
   TouchableOpacity,
   ScrollView,
-} from "react-native"
-import React, { useCallback, useState, useEffect } from "react"
-import { Box, Stack, Center } from "native-base"
-import { Icon, Overlay } from "@rneui/themed"
-import { useFocusEffect } from "@react-navigation/native"
-import { launchCamera, launchImageLibrary } from "react-native-image-picker"
+} from "react-native";
+import React, { useCallback, useState, useEffect } from "react";
+import { Box, Stack, Center } from "native-base";
+import { Icon, Overlay } from "@rneui/themed";
+// import { useFocusEffect } from "@react-navigation/native";
+// import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 
-import COLORS from "../../consts/colors"
-import CustomActivityIndicator from "../../components/ActivityIndicator/CustomActivityIndicator"
-import { months } from "../../helpers/dates"
-import CustomDivider from "../../components/Divider/CustomDivider"
-import PhotoModal from "../Modals/PhotoModal"
-import { roles } from "../../consts/roles"
-import styles from "./styles"
-import { secrets } from "../../secrets"
-import { errorMessages } from "../../consts/errorMessages"
+import COLORS from "../../consts/colors";
+// import CustomActivityIndicator from "../../components/ActivityIndicator/CustomActivityIndicator";
+// import { months } from "../../helpers/dates";
+import CustomDivider from "../../components/Divider/CustomDivider";
+import PhotoModal from "../Modals/PhotoModal";
+import { roles } from "../../consts/roles";
+import styles from "./styles";
+import { secrets } from "../../secrets";
+import { errorMessages } from "../../consts/errorMessages";
 
-import { useUser, useApp } from "@realm/react"
-import { realmContext } from "../../models/realmContext"
-import AwesomeAlert from "react-native-awesome-alerts"
-const { useRealm, useQuery, useObject } = realmContext
+// import { useUser, useApp } from "@realm/react";
+import { realmContext } from "../../models/realmContext";
+import AwesomeAlert from "react-native-awesome-alerts";
+const { useRealm, useQuery, useObject } = realmContext;
 
 export default function UserProfile({
   user,
   setIsGoalUpdateVisible,
   isUserProfileVisible,
   setIsUserProfileVisible,
+
 }) {
   // const [isOverlayVisible, setIsOverlayVisible] = useState(false);
-  const realm = useRealm()
-  const customUserData = user?.customData
+  const realm = useRealm();
+  const customUserData = user?.customData;
   // const currentUserData = useQuery('User').filtered(`userId =="${customUserData.userId}"`)[0];
 
-  const [isPhotoModalVisible, setIsPhotoModalVisible] = useState(false)
-  const [isAddPhoto, setIsAddPhoto] = useState(false)
+  const [isPhotoModalVisible, setIsPhotoModalVisible] = useState(false);
+  const [isAddPhoto, setIsAddPhoto] = useState(false);
 
   //-----------------------------------------------------
-  const [titleAlert, setTitleAlert] = useState("")
-  const [messageAlert, setMessageAlert] = useState("")
-  const [showCancelButton, setShowCancelButton] = useState(false)
-  const [showConfirmButton, setShowConfirmButtom] = useState(false)
-  const [confirmText, setConfirmText] = useState("")
-  const [cancelText, setCancelText] = useState("")
-  const [alert, setAlert] = useState(false)
+  const [titleAlert, setTitleAlert] = useState("");
+  const [messageAlert, setMessageAlert] = useState("");
+  const [showCancelButton, setShowCancelButton] = useState(false);
+  const [showConfirmButton, setShowConfirmButtom] = useState(false);
+  const [confirmText, setConfirmText] = useState("");
+  const [cancelText, setCancelText] = useState("");
+  const [alert, setAlert] = useState(false);
   // ----------------------------------------------------
-
-  // console.log('customUserData--: ', JSON.stringify(customUserData));
 
   // on user registration
   const updateUserImage = async (userId, imageString) => {
     // try to register new user
     try {
-      const mongo = user.mongoClient(secrets.serviceName)
+      const mongo = user.mongoClient(secrets.serviceName);
       const collection = mongo
         .db(secrets.databaseName)
-        .collection(secrets.userCollectionName)
+        .collection(secrets.userCollectionName);
 
       // save custom user data
       const result = await collection.updateOne(
@@ -71,44 +73,44 @@ export default function UserProfile({
         {
           $set: { image: imageString },
         },
-      )
-      const customUserData = await user.refreshCustomData()
+      );
+      const customUserData = await user.refreshCustomData();
     } catch (error) {
       // console.log('Failed to save image: ', { cause: error })
       if (error.includes(errorMessages.network.logFlag)) {
         // Alert message
-        setTitleAlert(errorMessages.network.title)
-        setMessageAlert(errorMessages.network.message)
-        setShowCancelButton(errorMessages.network.showCancelButton)
-        setShowConfirmButtom(errorMessages.network.showCancelButton)
-        setConfirmText(errorMessages.network.confirmText)
-        setCancelText(errorMessages.network.cancelText)
-        setAlert(true)
+        setTitleAlert(errorMessages.network.title);
+        setMessageAlert(errorMessages.network.message);
+        setShowCancelButton(errorMessages.network.showCancelButton);
+        setShowConfirmButtom(errorMessages.network.showCancelButton);
+        setConfirmText(errorMessages.network.confirmText);
+        setCancelText(errorMessages.network.cancelText);
+        setAlert(true);
       } else {
         // Alert message
-        setTitleAlert(errorMessages.server.title)
-        setMessageAlert(errorMessages.server.message)
-        setShowCancelButton(errorMessages.server.showCancelButton)
-        setShowConfirmButtom(errorMessages.service.showConfirmButton)
-        setConfirmText(errorMessages.server.confirmText)
-        setCancelText(errorMessages.server.cancelText)
-        setAlert(true)
+        setTitleAlert(errorMessages.server.title);
+        setMessageAlert(errorMessages.server.message);
+        setShowCancelButton(errorMessages.server.showCancelButton);
+        setShowConfirmButtom(errorMessages.service.showConfirmButton);
+        setConfirmText(errorMessages.server.confirmText);
+        setCancelText(errorMessages.server.cancelText);
+        setAlert(true);
       }
-      return
+      return;
     }
-  }
+  };
+
 
   const toggleOverlay = () => {
-    setIsUserProfileVisible(!isUserProfileVisible)
-  }
+    setIsUserProfileVisible(!isUserProfileVisible);
+  };
 
   return (
     <Overlay
       overlayStyle={{
-        backgroundColor: "ghostwhite",
         width: "100%",
         height: "100%",
-        backgroundColor: COLORS.fourth,
+        backgroundColor: COLORS.lightestgrey,
         paddingTop: 10,
       }}
       isVisible={isUserProfileVisible}
@@ -129,16 +131,16 @@ export default function UserProfile({
         cancelButtonColor={COLORS.grey}
         onCancelPressed={() => {
           if (isAddPhoto) {
-            setIsAddPhoto(false)
+            setIsAddPhoto(false);
           }
-          setAlert(false)
+          setAlert(false);
         }}
         onConfirmPressed={() => {
           if (isAddPhoto) {
-            setIsAddPhoto(false)
-            setIsPhotoModalVisible(true)
+            setIsAddPhoto(false);
+            setIsPhotoModalVisible(true);
           }
-          setAlert(false)
+          setAlert(false);
         }}
       />
 
@@ -150,7 +152,7 @@ export default function UserProfile({
               color={COLORS.grey}
               size={25}
               onPress={() => {
-                setIsUserProfileVisible(false)
+                setIsUserProfileVisible(false);
               }}
             />
           </Box>
@@ -179,16 +181,16 @@ export default function UserProfile({
                 <TouchableOpacity
                   disabled={true}
                   onPress={() => {
-                    setIsAddPhoto(true)
-                    setTitleAlert(errorMessages.addPhoto.title)
-                    setMessageAlert(errorMessages.addPhoto.message)
-                    setShowCancelButton(errorMessages.addPhoto.showCancelButton)
+                    setIsAddPhoto(true);
+                    setTitleAlert(errorMessages.addPhoto.title);
+                    setMessageAlert(errorMessages.addPhoto.message);
+                    setShowCancelButton(errorMessages.addPhoto.showCancelButton);
                     setShowConfirmButtom(
                       errorMessages.addPhoto.showConfirmButton,
-                    )
-                    setCancelText(errorMessages.addPhoto.cancelText)
-                    setConfirmText(errorMessages.addPhoto.confirmText)
-                    setAlert(true)
+                    );
+                    setCancelText(errorMessages.addPhoto.cancelText);
+                    setConfirmText(errorMessages.addPhoto.confirmText);
+                    setAlert(true);
                   }}
                 >
                   {customUserData?.image && (
@@ -328,36 +330,36 @@ export default function UserProfile({
                 >
                   {(customUserData?.role.includes(roles.provincialManager) ||
                     customUserData?.email.includes("connectcaju2023")) && (
-                    <TouchableOpacity
-                      onPress={() => {
-                        setIsGoalUpdateVisible(true)
-                      }}
-                    >
-                      <Stack
-                        w="100%"
-                        direction="row"
-                        space={5}
-                        style={{
-                          borderColor: COLORS.grey,
-                          paddingVertical: 5,
-                          borderRadius: 10,
+                      <TouchableOpacity
+                        onPress={() => {
+                          setIsGoalUpdateVisible(true);
                         }}
                       >
-                        <Icon name="update" size={25} color={COLORS.grey} />
-                        <Text
+                        <Stack
+                          w="100%"
+                          direction="row"
+                          space={5}
                           style={{
-                            color: COLORS.grey,
-                            fontSize: 16,
-                            fontFamily: "JosefinSans-Regular",
+                            borderColor: COLORS.grey,
+                            paddingVertical: 5,
+                            borderRadius: 10,
                           }}
                         >
-                          Actualizar metas
-                        </Text>
-                      </Stack>
-                    </TouchableOpacity>
-                  )}
+                          <Icon name="update" size={25} color={COLORS.grey} />
+                          <Text
+                            style={{
+                              color: COLORS.grey,
+                              fontSize: 16,
+                              fontFamily: "JosefinSans-Regular",
+                            }}
+                          >
+                            Actualizar metas
+                          </Text>
+                        </Stack>
+                      </TouchableOpacity>
+                    )}
 
-                  <TouchableOpacity disabled style={{}} onPress={() => {}}>
+                  <TouchableOpacity disabled style={{}} onPress={() => { }}>
                     <Stack
                       w="100%"
                       direction="row"
@@ -387,7 +389,7 @@ export default function UserProfile({
 
                   <TouchableOpacity
                     onPress={() => {
-                      user?.logOut()
+                      user?.logOut();
                     }}
                   >
                     <Stack
@@ -427,5 +429,5 @@ export default function UserProfile({
         setIsPhotoModalVisible={setIsPhotoModalVisible}
       />
     </Overlay>
-  )
+  );
 }

@@ -25,7 +25,6 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import BcryptReactNative from "bcrypt-react-native";
 
 import { responsiveFontSize } from "react-native-responsive-dimensions";
 

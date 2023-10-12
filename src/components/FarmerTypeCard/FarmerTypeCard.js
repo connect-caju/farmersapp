@@ -1,25 +1,26 @@
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome"
-import { useNavigation } from "@react-navigation/native"
-import React from "react"
-import { ImageBackground } from "react-native"
-import { ListItem, Avatar, Icon } from "@rneui/themed"
-import { View, Text, TouchableOpacity } from "react-native"
-import Animated, { LightSpeedOutRight } from "react-native-reanimated"
-import COLORS from "../../consts/colors"
-import { faRing, faUserTie } from "@fortawesome/free-solid-svg-icons"
+/* eslint-disable react/prop-types */
+/* eslint-disable prettier/prettier */
+/* eslint-disable linebreak-style */
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { useNavigation } from "@react-navigation/native";
+import React from "react";
+import { Icon } from "@rneui/themed";
+import { View, Text, TouchableOpacity } from "react-native";
+import COLORS from "../../consts/colors";
 
 export function FarmerTypeCard({ route, item }) {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate("FarmersListLayout", { farmerType: item?.farmerType })
+        navigation.navigate("FarmersListLayout", {
+          farmerType: item?.farmerType,
+        });
       }}
       style={{
         alignItems: "center",
         justifyContent: "center",
-        width: "100%",
         width: "100%",
       }}
     >
@@ -43,15 +44,17 @@ export function FarmerTypeCard({ route, item }) {
             <View
               style={{
                 borderRadius: 100,
-                borderWidth: 2,
-                borderColor: item?.color,
+                // borderWidth: 1,
+                borderColor: item?.iconColor,
+                backgroundColor: COLORS.fourth,
                 padding: 10,
+                elevation: 8,
               }}
             >
               <FontAwesomeIcon
                 icon={item?.icon}
                 size={40}
-                color={item?.color}
+                color={item?.iconColor}
               />
             </View>
           </View>
@@ -117,7 +120,7 @@ export function FarmerTypeCard({ route, item }) {
         </View>
       }
     </TouchableOpacity>
-  )
+  );
 }
 
-export default FarmerTypeCard
+export default FarmerTypeCard;

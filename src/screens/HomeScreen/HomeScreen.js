@@ -1,4 +1,6 @@
-/* eslint-disable semi */
+/* eslint-disable linebreak-style */
+/* eslint-disable prettier/prettier */
+
 import {
   View,
   Text,
@@ -7,66 +9,69 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-} from "react-native"
-import React, { useCallback, useState, useEffect } from "react"
-import { Box, Stack, Center } from "native-base"
-import { Icon } from "@rneui/themed"
-import { useFocusEffect } from "@react-navigation/native"
+} from "react-native";
+import React, { useCallback, useState, useEffect } from "react";
+import { Box, Stack, Center } from "native-base";
+import { Icon } from "@rneui/themed";
+import { useFocusEffect } from "@react-navigation/native";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from "react-native-responsive-screen"
+} from "react-native-responsive-screen";
 
-import { responsiveFontSize } from "react-native-responsive-dimensions"
+import { responsiveFontSize } from "react-native-responsive-dimensions";
 
-import COLORS from "../../consts/colors"
-import CustomActivityIndicator from "../../components/ActivityIndicator/CustomActivityIndicator"
-import { months } from "../../helpers/dates"
-import CustomDivider from "../../components/Divider/CustomDivider"
-import UserGoalEdit from "../../components/UserGoalEdit/UserGoalEdit"
-import { roles } from "../../consts/roles"
-import UserProfile from "../../components/UserProfile/UserProfile"
-import { getPercentage } from "../../helpers/getPercentage"
 
-import { useUser } from "@realm/react"
-import { realmContext } from "../../models/realmContext"
-const { useRealm, useQuery } = realmContext
+import COLORS from "../../consts/colors";
+import CustomActivityIndicator from "../../components/ActivityIndicator/CustomActivityIndicator";
+import { months } from "../../helpers/dates";
+import CustomDivider from "../../components/Divider/CustomDivider";
+import UserGoalEdit from "../../components/UserGoalEdit/UserGoalEdit";
+import { roles } from "../../consts/roles";
+import UserProfile from "../../components/UserProfile/UserProfile";
+import { getPercentage } from "../../helpers/getPercentage";
+
+import { useUser } from "@realm/react";
+import { realmContext } from "../../models/realmContext";
+// import InternetInfo from "../../components/InternetInfo/InternetInfo";
+const { useRealm, useQuery } = realmContext;
 
 // sync subscription by this name
-const userStats = "userStats"
+const userStats = "userStats";
 
-const districtSingleFarmers = "districtSingleFarmers"
-const districtGroupFarmers = "districtGroupFarmers"
-const districtInstitutionFarmers = "districtInstitutionFarmers"
-const districtFarmlands = "districtFarmlands"
-const serviceProviderSubs = "serviceProviderSubs"
-const actorMembershipSubs = "actorMembershipSubs"
+const districtSingleFarmers = "districtSingleFarmers";
+const districtGroupFarmers = "districtGroupFarmers";
+const districtInstitutionFarmers = "districtInstitutionFarmers";
+const districtFarmlands = "districtFarmlands";
+const serviceProviderSubs = "serviceProviderSubs";
+const actorMembershipSubs = "actorMembershipSubs";
 
 // realm variable used for manual client reset in the syncConfig
-export let realm
+export let realm;
 
 export default function HomeScreen({ route, navigation }) {
-  realm = useRealm()
-  const user = useUser()
-  const customUserData = user?.customData
+  realm = useRealm();
+  const user = useUser();
+  const customUserData = user?.customData;
 
   const [isPerformanceButtonActive, setIsPerformanceButtonActive] =
-    useState(false)
-  const [isUserProfileVisible, setIsUserProfileVisible] = useState(false)
-  const [isGoalUpdateVisible, setIsGoalUpdateVisible] = useState(false)
-  const [isFieldAgent, setIsFieldAgent] = useState(true)
+    useState(false);
+  const [isUserProfileVisible, setIsUserProfileVisible] = useState(false);
+  const [isGoalUpdateVisible, setIsGoalUpdateVisible] = useState(false);
+  const [isFieldAgent, setIsFieldAgent] = useState(true);
 
   const [loadingActivitiyIndicator, setLoadingActivityIndicator] =
-    useState(false)
+    useState(false);
 
   const provincialUserStats = useQuery("UserStat").filtered(
     `userProvince == "${customUserData?.userProvince}" && userDistrict != "NA"`,
-  )
+  );
+
 
   // --------------------------------------------------------
   const districts = Array.from(
     new Set(provincialUserStats.map((stat) => stat?.userDistrict)),
-  )
+  );
 
   // -------------------------------------------------------------
 
@@ -76,15 +81,15 @@ export default function HomeScreen({ route, navigation }) {
     return {
       tFarmers: stat.targetFarmers,
       tFarmlands: stat.targetFarmlands,
-    }
-  })
+    };
+  });
 
   const rWholeProvince = provincialUserStats?.map((stat) => {
     return {
       rFarmers: stat.registeredFarmers,
       rFarmlands: stat.registeredFarmlands,
-    }
-  })
+    };
+  });
 
   // the current user provincial stats (Number of farmers and farmlands that have to be registered
   // until the end of the project execution
@@ -92,16 +97,16 @@ export default function HomeScreen({ route, navigation }) {
 
   const tpFarmers = tWholeProvince
     .map((stat) => stat.tFarmers)
-    .reduce((ac, cur) => ac + cur, 0)
+    .reduce((ac, cur) => ac + cur, 0);
   const rpFarmers = rWholeProvince
     .map((stat) => stat.rFarmers)
-    .reduce((ac, cur) => ac + cur, 0)
+    .reduce((ac, cur) => ac + cur, 0);
   const tpFarmlands = tWholeProvince
     .map((stat) => stat.tFarmlands)
-    .reduce((ac, cur) => ac + cur, 0)
+    .reduce((ac, cur) => ac + cur, 0);
   const rpFarmlands = rWholeProvince
     .map((stat) => stat.rFarmlands)
-    .reduce((ac, cur) => ac + cur, 0)
+    .reduce((ac, cur) => ac + cur, 0);
 
   // ----------------------------------------------------------------
   //  extract stats from whole district
@@ -115,8 +120,8 @@ export default function HomeScreen({ route, navigation }) {
       return {
         tFarmers: stat.targetFarmers,
         tFarmlands: stat.targetFarmlands,
-      }
-    })
+      };
+    });
 
   const rWholeDistrict = provincialUserStats
     ?.filter(
@@ -128,8 +133,8 @@ export default function HomeScreen({ route, navigation }) {
       return {
         rFarmers: stat.registeredFarmers,
         rFarmlands: stat.registeredFarmlands,
-      }
-    })
+      };
+    });
 
   // the current user district stats in terms of farmers and farmlands that have to be registered
   // within the district and the project execution timeline
@@ -137,16 +142,16 @@ export default function HomeScreen({ route, navigation }) {
 
   const tdFarmers = tWholeDistrict
     .map((stat) => stat.tFarmers)
-    .reduce((ac, cur) => ac + cur, 0)
+    .reduce((ac, cur) => ac + cur, 0);
   const rdFarmers = rWholeDistrict
     .map((stat) => stat.rFarmers)
-    .reduce((ac, cur) => ac + cur, 0)
+    .reduce((ac, cur) => ac + cur, 0);
   const tdFarmlands = tWholeDistrict
     .map((stat) => stat.tFarmlands)
-    .reduce((ac, cur) => ac + cur, 0)
+    .reduce((ac, cur) => ac + cur, 0);
   const rdFarmlands = rWholeDistrict
     .map((stat) => stat.rFarmlands)
-    .reduce((ac, cur) => ac + cur, 0)
+    .reduce((ac, cur) => ac + cur, 0);
 
   // ---------------------------------------------------------------
   // extract stats of the current user
@@ -157,8 +162,8 @@ export default function HomeScreen({ route, navigation }) {
       return {
         tFarmers: stat.targetFarmers,
         tFarmlands: stat.targetFarmlands,
-      }
-    })
+      };
+    });
 
   const rCurrentUser = provincialUserStats
     ?.filter((stat) => stat.userId === customUserData?.userId)
@@ -166,8 +171,8 @@ export default function HomeScreen({ route, navigation }) {
       return {
         rFarmers: stat.registeredFarmers,
         rFarmlands: stat.registeredFarmlands,
-      }
-    })
+      };
+    });
 
   // the current user stats (target -- gooal in terms of the number of farmers and farmlands)
   //  they must register throughout the project execution
@@ -175,37 +180,37 @@ export default function HomeScreen({ route, navigation }) {
 
   const tuFarmers = tCurrentUser
     .map((stat) => stat.tFarmers)
-    .reduce((ac, cur) => ac + cur, 0)
+    .reduce((ac, cur) => ac + cur, 0);
   const ruFarmers = rCurrentUser
     .map((stat) => stat.rFarmers)
-    .reduce((ac, cur) => ac + cur, 0)
+    .reduce((ac, cur) => ac + cur, 0);
   const tuFarmlands = tCurrentUser
     .map((stat) => stat.tFarmlands)
-    .reduce((ac, cur) => ac + cur, 0)
+    .reduce((ac, cur) => ac + cur, 0);
   const ruFarmlands = rCurrentUser
     .map((stat) => stat.rFarmlands)
-    .reduce((ac, cur) => ac + cur, 0)
+    .reduce((ac, cur) => ac + cur, 0);
   //----------------------------------------------------------------------
 
   // realm subscription to all the resources
   useEffect(() => {
     realm.subscriptions.update((mutableSubs) => {
-      mutableSubs.removeByName(userStats)
+      mutableSubs.removeByName(userStats);
       mutableSubs.add(
         realm
           .objects("UserStat")
           .filtered(`userProvince == "${user?.customData?.userProvince}"`),
         { name: userStats },
-      )
-    })
+      );
+    });
 
     if (
       customUserData?.role?.includes(roles.provincialManager) ||
       customUserData?.role?.includes(roles.ampcmSupervisor)
     ) {
-      setIsFieldAgent(false)
+      setIsFieldAgent(false);
     }
-  }, [user, realm])
+  }, [user, realm]);
 
   useEffect(() => {
     if (
@@ -218,8 +223,8 @@ export default function HomeScreen({ route, navigation }) {
             .objects("Actor")
             .filtered(`userDistrict == "${user?.customData?.userDistrict}"`),
           // { name: districtSingleFarmers },
-        )
-      })
+        );
+      });
 
       realm.subscriptions.update((mutableSubs) => {
         // mutableSubs.removeByName(districtGroupFarmers)
@@ -228,8 +233,8 @@ export default function HomeScreen({ route, navigation }) {
             .objects("Group")
             .filtered(`userDistrict == "${user?.customData?.userDistrict}"`),
           // { name: districtGroupFarmers },
-        )
-      })
+        );
+      });
 
       realm.subscriptions.update((mutableSubs) => {
         mutableSubs.add(
@@ -237,8 +242,8 @@ export default function HomeScreen({ route, navigation }) {
             .objects("Institution")
             .filtered(`userDistrict == "${user?.customData?.userDistrict}"`),
           // { name: districtInstitutionFarmers },
-        )
-      })
+        );
+      });
 
 
       realm.subscriptions.update((mutableSubs) => {
@@ -247,8 +252,8 @@ export default function HomeScreen({ route, navigation }) {
             .objects("Farmland")
             .filtered(`userDistrict == "${user?.customData?.userDistrict}"`),
           // { name: districtFarmlands },
-        )
-      })
+        );
+      });
 
       realm.subscriptions.update((mutableSubs) => {
         mutableSubs.add(
@@ -256,8 +261,8 @@ export default function HomeScreen({ route, navigation }) {
             .objects("SprayingServiceProvider")
             .filtered(`userDistrict == "${user?.customData?.userDistrict}"`),
           // { name: serviceProviderSubs },
-        )
-      })
+        );
+      });
 
       realm.subscriptions.update((mutableSubs) => {
         mutableSubs.add(
@@ -265,34 +270,34 @@ export default function HomeScreen({ route, navigation }) {
             .objects("ActorMembership")
             .filtered(`userDistrict == "${user?.customData?.userDistrict}"`),
           // { name: actorMembershipSubs },
-        )
-      })
+        );
+      });
     } else if (
       customUserData?.role === roles.provincialManager ||
       // customUserData?.role === roles.coopManager ||
       customUserData?.role === roles.ampcmSupervisor
     ) {
       realm.subscriptions.update((mutableSubs) => {
-        mutableSubs.removeByName(provincialStats)
+        // mutableSubs.removeByName(provincialStats);
         mutableSubs.add(
           realm
             .objects("UserStat")
             .filtered(`userProvince == "${user?.customData?.userProvince}"`),
-          { name: provincialStats },
-        )
-      })
+          // { name: provincialStats },
+        );
+      });
     }
-  }, [realm, user])
+  }, [realm, user]);
 
   useFocusEffect(
     useCallback(() => {
       const task = InteractionManager.runAfterInteractions(() => {
-        setLoadingActivityIndicator(true)
-      })
+        setLoadingActivityIndicator(true);
+      });
 
-      return () => task.cancel()
+      return () => task.cancel();
     }, []),
-  )
+  );
 
   if (loadingActivitiyIndicator) {
     return (
@@ -300,8 +305,11 @@ export default function HomeScreen({ route, navigation }) {
         loadingActivitiyIndicator={loadingActivitiyIndicator}
         setLoadingActivityIndicator={setLoadingActivityIndicator}
       />
-    )
+    );
   }
+
+
+
 
   return (
     <SafeAreaView
@@ -357,7 +365,7 @@ export default function HomeScreen({ route, navigation }) {
             <Box w="40%" alignItems={"center"}>
               <TouchableOpacity
                 onPress={() => {
-                  setIsUserProfileVisible((prev) => !prev)
+                  setIsUserProfileVisible((prev) => !prev);
                 }}
               >
                 <Icon
@@ -755,7 +763,7 @@ export default function HomeScreen({ route, navigation }) {
                 <Box w="50%" alignItems={"center"} style={{}}>
                   <TouchableOpacity
                     onPress={() => {
-                      setIsPerformanceButtonActive((prev) => !prev)
+                      setIsPerformanceButtonActive((prev) => !prev);
                     }}
                     style={{
                       backgroundColor: isPerformanceButtonActive
@@ -791,7 +799,7 @@ export default function HomeScreen({ route, navigation }) {
                 <Box w="50%" alignItems={"center"}>
                   <TouchableOpacity
                     onPress={() => {
-                      setIsPerformanceButtonActive((prev) => !prev)
+                      setIsPerformanceButtonActive((prev) => !prev);
                     }}
                     style={{
                       backgroundColor: isPerformanceButtonActive
@@ -1355,6 +1363,7 @@ export default function HomeScreen({ route, navigation }) {
         isGoalUpdateVisible={isGoalUpdateVisible}
         setIsGoalUpdateVisible={setIsGoalUpdateVisible}
       />
+      {/* <InternetInfo isNetInfoVisible={isNetInfoVisible} setIsNetInfoVisible={setIsNetInfoVisible} /> */}
     </SafeAreaView>
-  )
+  );
 }

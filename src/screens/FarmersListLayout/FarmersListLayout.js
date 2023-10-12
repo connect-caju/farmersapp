@@ -11,6 +11,8 @@ import CustomActivityIndicator from "../../components/ActivityIndicator/CustomAc
 import RegisteredByCurrentUser from "../../components/RegisteredByCurrentUser/RegisteredByCurrentUser";
 import InvalidatedFarmers from "../../components/InvalidatedFarmers/InvalidatedFarmers";
 import RegisteredByAllUsers from "../../components/RegisteredByAllUsers/RegisteredByAllUsers";
+import { Animated } from "react-native";
+import MenuFromEllipsis from "../../components/MenuFromEllipis/MenuFromEllipsis";
 
 
 const filterByCriteria = [
@@ -40,6 +42,28 @@ const FarmersListLayout = ({ route, navigation }) => {
     const [loadingActivitiyIndicator, setLoadingActivityIndicator] = useState(false);
 
 
+    // const [menu] = useState(new Animated.Value(10));
+    // const [pop, setPop] = useState(false);
+
+    // const popIn = () => {
+    //     setPop(true);
+    //     Animated.timing(menu, {
+    //         toValue: 30,
+    //         timing: 800,
+    //         useNativeDriver: false,
+    //     }).start();
+    // };
+
+    // const popOut = () => {
+    //     setPop(false);
+    //     Animated.timing(menu, {
+    //         toValue: 10,
+    //         timing: 1000,
+    //         useNativeDriver: false,
+    //     }).start();
+    // };
+
+
     const handleFocusedOption = (option) => {
         setFocusedOption(option);
     };
@@ -63,6 +87,8 @@ const FarmersListLayout = ({ route, navigation }) => {
                 flex: 1,
             }}
         >
+
+
             <View
                 style={{
                     width: "100%",
@@ -76,6 +102,7 @@ const FarmersListLayout = ({ route, navigation }) => {
                     borderRightWidth: 3,
                 }}
             >
+                {/* <MenuFromEllipsis menu={menu} pop={pop} /> */}
                 <>
                     <View
                         style={{
@@ -170,7 +197,7 @@ const FarmersListLayout = ({ route, navigation }) => {
                                     padding: 6,
                                 }}
                                 onPress={() => {
-
+                                    // pop === false ? popIn() : popOut();
                                 }}
                             >
                                 <FontAwesomeIcon
