@@ -77,25 +77,35 @@ const RegistrationButton = ({ customUserData, navigation, route, }) => {
         >
             <Animated.View
                 style={[{
-                    // backgroundColor: COLORS.main,
                     width: 60,
                     height: 60,
                     position: "absolute",
                     bottom: 30,
                     right: 30,
-                    borderRadius: 50,
+                    // borderRadius: 50,
                     justifyContent: "center",
                     alignItems: "center",
                 }, { bottom: icon_1 }]}
             >
-                <TouchableOpacity
-                    onPress={() => {
-                        addFarmer(farmerTypes.group);
+                <View
+                    style={{
+                        borderRadius: 100,
+                        borderColor: COLORS.fourth,
+                        backgroundColor: COLORS.fourth,
+                        padding: 10,
+                        elevation: 8,
                     }}
                 >
-                    <FontAwesomeIcon icon={faPeopleGroup} size={30} color={COLORS.main} />
-                </TouchableOpacity>
-                {pop && <Text  style={{
+                    <TouchableOpacity
+                        onPress={() => {
+                            addFarmer(farmerTypes.group);
+                        }}
+                    >
+                        <FontAwesomeIcon icon={faPeopleGroup} size={30} color={COLORS.main} />
+                    </TouchableOpacity>
+
+                </View>
+                {pop && <Text style={{
                     fontSize: 10,
                 }}>Grupo</Text>}
             </Animated.View>
@@ -112,14 +122,24 @@ const RegistrationButton = ({ customUserData, navigation, route, }) => {
                     alignItems: "center",
                 }, { bottom: icon_2, right: icon_2 }]}
             >
-                <TouchableOpacity
-                    onPress={() => {
-                        addFarmer(farmerTypes.farmer);
+                <View
+                    style={{
+                        borderRadius: 100,
+                        borderColor: COLORS.fourth,
+                        backgroundColor: COLORS.fourth,
+                        padding: 10,
+                        elevation: 8,
                     }}
                 >
-                    <FontAwesomeIcon icon={faPerson} size={30} color={COLORS.main} />
-                </TouchableOpacity>
-                {pop && <Text  style={{
+                    <TouchableOpacity
+                        onPress={() => {
+                            addFarmer(farmerTypes.farmer);
+                        }}
+                    >
+                        <FontAwesomeIcon icon={faPerson} size={30} color={COLORS.main} />
+                    </TouchableOpacity>
+                </View>
+                {pop && <Text style={{
                     fontSize: 10,
                 }}>Singular</Text>}
             </Animated.View>
@@ -136,13 +156,23 @@ const RegistrationButton = ({ customUserData, navigation, route, }) => {
                     alignItems: "center",
                 }, { right: icon_3, }]}
             >
-                <TouchableOpacity
-                    onPress={() => {
-                        addFarmer(farmerTypes.institution);
+                <View
+                    style={{
+                        borderRadius: 100,
+                        borderColor: COLORS.fourth,
+                        backgroundColor: COLORS.fourth,
+                        padding: 10,
+                        elevation: 8,
                     }}
                 >
-                    <FontAwesomeIcon icon={faInstitution} size={30} color={COLORS.main} />
-                </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
+                            addFarmer(farmerTypes.institution);
+                        }}
+                    >
+                        <FontAwesomeIcon icon={faInstitution} size={30} color={COLORS.main} />
+                    </TouchableOpacity>
+                </View>
                 {pop && <Text style={{
                     fontSize: 10,
                 }}>Instituição</Text>}

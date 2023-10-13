@@ -5,18 +5,11 @@
 import {
   FlatList,
   InteractionManager,
-  ScrollView,
-  Switch,
-  Image,
   SafeAreaView,
   Text,
   View,
-  PermissionsAndroid,
-  Animated,
   TouchableOpacity,
   SectionList,
-  ActivityIndicator,
-  useNativeDriver,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { Icon } from "@rneui/themed";
@@ -35,12 +28,6 @@ import {
 
 import {
   responsiveFontSize,
-  // responsiveScreenFontSize,
-  // responsiveHeight,
-  // responsiveWidth,
-  // responsiveScreenHeight,
-  // responsiveScreenWidth,
-  // useDimensionsChange,
 } from "react-native-responsive-dimensions";
 
 import CustomActivityIndicator from "../../components/ActivityIndicator/CustomActivityIndicator";
@@ -56,7 +43,6 @@ import { roles } from "../../consts/roles";
 import StatItem from "../../components/StatItem/StatItem";
 import FarmerTypeCard from "../../components/FarmerTypeCard/FarmerTypeCard";
 import CustomDivider from "../../components/Divider/CustomDivider";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import RegistrationButton from "../../components/RegistrationButton/RegistrationButton";
 const { useRealm, useQuery } = realmContext;
 

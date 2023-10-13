@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable linebreak-style */
 /* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from "react";
@@ -36,6 +37,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { extractIDs } from "../../helpers/extractIDs";
 import CustomDivider from "../../components/Divider/CustomDivider";
+import { farmerTypes } from "../../consts/farmerTypes";
 
 const { useRealm } = realmContext;
 
@@ -92,14 +94,14 @@ const FarmersListScreen = ({ route, navigation }) => {
     setFocusedOption(option);
   };
 
-  const farmerType = route.params?.farmerType || "Indivíduo";
+  const farmerType = route.params?.farmerType || farmerTypes.farmer;
   let farmersRegisteredByUser;
-  let farmersRegisteredByAllDistrictUsers;
+  // let farmersRegisteredByAllDistrictUsers;
   let farmlands;
   let serviceProviders;
   let farmersIDs; // IDs to be used for swiping between farmersRegisteredByUser' screen
 
-  if (farmerType === "Indivíduo") {
+  if (farmerType === farmerTypes.farmer) {
     farmersRegisteredByUser = realm
       .objects("Actor")
       // .filtered("userDistrict == $0", customUserData?.userDistrict)
@@ -115,10 +117,10 @@ const FarmersListScreen = ({ route, navigation }) => {
       farmlands,
       serviceProviders,
       customUserData,
-      "Indivíduo",
+      farmerTypes.farmer,
     );
     farmersIDs = extractIDs(farmersRegisteredByUser);
-  } else if (farmerType === "Grupo") {
+  } else if (farmerType === farmerTypes.group) {
     farmersRegisteredByUser = realm
       .objects("Group")
       // .filtered("userDistrict == $0", customUserData?.userDistrict)
@@ -135,10 +137,10 @@ const FarmersListScreen = ({ route, navigation }) => {
       farmlands,
       serviceProviders,
       customUserData,
-      "Grupo",
+      farmerTypes.group,
     );
     farmersIDs = extractIDs(farmersRegisteredByUser);
-  } else if (farmerType === "Instituição") {
+  } else if (farmerType === farmerTypes.institution) {
     farmersRegisteredByUser = realm
       .objects("Institution")
       // .filtered("userDistrict == $0", customUserData?.userDistrict)
@@ -155,7 +157,7 @@ const FarmersListScreen = ({ route, navigation }) => {
       farmlands,
       serviceProviders,
       customUserData,
-      "Instituição",
+      farmerTypes.institution,
     );
     farmersIDs = extractIDs(farmersRegisteredByUser);
   }
@@ -184,7 +186,7 @@ const FarmersListScreen = ({ route, navigation }) => {
       customUserData?.role !== roles.provincialManager &&
       customUserData?.role !== roles.ampcmSupervisor
     ) {
-      if (farmerType === "Indivíduo" && focusedOption === 1) {
+      if (farmerType === farmerTypes.farmer && focusedOption === 1) {
         realm.subscriptions.update((mutableSubs) => {
           mutableSubs.removeByName(districtSingleFarmers);
           mutableSubs.add(
@@ -194,7 +196,7 @@ const FarmersListScreen = ({ route, navigation }) => {
             { name: districtSingleFarmers },
           );
         });
-      } else if (farmerType === "Indivíduo" && focusedOption === 2) {
+      } else if (farmerType === farmerTypes.farmer && focusedOption === 2) {
         realm.subscriptions.update((mutableSubs) => {
           mutableSubs.removeByName(invalidatedSingleFarmers);
           mutableSubs.add(
@@ -202,7 +204,7 @@ const FarmersListScreen = ({ route, navigation }) => {
             { name: invalidatedSingleFarmers },
           );
         });
-      } else if (farmerType === "Indivíduo" && focusedOption === 3) {
+      } else if (farmerType === farmerTypes.farmer && focusedOption === 3) {
         realm.subscriptions.update((mutableSubs) => {
           mutableSubs.removeByName(districtSingleFarmers);
           mutableSubs.add(
@@ -214,7 +216,7 @@ const FarmersListScreen = ({ route, navigation }) => {
         });
       }
 
-      if (farmerType === "Grupo" && focusedOption === 1) {
+      if (farmerType === farmerTypes.group && focusedOption === 1) {
         realm.subscriptions.update((mutableSubs) => {
           mutableSubs.removeByName(districtGroupFarmers);
           mutableSubs.add(
@@ -224,7 +226,7 @@ const FarmersListScreen = ({ route, navigation }) => {
             { name: districtGroupFarmers },
           );
         });
-      } else if (farmerType === "Grupo" && focusedOption === 2) {
+      } else if (farmerType === farmerTypes.group && focusedOption === 2) {
         realm.subscriptions.update((mutableSubs) => {
           mutableSubs.removeByName(districtGroupFarmers);
           mutableSubs.add(
@@ -234,7 +236,7 @@ const FarmersListScreen = ({ route, navigation }) => {
             { name: districtGroupFarmers },
           );
         });
-      } else if (farmerType === "Grupo" && focusedOption === 3) {
+      } else if (farmerType === farmerTypes.group && focusedOption === 3) {
         realm.subscriptions.update((mutableSubs) => {
           mutableSubs.removeByName(invalidatedGroupFarmers);
           mutableSubs.add(
@@ -244,7 +246,7 @@ const FarmersListScreen = ({ route, navigation }) => {
         });
       }
 
-      if (farmerType === "Instituição" && focusedOption === 1) {
+      if (farmerType === farmerTypes.institution && focusedOption === 1) {
         realm.subscriptions.update((mutableSubs) => {
           mutableSubs.removeByName(districtInstitutionFarmers);
           mutableSubs.add(
@@ -254,7 +256,7 @@ const FarmersListScreen = ({ route, navigation }) => {
             { name: districtInstitutionFarmers },
           );
         });
-      } else if (farmerType === "Instituição" && focusedOption === 2) {
+      } else if (farmerType === farmerTypes.institution && focusedOption === 2) {
         realm.subscriptions.update((mutableSubs) => {
           mutableSubs.removeByName(invalidatedInstitutionFarmers);
           mutableSubs.add(
@@ -262,7 +264,7 @@ const FarmersListScreen = ({ route, navigation }) => {
             { name: invalidatedInstitutionFarmers },
           );
         });
-      } else if (farmerType === "Instituição" && focusedOption === 3) {
+      } else if (farmerType === farmerTypes.institution && focusedOption === 3) {
         realm.subscriptions.update((mutableSubs) => {
           mutableSubs.removeByName(districtInstitutionFarmers);
           mutableSubs.add(
@@ -320,14 +322,14 @@ const FarmersListScreen = ({ route, navigation }) => {
     if (isSearching && searchQuery.length > 0) {
       setFoundFarmersList(
         farmersRegisteredByUser.filter((item) => {
-          if (farmerType?.includes("Indiv")) {
+          if (farmerType?.includes(farmerTypes.farmer)) {
             return item.name?.toLowerCase()?.includes(searchQuery.toLowerCase());
-          } else if (farmerType?.includes("Grupo")) {
+          } else if (farmerType?.includes(farmerTypes.group)) {
             return (
               item.name?.toLowerCase()?.includes(searchQuery.toLowerCase()) ||
               item.type?.toLowerCase()?.includes(searchQuery.toLowerCase())
             );
-          } else if (farmerType?.includes("Institu")) {
+          } else if (farmerType?.includes(farmerTypes.institution)) {
             return (
               item.name?.toLowerCase()?.includes(searchQuery.toLowerCase()) ||
               item.manager?.toLowerCase()?.includes(searchQuery.toLowerCase())
@@ -404,9 +406,9 @@ const FarmersListScreen = ({ route, navigation }) => {
                     fontSize: 30,
                   }}
                 >
-                  {farmerType === "Grupo"
+                  {farmerType === farmerTypes.group
                     ? "Organizações"
-                    : farmerType === "Indivíduo"
+                    : farmerType === farmerTypes.farmer
                       ? "Produtores"
                       : "Instituições"}{" "}
                   {/* {farmersRegisteredByUser?.length} */}
@@ -610,9 +612,9 @@ const FarmersListScreen = ({ route, navigation }) => {
               // when the user open any item from the list
               item.farmersIDs = farmersIDs;
 
-              if (item.flag === "Grupo") {
+              if (item.flag === farmerTypes.group) {
                 return <GroupItem route={route} item={item} />;
-              } else if (item.flag === "Indivíduo") {
+              } else if (item.flag === farmerTypes.farmer) {
                 return (
                   <FarmerItem
                     route={route}
@@ -620,7 +622,7 @@ const FarmersListScreen = ({ route, navigation }) => {
                     item={item}
                   />
                 );
-              } else if (item.flag === "Instituição") {
+              } else if (item.flag === farmerTypes.institution) {
                 return <InstitutionItem route={route} item={item} />;
               }
             }}
@@ -669,9 +671,9 @@ const FarmersListScreen = ({ route, navigation }) => {
               onEndReached={handleEndReached}
               onEndReachedThreshold={0.1}
               renderItem={({ item }) => {
-                if (item.flag === "Grupo") {
+                if (item.flag === farmerTypes.group) {
                   return <GroupItem route={route} item={item} />;
-                } else if (item.flag === "Indivíduo") {
+                } else if (item.flag === farmerTypes.farmer) {
                   return (
                     <FarmerItem
                       route={route}
@@ -679,7 +681,7 @@ const FarmersListScreen = ({ route, navigation }) => {
                       item={item}
                     />
                   );
-                } else if (item.flag === "Instituição") {
+                } else if (item.flag === farmerTypes.institution) {
                   return <InstitutionItem route={route} item={item} />;
                 }
               }}
@@ -719,9 +721,9 @@ const FarmersListScreen = ({ route, navigation }) => {
               }}
             >
               Nenhum registo de
-              {farmerType === "Grupo"
+              {farmerType === farmerTypes.group
                 ? " organizações"
-                : farmerType === "Indivíduo"
+                : farmerType === farmerTypes.farmer
                   ? " produtores"
                   : " instituições"}{" "}
               foi encontrado!
@@ -748,9 +750,9 @@ const FarmersListScreen = ({ route, navigation }) => {
             }}
           >
             Nenhum registo de
-            {farmerType === "Grupo"
+            {farmerType === farmerTypes.group
               ? " organizações"
-              : farmerType === "Indivíduo"
+              : farmerType === farmerTypes.farmer
                 ? " produtores"
                 : " instituições"}{" "}
             foi encontrado!

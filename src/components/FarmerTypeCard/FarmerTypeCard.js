@@ -24,7 +24,6 @@ export function FarmerTypeCard({ route, item }) {
         width: "100%",
       }}
     >
-      {
         <View
           style={{
             marginVertical: 20,
@@ -118,7 +117,6 @@ export function FarmerTypeCard({ route, item }) {
             </View>
           </View>
         </View>
-      }
     </TouchableOpacity>
   );
 }
