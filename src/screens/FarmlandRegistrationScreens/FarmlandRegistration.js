@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable react/prop-types */
 /* eslint-disable prettier/prettier */
 import {
@@ -9,6 +10,7 @@ import {
   TouchableOpacity,
   Pressable,
   Image,
+  View,
 } from "react-native";
 import React, { useEffect, useState, useCallback, useRef, } from "react";
 import { Icon, Chip } from "@rneui/themed";
@@ -761,6 +763,7 @@ export default function FarmlandRegistration({ route, navigation }) {
 
         <Box
           w="100%"
+          px="3"
           style={{
             backgroundColor: COLORS.fourth,
             height: 50,
@@ -790,12 +793,21 @@ export default function FarmlandRegistration({ route, navigation }) {
           <Text
             style={{
               fontFamily: "JosefinSans-Bold",
-              fontSize: 16,
-              color: COLORS.main,
+              fontSize: 24,
+              color: COLORS.black,
             }}
           >
-            Pomar
+            Registo
           </Text>
+          <View
+            style={{
+              position: "absolute",
+              top: 4,
+              right: 2,
+            }}
+          >
+            <Icon name="app-registration" size={40} color={COLORS.grey} />
+          </View>
         </Box>
         <ScrollView
           decelerationRate={"normal"}
@@ -803,8 +815,14 @@ export default function FarmlandRegistration({ route, navigation }) {
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="handled"
         >
-          <Stack direction="row" mt="1" pb="5">
-            <Box w="5%"></Box>
+          <Stack style={{
+                        elevation: 2,
+                        borderWidth: 1,
+                        borderColor: COLORS.lightgrey,
+                        backgroundColor: COLORS.ghostwhite,
+            
+          }} direction="row" pb="1">
+            <Box w="3%"></Box>
             <Box
               w="95%"
               style={{
@@ -818,8 +836,7 @@ export default function FarmlandRegistration({ route, navigation }) {
                   style={{
                     width: 80,
                     height: 80,
-                    borderColor: COLORS.main,
-                    marginHorizontal: 3,
+                    marginRight: 3,
                     borderRadius: 120,
                   }}
                 />
@@ -833,7 +850,7 @@ export default function FarmlandRegistration({ route, navigation }) {
               <Box
                 style={{
                   justifyContent: "flex-end",
-                  paddingHorizontal: 10,
+                  paddingLeft: 10,
                 }}
               >
                 <Text
@@ -864,11 +881,7 @@ export default function FarmlandRegistration({ route, navigation }) {
                 </Text>
               </Box>
             </Box>
-
-            {/* <Box w="5%"></Box> */}
           </Stack>
-
-          <CustomDivider thickness={2} bg={COLORS.lightgrey} />
 
           {loadingActivitiyIndicator && (
             <CustomActivityIndicator
@@ -1348,78 +1361,86 @@ export default function FarmlandRegistration({ route, navigation }) {
                         margin: 10,
                       }}
                     >
-                      <Box
-                        style={{
-                          borderBottomWidth: 2,
-                          borderBottomColor: COLORS.main,
-                        }}
-                      >
-                        <Box
-                          w="100%"
-                          style={{
-                            backgroundColor: COLORS.main,
-                            paddingVertical: 3,
-                            paddingHorizontal: 6,
-                            flexDirection: "row",
-                          }}
-                        >
                           <Box
-                            w="85%"
+                            w="100%"
                             style={{
-                              paddingLeft: 10,
+                              backgroundColor: COLORS.main,
+                              borderTopEndRadius: 8,
+                              borderTopStartRadius: 8,
+                              paddingVertical: 3,
+                              paddingHorizontal: 6,
+                              flexDirection: "row",
+  
                             }}
                           >
-                            <Text
+                            <Box
+                              w="85%"
                               style={{
-                                color: COLORS.ghostwhite,
-                                fontFamily: "JosefinSans-Bold",
-                                fontSize: 15,
-                              }}
-                              numberOfLines={1}
-                              ellipsizeMode="head"
-                            >
-                              Ano de Plantio: {block?.plantingYear}
-                            </Text>
-                          </Box>
-
-                          <Box w="15%">
-                            <TouchableOpacity
-                              disabled={
-                                block?.position === farmland?.blocks?.length - 1
-                                  ? false
-                                  : true
-                              }
-                              onPress={() => {
-                                setAreaFlag(
-                                  (prev) => prev - parseFloat(block?.usedArea),
-                                );
-                                setTreesFlag(
-                                  (prev) => prev - parseInt(block?.trees),
-                                );
-
-                                setIsDeleteBlockOn(true);
+                                paddingLeft: 10,
+                                justifyContent: "center",
                               }}
                             >
-                              <Icon
-                                name={
-                                  block?.position ===
-                                    farmland?.blocks?.length - 1
-                                    ? "delete-forever"
-                                    : "check-circle"
+                              <Text
+                                style={{
+                                  color: COLORS.ghostwhite,
+                                  fontFamily: "JosefinSans-Bold",
+                                  fontSize: 15,
+                                }}
+                                numberOfLines={1}
+                                ellipsizeMode="head"
+                              >
+                                Parcela {index + 1} ({block?.plantingYear})
+                              </Text>
+                            </Box>
+  
+                            <Box w="15%">
+                              <TouchableOpacity
+                                disabled={
+                                  block?.position === farmland?.blocks?.length - 1
+                                    ? false
+                                    : true
                                 }
-                                size={35}
-                                color={
-                                  block?.position ===
-                                    farmland?.blocks?.length - 1
-                                    ? COLORS.ghostwhite
-                                    : COLORS.ghostwhite
-                                }
-                              />
-                            </TouchableOpacity>
+                                onPress={() => {
+                                  setAreaFlag(
+                                    (prev) => prev - parseFloat(block?.usedArea),
+                                  );
+                                  setTreesFlag(
+                                    (prev) => prev - parseInt(block?.trees),
+                                  );
+  
+                                  setIsDeleteBlockOn(true);
+                                }}
+                              >
+                                <Icon
+                                  name={
+                                    block?.position ===
+                                      farmland?.blocks?.length - 1
+                                      ? "delete-forever"
+                                      : "check-circle"
+                                  }
+                                  size={25}
+                                  color={
+                                    block?.position ===
+                                      farmland?.blocks?.length - 1
+                                      ? COLORS.ghostwhite
+                                      : COLORS.ghostwhite
+                                  }
+                                />
+                              </TouchableOpacity>
+                            </Box>
+                            <Box w="5%"></Box>
                           </Box>
-                          <Box w="5%"></Box>
-                        </Box>
-                        <Box w="100%" style={{}}>
+                      <Box
+                        style={{
+                          // borderBottomWidth: 2,
+                          borderWidth: 2,
+                          borderColor: COLORS.main,
+                        }}
+                      >
+
+                        <Box w="100%" style={{
+                          backgroundColor: COLORS.lightestgrey,
+                        }}>
                           <Stack direction="row" w="100%" space={1} my="3">
                             <Box w="50%" alignItems={"center"}>
                               <Text
@@ -1450,7 +1471,9 @@ export default function FarmlandRegistration({ route, navigation }) {
                           </Stack>
                         </Box>
 
-                        <Box w="100%" style={{}}>
+                        <Box w="100%" style={{
+                           backgroundColor: COLORS.lightestgrey,
+                        }}>
                           <Stack direction="row" w="100%" space={1} my="3">
                             <Box w="50%" alignItems={"center"}>
                               <Text

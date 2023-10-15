@@ -1,46 +1,42 @@
-import React, { useState, useEffect, useCallback } from "react"
+/* eslint-disable react/prop-types */
+/* eslint-disable prettier/prettier */
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
-  StyleSheet,
-  ScrollView,
   Image,
   Modal,
   Animated,
   SafeAreaView,
-} from "react-native"
+} from "react-native";
 import {
   Box,
   FormControl,
   Stack,
-  Select,
-  CheckIcon,
-  Center,
-  Radio,
-} from "native-base"
+} from "native-base";
 import {
   MultipleSelectList,
   SelectList,
-} from "react-native-dropdown-select-list"
+} from "react-native-dropdown-select-list";
 // import Animated, { FadeInLeft, SlideInUp } from "react-native-reanimated";
 
-import { responsiveFontSize } from "react-native-responsive-dimensions"
+import { responsiveFontSize } from "react-native-responsive-dimensions";
 
-import { Overlay, Icon, Button, CheckBox } from "@rneui/base"
-import COLORS from "../../consts/colors"
-import { getFullYears, getFullYears2 } from "../../helpers/dates"
-import { plantingTypes } from "../../consts/plantingTypes"
-import cloneList from "../../consts/clones"
-import { CustomInput } from "../Inputs/CustomInput"
+import {Icon, Button, CheckBox } from "@rneui/base";
+import COLORS from "../../consts/colors";
+import { getFullYears, getFullYears2 } from "../../helpers/dates";
+import { plantingTypes } from "../../consts/plantingTypes";
+import cloneList from "../../consts/clones";
+import { CustomInput } from "../Inputs/CustomInput";
 
 // import { v4 as uuidv4 } from 'uuid';
 
-import { realmContext } from "../../models/realmContext"
-import { TouchableOpacity } from "react-native"
-import validateBlockData from "../../helpers/validateBlockData"
-import AwesomeAlert from "react-native-awesome-alerts"
-import { errorMessages } from "../../consts/errorMessages"
-const { useRealm, useQuery, useObject } = realmContext
+import { realmContext } from "../../models/realmContext";
+import { TouchableOpacity } from "react-native";
+import validateBlockData from "../../helpers/validateBlockData";
+import AwesomeAlert from "react-native-awesome-alerts";
+import { errorMessages } from "../../consts/errorMessages";
+const { useRealm, useQuery, useObject } = realmContext;
 
 export default function FarmlandBlockRegistration({
   customUserData,
@@ -49,7 +45,6 @@ export default function FarmlandBlockRegistration({
   setIsOverlayVisible,
   errors,
   setErrors,
-  resizeBlockBox,
   scale,
   // alert, setAlert,
   plantingYear,
@@ -78,8 +73,8 @@ export default function FarmlandBlockRegistration({
   setSameTypeTreesList,
 
   totalArea,
-  setTotalArea,
-  setTotalTrees,
+  // setTotalArea,
+  // setTotalTrees,
   totalTrees,
   treesFlag,
   setTreesFlag,
@@ -105,123 +100,101 @@ export default function FarmlandBlockRegistration({
 
   ownerImage,
 
-  // successLottieVisible, setSuccessLottieVisible,
 }) {
-  const realm = useRealm()
-  const foundFarmland = realm.objectForPrimaryKey("Farmland", farmlandId)
-  const [addedClone, setAddedClone] = useState("")
+  const realm = useRealm();
+  const foundFarmland = realm.objectForPrimaryKey("Farmland", farmlandId);
+  const [addedClone, setAddedClone] = useState("");
 
-  const [addBlockIsOn, setAddBlockIsOn] = useState(false)
-  const [treeRedFlag, setTreeRedFlag] = useState(false)
-  const [areaRedFlag, setAreaRedFlag] = useState(false)
+  const [addBlockIsOn, setAddBlockIsOn] = useState(false);
+  const [treeRedFlag, setTreeRedFlag] = useState(false);
+  const [areaRedFlag, setAreaRedFlag] = useState(false);
 
   // ---------------------------------------------
 
   const toggleOverlay = () => {
-    setIsOverlayVisible(!isOverlayVisible)
-  }
+    setIsOverlayVisible(!isOverlayVisible);
+  };
 
   useEffect(() => {
     if (addBlockIsOn) {
       if (treesFlag > totalTrees || areaFlag > totalArea) {
-        setAlert(true)
-        setTitleAlert(errorMessages.farmlandAndBlockConformity.title)
-        setMessageAlert(errorMessages.farmlandAndBlockConformity.message)
+        setAlert(true);
+        setTitleAlert(errorMessages.farmlandAndBlockConformity.title);
+        setMessageAlert(errorMessages.farmlandAndBlockConformity.message);
         setShowCancelButton(
           errorMessages.farmlandAndBlockConformity.showCancelButton,
-        )
+        );
         setShowConfirmButton(
           errorMessages.farmlandAndBlockConformity.showConfirmButton,
-        )
-        setCancelText(errorMessages.farmlandAndBlockConformity.cancelText)
-        setConfirmText(errorMessages.farmlandAndBlockConformity.confirmText)
+        );
+        setCancelText(errorMessages.farmlandAndBlockConformity.cancelText);
+        setConfirmText(errorMessages.farmlandAndBlockConformity.confirmText);
 
-        setAddBlockIsOn(false)
+        setAddBlockIsOn(false);
 
-        setTreeRedFlag(true)
-        setAreaRedFlag(true)
+        setTreeRedFlag(true);
+        setAreaRedFlag(true);
 
-        setTreesFlag((prev) => prev - parseInt(blockTrees))
-        setAreaFlag((prev) => prev - parseFloat(usedArea))
+        setTreesFlag((prev) => prev - parseInt(blockTrees));
+        setAreaFlag((prev) => prev - parseFloat(usedArea));
 
-        return
+        return;
       } else {
-        setAreaRedFlag(false)
-        setTreeRedFlag(false)
+        setAreaRedFlag(false);
+        setTreeRedFlag(false);
       }
 
-      visualizeBlockData()
+      visualizeBlockData();
 
-      setAddBlockIsOn(false)
+      setAddBlockIsOn(false);
     }
-  }, [addBlockIsOn])
+  }, [addBlockIsOn]);
 
   useEffect(() => {
-    let selectedClones = []
-    let mergedSameTypeTrees = []
+    let selectedClones = [];
+    let mergedSameTypeTrees = [];
     const filteredPlantTypes = plantTypes.filter(
       (plantType) => !plantType.includes("enxer"),
-    )
+    );
     if (
       plantTypes.filter((plantType) => plantType.includes("enxer")).length > 0
     ) {
       selectedClones = clones
         ?.filter((clone) => clone !== "Outro")
-        ?.map((clone) => `Clone: ${clone}`)
-      mergedSameTypeTrees = filteredPlantTypes.concat(selectedClones)
+        ?.map((clone) => `Clone: ${clone}`);
+      mergedSameTypeTrees = filteredPlantTypes.concat(selectedClones);
     } else {
-      mergedSameTypeTrees = filteredPlantTypes
+      mergedSameTypeTrees = filteredPlantTypes;
       if (clones?.length > 0) {
-        setClones([])
+        setClones([]);
       }
     }
     let normalizedSameTypeTrees = mergedSameTypeTrees?.map((treeType) => ({
       treeType,
       trees: "",
-    }))
-    setSameTypeTreesList(normalizedSameTypeTrees)
-  }, [clones, plantTypes])
+    }));
+    setSameTypeTreesList(normalizedSameTypeTrees);
+  }, [clones, plantTypes]);
 
   return (
-    //      <Overlay
-    //      fullScreen
-    //     overlayStyle={{
-    //         backgroundColor: COLORS.ghostwhite,
-    //         width: '100%',
-    //         // maxHeight: '95%',
-    //         borderTopLeftRadius: 0,
-    //         borderTopRightRadius: 0,
-    //         paddingBottom: 5,
-    //     }}
-    //     isVisible={isOverlayVisible}
-    //     onBackdropPress={()=>{
-
-    //         turnOffOverlay();
-
-    //         if (treeRedFlag || areaRedFlag){
-    //             setTreeRedFlag(false);
-    //             setAreaRedFlag(false);
-    //         }
-    //     }}
-    // >
-
     <Modal
       visible={isOverlayVisible}
       // transparent
       onDismiss={() => {
-        turnOffOverlay()
+        turnOffOverlay();
         if (treeRedFlag || areaRedFlag) {
-          setTreeRedFlag(false)
-          setAreaRedFlag(false)
+          setTreeRedFlag(false);
+          setAreaRedFlag(false);
         }
       }}
     >
       <SafeAreaView
         style={{
           flex: 1,
+         
         }}
         onTouchCancel={
-          () => {}
+          () => { }
           // resizeBlockBox(0)
           // setIsOverlayVisible(false)
         }
@@ -229,6 +202,7 @@ export default function FarmlandBlockRegistration({
         <Animated.View
           style={{
             paddingHorizontal: 10,
+            minHeight: "100%",
             backgroundColor: COLORS.ghostwhite,
             opacity: scale?.interpolate({
               inputRange: [0, 1],
@@ -306,10 +280,10 @@ export default function FarmlandBlockRegistration({
             cancelButtonColor="#DD6B55"
             confirmButtonColor={COLORS.danger}
             onCancelPressed={() => {
-              setAlert(false)
+              setAlert(false);
             }}
             onConfirmPressed={() => {
-              setAlert(false)
+              setAlert(false);
             }}
           />
 
@@ -318,7 +292,7 @@ export default function FarmlandBlockRegistration({
               style={{
                 textAlign: "center",
                 color: COLORS.black,
-                fontSize: responsiveFontSize(2),
+                fontSize: 24,
                 fontFamily: "JosefinSans-Bold",
               }}
             >
@@ -334,11 +308,11 @@ export default function FarmlandBlockRegistration({
           >
             <TouchableOpacity
               onPress={() => {
-                turnOffOverlay()
+                turnOffOverlay();
 
                 if (treeRedFlag || areaRedFlag) {
-                  setTreeRedFlag(false)
-                  setAreaRedFlag(false)
+                  setTreeRedFlag(false);
+                  setAreaRedFlag(false);
                 }
               }}
             >
@@ -426,8 +400,8 @@ export default function FarmlandBlockRegistration({
                     <SelectList
                       data={() => getFullYears2(70)}
                       setSelected={(newYear) => {
-                        setErrors((prev) => ({ ...prev, plantingYear: "" }))
-                        setPlantingYear(newYear)
+                        setErrors((prev) => ({ ...prev, plantingYear: "" }));
+                        setPlantingYear(newYear);
                       }}
                       save="value"
                       placeholder="Escolher ano"
@@ -498,8 +472,8 @@ export default function FarmlandBlockRegistration({
                             blockTrees: null,
                             usedArea: null,
                             treeDensity: null,
-                          }))
-                          setUsedArea(newNumber)
+                          }));
+                          setUsedArea(newNumber);
                         }}
                       />
                     </FormControl>
@@ -529,8 +503,8 @@ export default function FarmlandBlockRegistration({
                             blockTrees: null,
                             usedArea: null,
                             treeDensity: null,
-                          }))
-                          setBlockTrees(newNumber)
+                          }));
+                          setBlockTrees(newNumber);
                         }}
                       />
                     </FormControl>
@@ -680,12 +654,12 @@ export default function FarmlandBlockRegistration({
                           />
                         }
                         onPress={() => {
-                          setIsDensityModeRegular(true)
-                          setIsDensityModeIrregular(false)
+                          setIsDensityModeRegular(true);
+                          setIsDensityModeIrregular(false);
                           setErrors({
                             ...errors,
                             densityMode: "",
-                          })
+                          });
                         }}
                       />
                     </Box>
@@ -721,14 +695,14 @@ export default function FarmlandBlockRegistration({
                           />
                         }
                         onPress={() => {
-                          setIsDensityModeIrregular(true)
-                          setIsDensityModeRegular(false)
+                          setIsDensityModeIrregular(true);
+                          setIsDensityModeRegular(false);
                           setErrors({
                             ...errors,
                             densityMode: "",
-                          })
-                          setDensityWidth("")
-                          setDensityLength("")
+                          });
+                          setDensityWidth("");
+                          setDensityLength("");
                         }}
                       />
                     </Box>
@@ -770,8 +744,8 @@ export default function FarmlandBlockRegistration({
                             blockTrees: null,
                             usedArea: null,
                             treeDensity: null,
-                          }))
-                          setDensityLength(newNumber)
+                          }));
+                          setDensityLength(newNumber);
                         }}
                       />
 
@@ -825,8 +799,8 @@ export default function FarmlandBlockRegistration({
                             blockTrees: null,
                             usedArea: null,
                             treeDensity: null,
-                          }))
-                          setDensityWidth(newNumber)
+                          }));
+                          setDensityWidth(newNumber);
                         }}
                       />
 
@@ -851,8 +825,8 @@ export default function FarmlandBlockRegistration({
                 <FormControl.Label>Tipo de plantas</FormControl.Label>
                 <MultipleSelectList
                   setSelected={(type) => {
-                    setErrors((prev) => ({ ...prev, plantTypes: "" }))
-                    setPlantTypes(type)
+                    setErrors((prev) => ({ ...prev, plantTypes: "" }));
+                    setPlantTypes(type);
                   }}
                   data={plantingTypes}
                   notFoundText={"Tipo de planta não encontrado"}
@@ -912,8 +886,8 @@ export default function FarmlandBlockRegistration({
                     <FormControl.Label>Clones</FormControl.Label>
                     <MultipleSelectList
                       setSelected={(type) => {
-                        setErrors((prev) => ({ ...prev, clones: "" }))
-                        setClones(type)
+                        setErrors((prev) => ({ ...prev, clones: "" }));
+                        setClones(type);
                       }}
                       data={cloneList}
                       notFoundText={"Clone não encontrado"}
@@ -989,8 +963,8 @@ export default function FarmlandBlockRegistration({
                               setErrors({
                                 ...errors,
                                 addedClone: "",
-                              })
-                              setAddedClone(newClone)
+                              });
+                              setAddedClone(newClone);
                             }}
                           />
                           {"addedClone" in errors ? (
@@ -1036,14 +1010,14 @@ export default function FarmlandBlockRegistration({
                           }}
                           onPress={() => {
                             if (addedClone) {
-                              setClones((prev) => [...prev, addedClone])
+                              setClones((prev) => [...prev, addedClone]);
 
-                              setAddedClone("")
+                              setAddedClone("");
                             } else {
                               setErrors({
                                 ...errors,
                                 addedClone: "Indica novo clone",
-                              })
+                              });
                             }
                           }}
                         >
@@ -1117,7 +1091,7 @@ export default function FarmlandBlockRegistration({
                         direction="row"
                         w="100%"
                         space={2}
-                        // mt="1"
+                      // mt="1"
                       >
                         <Box
                           w="65%"
@@ -1151,17 +1125,17 @@ export default function FarmlandBlockRegistration({
                               setErrors((prev) => ({
                                 ...prev,
                                 sameTypeTrees: "",
-                              }))
+                              }));
                               setSameTypeTreesList(
                                 sameTypeTreesList.map((object) => {
                                   if (
                                     object?.treeType === sameTypeTree?.treeType
                                   ) {
-                                    object.trees = newTrees
+                                    object.trees = newTrees;
                                   }
-                                  return object
+                                  return object;
                                 }),
-                              )
+                              );
                             }}
                           />
                         </Box>
@@ -1201,35 +1175,35 @@ export default function FarmlandBlockRegistration({
                       isDensityModeIrregular,
                       isDensityModeRegular,
                       sameTypeTreesList,
-                    }
+                    };
                     // if any required data is not validated
                     // a alert message is sent to the user
                     if (!validateBlockData(blockData, errors, setErrors)) {
-                      setAlert(true)
+                      setAlert(true);
                       // setValidated(true);
-                      setTitleAlert(errorMessages.farmlandError.title)
-                      setMessageAlert(errorMessages.farmlandError.message)
+                      setTitleAlert(errorMessages.farmlandError.title);
+                      setMessageAlert(errorMessages.farmlandError.message);
                       setShowCancelButton(
                         errorMessages.farmlandError.showCancelButton,
-                      )
+                      );
                       setShowConfirmButton(
                         errorMessages.farmlandError.showConfirmButton,
-                      )
-                      setCancelText(errorMessages.farmlandError.cancelText)
-                      setConfirmText(errorMessages.farmlandError.confirmText)
+                      );
+                      setCancelText(errorMessages.farmlandError.cancelText);
+                      setConfirmText(errorMessages.farmlandError.confirmText);
 
-                      return
+                      return;
                     }
                     // created the validated data object to be passed to the FarmlandModal component
                     // let retrievedBlockData = validateBlockData(blockData, errors, setErrors);
 
-                    setTreesFlag((prev) => prev + parseInt(blockTrees))
-                    setAreaFlag((prev) => prev + parseFloat(usedArea))
+                    setTreesFlag((prev) => prev + parseInt(blockTrees));
+                    setAreaFlag((prev) => prev + parseFloat(usedArea));
 
-                    setAddBlockIsOn(true)
+                    setAddBlockIsOn(true);
 
-                    setAreaRedFlag(false)
-                    setTreeRedFlag(false)
+                    setAreaRedFlag(false);
+                    setTreeRedFlag(false);
                   }}
                 />
               </View>
@@ -1238,5 +1212,5 @@ export default function FarmlandBlockRegistration({
         </Animated.View>
       </SafeAreaView>
     </Modal>
-  )
+  );
 }

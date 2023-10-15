@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable linebreak-style */
 import React, { useEffect } from "react";
 import { StatusBar } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -28,9 +30,9 @@ import { AppProvider, UserProvider } from "@realm/react";
 import { realmContext } from "./models/realmContext";
 const { RealmProvider } = realmContext;
 
-import { toastConfig } from "./config/toastConfig"
-import { syncConfig } from "./syncConfig"
-import { useState } from "react"
+import { toastConfig } from "./config/toastConfig";
+import { syncConfig } from "./syncConfig";
+import { useState } from "react";
 import ClientResetModal from "./components/Modals/ClientResetModal";
 
 export default function App() {
@@ -41,10 +43,11 @@ export default function App() {
     SplashScreen.hide(); //hides the splash screen on app load.
   }, []);
 
+
   // dispaly manual client reset dialog
   const onSyncError = (error) => {
     if (error.name === "ClientReset") {
-      setIsVisible(true)
+      setIsVisible(true);
     }
   };
 

@@ -1,50 +1,46 @@
-import React, { useState, useEffect, useCallback } from "react"
+/* eslint-disable react/prop-types */
+/* eslint-disable prettier/prettier */
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
-  StyleSheet,
   ScrollView,
   Image,
   Animated,
   Modal,
   SafeAreaView,
-  Dimensions,
-} from "react-native"
+} from "react-native";
 import {
   Box,
   FormControl,
   Stack,
-  Select,
-  CheckIcon,
-  Center,
-  Radio,
-} from "native-base"
+} from "native-base";
 import {
   MultipleSelectList,
   SelectList,
-} from "react-native-dropdown-select-list"
+} from "react-native-dropdown-select-list";
 
-import { Overlay, Icon, Button, CheckBox } from "@rneui/base"
-import COLORS from "../../consts/colors"
-import { getFullYears, getFullYears2 } from "../../helpers/dates"
-import { plantingTypes } from "../../consts/plantingTypes"
-import cloneList from "../../consts/clones"
-import { CustomInput } from "../Inputs/CustomInput"
+import { Overlay, Icon, Button, CheckBox } from "@rneui/base";
+import COLORS from "../../consts/colors";
+import { getFullYears, getFullYears2 } from "../../helpers/dates";
+import { plantingTypes } from "../../consts/plantingTypes";
+import cloneList from "../../consts/clones";
+import { CustomInput } from "../Inputs/CustomInput";
 
-import { v4 as uuidv4 } from "uuid"
+import { v4 as uuidv4 } from "uuid";
 
-import { TouchableOpacity } from "react-native"
-import validateBlockData from "../../helpers/validateBlockData"
-import AwesomeAlert from "react-native-awesome-alerts"
-import { errorMessages } from "../../consts/errorMessages"
+import { TouchableOpacity } from "react-native";
+import validateBlockData from "../../helpers/validateBlockData";
+import AwesomeAlert from "react-native-awesome-alerts";
+import { errorMessages } from "../../consts/errorMessages";
 
-import { useUser } from "@realm/react"
-import { realmContext } from "../../models/realmContext"
-import { resourceValidation } from "../../consts/resourceValidation"
-import DangerAlert from "../LottieComponents/DangerAlert"
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome"
-import { faTree } from "@fortawesome/free-solid-svg-icons"
-const { useRealm, useQuery, useObject } = realmContext
+import { useUser } from "@realm/react";
+import { realmContext } from "../../models/realmContext";
+import { resourceValidation } from "../../consts/resourceValidation";
+import DangerAlert from "../LottieComponents/DangerAlert";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faTree } from "@fortawesome/free-solid-svg-icons";
+const { useRealm, useQuery, useObject } = realmContext;
 
 export default function NewFarmlandBlock({
   isNewBlockVisible,
@@ -58,45 +54,45 @@ export default function NewFarmlandBlock({
   resizeBlockBox,
   ownerImage,
 }) {
-  const realm = useRealm()
-  const user = useUser()
-  const customUserData = user?.customData
-  const [addedClone, setAddedClone] = useState("")
+  const realm = useRealm();
+  const user = useUser();
+  const customUserData = user?.customData;
+  const [addedClone, setAddedClone] = useState("");
 
-  const [addBlockIsOn, setAddBlockIsOn] = useState(false)
+  const [addBlockIsOn, setAddBlockIsOn] = useState(false);
 
   // ------------------------------------------
-  const [alert, setAlert] = useState(false)
-  const [messageAlert, setMessageAlert] = useState("")
-  const [titleAlert, setTitleAlert] = useState("")
-  const [cancelText, setCancelText] = useState("")
-  const [confirmText, setConfirmText] = useState("")
-  const [showCancelButton, setShowCancelButton] = useState(false)
-  const [showConfirmButton, setShowConfirmButton] = useState(false)
+  const [alert, setAlert] = useState(false);
+  const [messageAlert, setMessageAlert] = useState("");
+  const [titleAlert, setTitleAlert] = useState("");
+  const [cancelText, setCancelText] = useState("");
+  const [confirmText, setConfirmText] = useState("");
+  const [showCancelButton, setShowCancelButton] = useState(false);
+  const [showConfirmButton, setShowConfirmButton] = useState(false);
 
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState({});
 
   // ---------------------------------------------
 
-  const [remainingArea, setRemainingArea] = useState()
+  const [remainingArea, setRemainingArea] = useState();
 
-  const [plantingYear, setPlantingYear] = useState("")
+  const [plantingYear, setPlantingYear] = useState("");
 
-  const [usedArea, setUsedArea] = useState("")
-  const [blockTrees, setBlockTrees] = useState("")
-  const [densityWidth, setDensityWidth] = useState("")
-  const [densityLength, setDensityLength] = useState("")
-  const [plantTypes, setPlantTypes] = useState([])
-  const [clones, setClones] = useState([])
-  const [isDensityModeIrregular, setIsDensityModeIrregular] = useState(false)
-  const [isDensityModeRegular, setIsDensityModeRegular] = useState(false)
-  const [sameTypeTreesList, setSameTypeTreesList] = useState([])
+  const [usedArea, setUsedArea] = useState("");
+  const [blockTrees, setBlockTrees] = useState("");
+  const [densityWidth, setDensityWidth] = useState("");
+  const [densityLength, setDensityLength] = useState("");
+  const [plantTypes, setPlantTypes] = useState([]);
+  const [clones, setClones] = useState([]);
+  const [isDensityModeIrregular, setIsDensityModeIrregular] = useState(false);
+  const [isDensityModeRegular, setIsDensityModeRegular] = useState(false);
+  const [sameTypeTreesList, setSameTypeTreesList] = useState([]);
 
   // ----------------------------------------------
 
   const toggleOverlay = () => {
-    setIsNewBlockVisible(!isNewBlockVisible)
-  }
+    setIsNewBlockVisible(!isNewBlockVisible);
+  };
 
   const addBlockData = () => {
     let blockData = {
@@ -111,25 +107,25 @@ export default function NewFarmlandBlock({
       isDensityModeRegular,
       sameTypeTreesList,
       remainingArea,
-    }
+    };
 
     // if any required data is not validated
     // a alert message is sent to the user
     if (!validateBlockData(blockData, errors, setErrors)) {
-      setAlert(true)
+      setAlert(true);
 
-      setTitleAlert(errorMessages.farmlandError.title)
-      setMessageAlert(errorMessages.farmlandError.message)
-      setShowCancelButton(errorMessages.farmlandError.showCancelButton)
-      setShowConfirmButton(errorMessages.farmlandError.showConfirmButton)
-      setCancelText(errorMessages.farmlandError.cancelText)
-      setConfirmText(errorMessages.farmlandError.confirmText)
+      setTitleAlert(errorMessages.farmlandError.title);
+      setMessageAlert(errorMessages.farmlandError.message);
+      setShowCancelButton(errorMessages.farmlandError.showCancelButton);
+      setShowConfirmButton(errorMessages.farmlandError.showConfirmButton);
+      setCancelText(errorMessages.farmlandError.cancelText);
+      setConfirmText(errorMessages.farmlandError.confirmText);
 
-      return
+      return;
     }
 
     // created the validated data object to be passed to the FarmlandModal component
-    let retrievedBlockData = validateBlockData(blockData, errors, setErrors)
+    let retrievedBlockData = validateBlockData(blockData, errors, setErrors);
 
     const block = {
       _id: uuidv4(),
@@ -142,91 +138,91 @@ export default function NewFarmlandBlock({
       userName: customUserData?.name,
       createdAt: new Date(),
       modifiedAt: new Date(),
-    }
+    };
 
-    onAddBlock(block, farmland, realm)
+    onAddBlock(block, farmland, realm);
 
     // setIsNewBlockVisible(false);
-    resizeBlockBox(0)
-  }
+    resizeBlockBox(0);
+  };
 
   const onAddBlock = useCallback(
     (block, farmland, realm) => {
       // update the sum of the blocks trees
       let blocksTrees = farmland?.blocks
         ?.map((block) => block?.trees)
-        .reduce((acc, el) => acc + el, 0)
-      blocksTrees = block?.trees + blocksTrees
-      let updatedTotalTrees
+        .reduce((acc, el) => acc + el, 0);
+      blocksTrees = block?.trees + blocksTrees;
+      let updatedTotalTrees;
       if (farmland?.trees < blocksTrees) {
         // update only if the number of the block trees are greater that the total's
-        updatedTotalTrees = farmland?.trees + (blocksTrees - farmland?.trees)
+        updatedTotalTrees = farmland?.trees + (blocksTrees - farmland?.trees);
       } else {
-        updatedTotalTrees = farmland?.trees
+        updatedTotalTrees = farmland?.trees;
       }
 
       realm.write(() => {
-        farmland?.blocks?.push(block)
+        farmland?.blocks?.push(block);
 
         // only update the resource status to 'pending' only when blocksTrees == updatedTotalTrees
         if (blocksTrees === updatedTotalTrees) {
-          farmland.status = resourceValidation.status.pending
+          farmland.status = resourceValidation.status.pending;
         }
-        farmland.trees = updatedTotalTrees
-      })
+        farmland.trees = updatedTotalTrees;
+      });
 
-      setAutoRefresh(!autoRefresh)
-      setSuccessLottieVisible(true)
+      setAutoRefresh(!autoRefresh);
+      setSuccessLottieVisible(true);
     },
     [realm, farmland],
-  )
+  );
 
-  console.log
+  console.log;
 
   useEffect(() => {
     // save the block if everything is fine
     if (addBlockIsOn) {
       // add the block
-      addBlockData()
-      setAddBlockIsOn(false)
+      addBlockData();
+      setAddBlockIsOn(false);
     }
 
     // find out the remaing area
     if (isNewBlockVisible) {
-      const totalArea = farmland?.totalArea
+      const totalArea = farmland?.totalArea;
       const blocksAreas = farmland?.blocks
         ?.map((block) => block?.usedArea)
-        ?.reduce((acc, el) => acc + el, 0)
-      const remainingArea = totalArea - blocksAreas
-      setRemainingArea(remainingArea)
+        ?.reduce((acc, el) => acc + el, 0);
+      const remainingArea = totalArea - blocksAreas;
+      setRemainingArea(remainingArea);
     }
-  }, [addBlockIsOn, isNewBlockVisible, farmland])
+  }, [addBlockIsOn, isNewBlockVisible, farmland]);
 
   useEffect(() => {
-    let selectedClones = []
-    let mergedSameTypeTrees = []
+    let selectedClones = [];
+    let mergedSameTypeTrees = [];
     const filteredPlantTypes = plantTypes.filter(
       (plantType) => !plantType.includes("enxer"),
-    )
+    );
     if (
       plantTypes.filter((plantType) => plantType.includes("enxer")).length > 0
     ) {
       selectedClones = clones
         ?.filter((clone) => clone !== "Outro")
-        ?.map((clone) => `Clone: ${clone}`)
-      mergedSameTypeTrees = filteredPlantTypes.concat(selectedClones)
+        ?.map((clone) => `Clone: ${clone}`);
+      mergedSameTypeTrees = filteredPlantTypes.concat(selectedClones);
     } else {
-      mergedSameTypeTrees = filteredPlantTypes
+      mergedSameTypeTrees = filteredPlantTypes;
       if (clones?.length > 0) {
-        setClones([])
+        setClones([]);
       }
     }
     let normalizedSameTypeTrees = mergedSameTypeTrees?.map((treeType) => ({
       treeType,
       trees: "",
-    }))
-    setSameTypeTreesList(normalizedSameTypeTrees)
-  }, [clones, plantTypes])
+    }));
+    setSameTypeTreesList(normalizedSameTypeTrees);
+  }, [clones, plantTypes]);
 
   return (
     <>
@@ -246,32 +242,9 @@ export default function NewFarmlandBlock({
             isVisible={isNewBlockVisible}
             onBackdropPress={() => {
               // setIsNewBlockVisible(false);
-              resizeBlockBox(0)
+              resizeBlockBox(0);
             }}
           >
-            {/* <Modal
-        visible={isNewBlockVisible}
-        onDismiss={()=>resizeBlockBox(0)}
-        transparent
-        style={{
-            // position: 'absolute',
-            // top: 0,
-            // left: 0,
-            // right: 0,
-            // bottom: 0,
-            // justifyContent: "center",
-            // alignItems: "center",
-        }}
-    > */}
-            {/* <SafeAreaView
-            style={{
-                flex: 1,   
-                // alignitems: 'center',
-                // justifycontent: 'center'
-            }}
-            onTouchEnd={()=>resizeBlockBox(0)}
-        > */}
-
             <Animated.View
               style={{
                 maxWidth: "80%",
@@ -284,9 +257,6 @@ export default function NewFarmlandBlock({
                   outputRange: [0, 1],
                 }),
                 transform: [{ scale: scaleBlockBox }],
-                // position: 'absolute',
-                // top: Dimensions.get('window').height / 2 - 100,
-                // alignSelf: 'center',
               }}
             >
               <Text
@@ -330,7 +300,7 @@ export default function NewFarmlandBlock({
 
               <TouchableOpacity
                 onPress={() => {
-                  resizeBlockBox(0)
+                  resizeBlockBox(0);
                   // setIsNewBlockVisible(false);
                 }}
                 style={{
@@ -355,30 +325,13 @@ export default function NewFarmlandBlock({
             {/* </Modal> */}
           </Overlay>
         ) : (
-          // <Overlay
-          // overlayStyle={{
-          //     backgroundColor: (remainingArea <= 0.1) ? COLORS.ghostwhite : COLORS.ghostwhite,
-          //     width: (remainingArea <= 0.1) ? '70%' : '100%',
-          //     //   maxHeight: '95%',
-          //     borderTopLeftRadius: (remainingArea <= 0.1) ? 7 : 0,
-          //     borderTopRightRadius: (remainingArea <= 0.1) ? 7 : 0,
-          //     borderBottomLeftRadius: (remainingArea <= 0.1) ? 7 : 0,
-          //     borderBottomRightRadius: (remainingArea <= 0.1) ? 7 : 0,
-          //     paddingBottom: 5,
-          // }}
-          //     isVisible={isNewBlockVisible}
-          //     onBackdropPress={()=>{
-          //         setIsNewBlockVisible(false);
-          //     }}
-          //     // fullScreen
-          // >
           <Modal visible={isNewBlockVisible} transparent>
             <SafeAreaView
               style={{
                 flex: 1,
               }}
               onTouchCancel={
-                () => {}
+                () => { }
                 // resizeBlockBox(0)
                 // setIsOverlayVisible(false)
               }
@@ -386,6 +339,7 @@ export default function NewFarmlandBlock({
               <Animated.View
                 style={{
                   paddingHorizontal: 10,
+                  minHeight: "100%",
                   backgroundColor: COLORS.ghostwhite,
                   opacity: scaleBlockBox?.interpolate({
                     inputRange: [0, 1],
@@ -464,10 +418,10 @@ export default function NewFarmlandBlock({
                       cancelButtonColor="#DD6B55"
                       confirmButtonColor={COLORS.danger}
                       onCancelPressed={() => {
-                        setAlert(false)
+                        setAlert(false);
                       }}
                       onConfirmPressed={() => {
-                        setAlert(false)
+                        setAlert(false);
                       }}
                     />
 
@@ -484,7 +438,7 @@ export default function NewFarmlandBlock({
                           style={{
                             textAlign: "center",
                             color: COLORS.black,
-                            fontSize: 16,
+                            fontSize: 24,
                             fontFamily: "JosefinSans-Bold",
                           }}
                         >
@@ -501,7 +455,7 @@ export default function NewFarmlandBlock({
                         <TouchableOpacity
                           onPress={() => {
                             // setIsNewBlockVisible(false);
-                            resizeBlockBox(0)
+                            resizeBlockBox(0);
                           }}
                         >
                           <Icon name="close" color={COLORS.grey} size={25} />
@@ -620,8 +574,8 @@ export default function NewFarmlandBlock({
                                     setErrors((prev) => ({
                                       ...prev,
                                       plantingYear: "",
-                                    }))
-                                    setPlantingYear(newYear)
+                                    }));
+                                    setPlantingYear(newYear);
                                   }}
                                   save="value"
                                   placeholder="Escolher ano"
@@ -705,8 +659,8 @@ export default function NewFarmlandBlock({
                                         blockTrees: null,
                                         usedArea: null,
                                         treeDensity: null,
-                                      }))
-                                      setUsedArea(newNumber)
+                                      }));
+                                      setUsedArea(newNumber);
                                     }}
                                   />
                                 </FormControl>
@@ -738,8 +692,8 @@ export default function NewFarmlandBlock({
                                         blockTrees: null,
                                         usedArea: null,
                                         treeDensity: null,
-                                      }))
-                                      setBlockTrees(newNumber)
+                                      }));
+                                      setBlockTrees(newNumber);
                                     }}
                                   />
                                 </FormControl>
@@ -897,12 +851,12 @@ export default function NewFarmlandBlock({
                                       />
                                     }
                                     onPress={() => {
-                                      setIsDensityModeRegular(true)
-                                      setIsDensityModeIrregular(false)
+                                      setIsDensityModeRegular(true);
+                                      setIsDensityModeIrregular(false);
                                       setErrors({
                                         ...errors,
                                         densityMode: "",
-                                      })
+                                      });
                                     }}
                                   />
                                 </Box>
@@ -938,14 +892,14 @@ export default function NewFarmlandBlock({
                                       />
                                     }
                                     onPress={() => {
-                                      setIsDensityModeIrregular(true)
-                                      setIsDensityModeRegular(false)
+                                      setIsDensityModeIrregular(true);
+                                      setIsDensityModeRegular(false);
                                       setErrors({
                                         ...errors,
                                         densityMode: "",
-                                      })
-                                      setDensityWidth("")
-                                      setDensityLength("")
+                                      });
+                                      setDensityWidth("");
+                                      setDensityLength("");
                                     }}
                                   />
                                 </Box>
@@ -993,8 +947,8 @@ export default function NewFarmlandBlock({
                                         blockTrees: null,
                                         usedArea: null,
                                         treeDensity: null,
-                                      }))
-                                      setDensityLength(newNumber)
+                                      }));
+                                      setDensityLength(newNumber);
                                     }}
                                   />
 
@@ -1052,8 +1006,8 @@ export default function NewFarmlandBlock({
                                         blockTrees: null,
                                         usedArea: null,
                                         treeDensity: null,
-                                      }))
-                                      setDensityWidth(newNumber)
+                                      }));
+                                      setDensityWidth(newNumber);
                                     }}
                                   />
 
@@ -1091,8 +1045,8 @@ export default function NewFarmlandBlock({
                                 setErrors((prev) => ({
                                   ...prev,
                                   plantTypes: "",
-                                }))
-                                setPlantTypes(type)
+                                }));
+                                setPlantTypes(type);
                               }}
                               data={plantingTypes}
                               notFoundText={"Tipo de planta não encontrado"}
@@ -1167,8 +1121,8 @@ export default function NewFarmlandBlock({
                                     setErrors((prev) => ({
                                       ...prev,
                                       clones: "",
-                                    }))
-                                    setClones(type)
+                                    }));
+                                    setClones(type);
                                   }}
                                   data={cloneList}
                                   notFoundText={"Clone não encontrado"}
@@ -1245,8 +1199,8 @@ export default function NewFarmlandBlock({
                                           setErrors({
                                             ...errors,
                                             addedClone: "",
-                                          })
-                                          setAddedClone(newClone)
+                                          });
+                                          setAddedClone(newClone);
                                         }}
                                       />
                                       {"addedClone" in errors ? (
@@ -1293,14 +1247,14 @@ export default function NewFarmlandBlock({
                                           setClones((prev) => [
                                             ...prev,
                                             addedClone,
-                                          ])
+                                          ]);
 
-                                          setAddedClone("")
+                                          setAddedClone("");
                                         } else {
                                           setErrors({
                                             ...errors,
                                             addedClone: "Indica novo clone",
-                                          })
+                                          });
                                         }
                                       }}
                                     >
@@ -1408,7 +1362,7 @@ export default function NewFarmlandBlock({
                                               setErrors((prev) => ({
                                                 ...prev,
                                                 sameTypeTrees: "",
-                                              }))
+                                              }));
                                               setSameTypeTreesList(
                                                 sameTypeTreesList.map(
                                                   (object) => {
@@ -1416,12 +1370,12 @@ export default function NewFarmlandBlock({
                                                       object?.treeType ===
                                                       sameTypeTree?.treeType
                                                     ) {
-                                                      object.trees = newTrees
+                                                      object.trees = newTrees;
                                                     }
-                                                    return object
+                                                    return object;
                                                   },
                                                 ),
-                                              )
+                                              );
                                             }}
                                           />
                                         </Box>
@@ -1452,7 +1406,7 @@ export default function NewFarmlandBlock({
                             }}
                             type="outline"
                             onPress={() => {
-                              setAddBlockIsOn(true)
+                              setAddBlockIsOn(true);
                             }}
                           />
                         </View>
@@ -1468,5 +1422,5 @@ export default function NewFarmlandBlock({
         // </Overlay>
       }
     </>
-  )
+  );
 }

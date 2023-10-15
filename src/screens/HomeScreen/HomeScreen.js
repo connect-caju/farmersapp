@@ -33,6 +33,7 @@ import { getPercentage } from "../../helpers/getPercentage";
 
 import { useUser } from "@realm/react";
 import { realmContext } from "../../models/realmContext";
+import ProvincialManager from "./ProvincialManager";
 // import InternetInfo from "../../components/InternetInfo/InternetInfo";
 const { useRealm, useQuery } = realmContext;
 
@@ -396,323 +397,300 @@ export default function HomeScreen({ route, navigation }) {
 
       {/* Province users and districts */}
       {!isFieldAgent && customUserData?.role === roles.provincialManager && (
-        <ScrollView
-          contentContainerStyle={{
-            flex: 1,
-            justifyContent: "center",
-            borderTopLeftRadius: wp("10%"),
-            borderTopRightRadius: wp("10%"),
-            padding: 10,
-          }}
-        >
-          <View
-            style={{
-              marginBottom: hp("2%"),
-            }}
-          >
-            <View
-              style={{
-                width: "100%",
-              }}
-            >
-              <Box
-                style={{
-                  justifyContent: "center",
-                  alignItems: "center",
-                  // padding: 5,
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: responsiveFontSize(2.5),
-                    color: COLORS.black,
-                    fontFamily: "JosefinSans-Bold",
-                    textAlign: "center",
-                  }}
-                >
-                  {customUserData?.userProvince}
-                </Text>
+        <ProvincialManager 
+          customUserData={customUserData}
+          isUserProfileVisible={isUserProfileVisible}
+          setIsUserProfileVisible={setIsUserProfileVisible}
+        />
+        // <ScrollView
+        //   contentContainerStyle={{
+        //     flex: 1,
+        //     // justifyContent: "center",
+        //     // borderTopLeftRadius: wp("10%"),
+        //     // borderTopRightRadius: wp("10%"),
+        //     padding: 10,
+        //   }}
+        // >
+        //   <View
+        //     style={{
+        //       marginBottom: hp("2%"),
+        //     }}
+        //   >
+        //     <View
+        //       style={{
+        //         width: "100%",
+        //       }}
+        //     >
+        //       <Box
+        //         style={{
+        //           justifyContent: "center",
+        //           alignItems: "center",
+        //           // padding: 5,
+        //         }}
+        //       >
+        //         <Text
+        //           style={{
+        //             fontSize: responsiveFontSize(2.5),
+        //             color: COLORS.black,
+        //             fontFamily: "JosefinSans-Bold",
+        //             textAlign: "center",
+        //           }}
+        //         >
+        //           {customUserData?.userProvince}
+        //         </Text>
 
-                <Stack direction="row" w="100%">
-                  <Box
-                    style={{
-                      width: "40%",
-                      // height: 100,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: responsiveFontSize(2),
-                        fontFamily: "JosefinSans-Bold",
-                        textAlign: "center",
-                        color: COLORS.grey,
-                      }}
-                    >
-                      Usuários
-                    </Text>
-                    <Box alignItems={"center"}>
-                      <Text
-                        style={{
-                          width: "50%",
-                          fontSize: responsiveFontSize(2),
-                          fontFamily: "JosefinSans-Regular",
-                          textAlign: "center",
-                          color: COLORS.grey,
-                          borderRadius: 100,
-                          borderWidth: 1,
-                          backgroundColor: COLORS.ghostwhite,
-                          borderColor: COLORS.ghostwhite,
-                        }}
-                      >
-                        {provincialUserStats?.length}
-                      </Text>
-                    </Box>
-                  </Box>
+        //         <Stack direction="row" w="100%">
+        //           <Box
+        //             style={{
+        //               width: "40%",
+        //               // height: 100,
+        //             }}
+        //           >
+        //             <Text
+        //               style={{
+        //                 fontSize: responsiveFontSize(2),
+        //                 fontFamily: "JosefinSans-Bold",
+        //                 textAlign: "center",
+        //                 color: COLORS.grey,
+        //               }}
+        //             >
+        //               Usuários
+        //             </Text>
+        //             <Box alignItems={"center"}>
+        //               <Text
+        //                 style={{
+        //                   width: "50%",
+        //                   fontSize: responsiveFontSize(2),
+        //                   fontFamily: "JosefinSans-Regular",
+        //                   textAlign: "center",
+        //                   color: COLORS.grey,
+        //                   borderRadius: 100,
+        //                   borderWidth: 1,
+        //                   backgroundColor: COLORS.ghostwhite,
+        //                   borderColor: COLORS.ghostwhite,
+        //                 }}
+        //               >
+        //                 {provincialUserStats?.length}
+        //               </Text>
+        //             </Box>
+        //           </Box>
 
-                  <Box w="20%"></Box>
+        //           <Box w="20%"></Box>
 
-                  <Box
-                    style={{
-                      width: "40%",
-                      // height: 100,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: responsiveFontSize(2),
-                        fontFamily: "JosefinSans-Bold",
-                        textAlign: "center",
-                        color: COLORS.grey,
-                      }}
-                    >
-                      Distritos
-                    </Text>
-                    <Box alignItems={"center"}>
-                      <Text
-                        style={{
-                          width: "50%",
-                          fontSize: responsiveFontSize(2),
-                          fontFamily: "JosefinSans-Regular",
-                          textAlign: "center",
-                          color: COLORS.grey,
-                          borderRadius: 100,
-                          borderWidth: 1,
-                          backgroundColor: COLORS.ghostwhite,
-                          borderColor: COLORS.ghostwhite,
-                        }}
-                      >
-                        {districts?.length}
-                      </Text>
-                    </Box>
-                  </Box>
-                </Stack>
-              </Box>
-            </View>
-          </View>
+        //           <Box
+        //             style={{
+        //               width: "40%",
+        //               // height: 100,
+        //             }}
+        //           >
+        //             <Text
+        //               style={{
+        //                 fontSize: responsiveFontSize(2),
+        //                 fontFamily: "JosefinSans-Bold",
+        //                 textAlign: "center",
+        //                 color: COLORS.grey,
+        //               }}
+        //             >
+        //               Distritos
+        //             </Text>
+        //             <Box alignItems={"center"}>
+        //               <Text
+        //                 style={{
+        //                   width: "50%",
+        //                   fontSize: responsiveFontSize(2),
+        //                   fontFamily: "JosefinSans-Regular",
+        //                   textAlign: "center",
+        //                   color: COLORS.grey,
+        //                   borderRadius: 100,
+        //                   borderWidth: 1,
+        //                   backgroundColor: COLORS.ghostwhite,
+        //                   borderColor: COLORS.ghostwhite,
+        //                 }}
+        //               >
+        //                 {districts?.length}
+        //               </Text>
+        //             </Box>
+        //           </Box>
+        //         </Stack>
+        //       </Box>
+        //     </View>
+        //   </View>
 
-          {/* provincial goals in terms of farmers and farmlands registrations  */}
+        //   {/* provincial goals in terms of farmers and farmlands registrations  */}
 
-          <View
-            style={{
-              width: "100%",
-              backgroundColor: COLORS.ghostwhite,
-              marginVertical: 10,
-              // paddingVertical: 4,
-              // paddingHorizontal: 5,
-              // borderColor: '#005000',
-              // shadowColor: "#005000",
-              // shadowOffset: {
-              //   width: 2,
-              //   height: 3,
-              // },
-              // shadowOpacity: 0.27,
-              // shadowRadius: 4.65,
-              // elevation: 3,
-              // opacity: 1,
-            }}
-          >
-            <View
-              style={
-                {
-                  // paddingTop: 30,
-                }
-              }
-            >
-              <View
-                style={{
-                  flexDirection: "row",
-                  // marginBottom: hp('1%'),
-                }}
-              >
-                <Icon name="update" size={wp("10%")} color={COLORS.danger} />
-                <Text
-                  style={{
-                    fontSize: responsiveFontSize(2),
-                    color: COLORS.danger,
-                    fontFamily: "JosefinSans-Bold",
-                    marginLeft: 10,
-                  }}
-                >
-                  Meta
-                </Text>
-              </View>
+        //   <View
+        //     style={{
+        //       width: "100%",
+        //       backgroundColor: COLORS.ghostwhite,
+        //       marginVertical: 10,
+        //     }}
+        //   >
+        //     <View
+        //       style={
+        //         {
+        //         }
+        //       }
+        //     >
+        //       <View
+        //         style={{
+        //           flexDirection: "row",
+        //         }}
+        //       >
+        //         <Icon name="update" size={wp("10%")} color={COLORS.danger} />
+        //         <Text
+        //           style={{
+        //             fontSize: responsiveFontSize(2),
+        //             color: COLORS.danger,
+        //             fontFamily: "JosefinSans-Bold",
+        //             marginLeft: 10,
+        //           }}
+        //         >
+        //           Meta
+        //         </Text>
+        //       </View>
 
-              <Stack w="100%" direction="row" space={3}>
-                <Box
-                  w="50%"
-                  style={{ alignItems: "center", justifyContent: "center" }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      fontFamily: "JosefinSans-Bold",
-                      textAlign: "center",
-                      color: COLORS.danger,
-                    }}
-                  >
-                    Produtores
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 18,
-                      fontFamily: "JosefinSans-Regular",
-                      textAlign: "center",
-                      color: COLORS.danger,
-                      paddingTop: 5,
-                    }}
-                  >
-                    {tpFarmers}
-                  </Text>
-                </Box>
-                <Box
-                  w="50%"
-                  style={{ alignItems: "center", justifyContent: "center" }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      fontFamily: "JosefinSans-Bold",
-                      textAlign: "center",
-                      color: COLORS.danger,
-                    }}
-                  >
-                    Pomares
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 18,
-                      fontFamily: "JosefinSans-Regular",
-                      textAlign: "center",
-                      color: COLORS.danger,
-                      paddingTop: 5,
-                    }}
-                  >
-                    {tpFarmlands}
-                  </Text>
-                </Box>
-              </Stack>
-            </View>
-          </View>
+        //       <Stack w="100%" direction="row" space={3}>
+        //         <Box
+        //           w="50%"
+        //           style={{ alignItems: "center", justifyContent: "center" }}
+        //         >
+        //           <Text
+        //             style={{
+        //               fontSize: 16,
+        //               fontFamily: "JosefinSans-Bold",
+        //               textAlign: "center",
+        //               color: COLORS.danger,
+        //             }}
+        //           >
+        //             Produtores
+        //           </Text>
+        //           <Text
+        //             style={{
+        //               fontSize: 18,
+        //               fontFamily: "JosefinSans-Regular",
+        //               textAlign: "center",
+        //               color: COLORS.danger,
+        //               paddingTop: 5,
+        //             }}
+        //           >
+        //             {tpFarmers}
+        //           </Text>
+        //         </Box>
+        //         <Box
+        //           w="50%"
+        //           style={{ alignItems: "center", justifyContent: "center" }}
+        //         >
+        //           <Text
+        //             style={{
+        //               fontSize: 16,
+        //               fontFamily: "JosefinSans-Bold",
+        //               textAlign: "center",
+        //               color: COLORS.danger,
+        //             }}
+        //           >
+        //             Pomares
+        //           </Text>
+        //           <Text
+        //             style={{
+        //               fontSize: 18,
+        //               fontFamily: "JosefinSans-Regular",
+        //               textAlign: "center",
+        //               color: COLORS.danger,
+        //               paddingTop: 5,
+        //             }}
+        //           >
+        //             {tpFarmlands}
+        //           </Text>
+        //         </Box>
+        //       </Stack>
+        //     </View>
+        //   </View>
 
-          {/* <CustomDivider thickness={2} bg={COLORS.danger} /> */}
-          {/*  provincial achievments in terms of farmers and farmlands registrations */}
+        //   {/* <CustomDivider thickness={2} bg={COLORS.danger} /> */}
+        //   {/*  provincial achievments in terms of farmers and farmlands registrations */}
 
-          <View
-            style={{
-              width: "100%",
-              backgroundColor: COLORS.ghostwhite,
-              marginVertical: 10,
-              // paddingVertical: 4,
-              paddingHorizontal: 5,
-              // borderColor: '#005000',
-              // shadowColor: "#005000",
-              // shadowOffset: {
-              //   width: 2,
-              //   height: 3,
-              // },
-              // shadowOpacity: 0.27,
-              // shadowRadius: 4.65,
-              // elevation: 3,
-              // opacity: 1,
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                // marginBottom: 10,
-                // paddingTop: 30,
-              }}
-            >
-              <Icon name="done-outline" size={30} color={COLORS.lightdanger} />
-              <Text
-                style={{
-                  fontSize: responsiveFontSize(2),
-                  color: COLORS.lightdanger,
-                  fontFamily: "JosefinSans-Bold",
-                  marginLeft: 10,
-                }}
-              >
-                Realização
-              </Text>
-            </View>
+        //   <View
+        //     style={{
+        //       width: "100%",
+        //       backgroundColor: COLORS.ghostwhite,
+        //       marginVertical: 10,
+        //       paddingHorizontal: 5,
+        //     }}
+        //   >
+        //     <View
+        //       style={{
+        //         flexDirection: "row",
+        //       }}
+        //     >
+        //       <Icon name="done-outline" size={30} color={COLORS.lightdanger} />
+        //       <Text
+        //         style={{
+        //           fontSize: responsiveFontSize(2),
+        //           color: COLORS.lightdanger,
+        //           fontFamily: "JosefinSans-Bold",
+        //           marginLeft: 10,
+        //         }}
+        //       >
+        //         Realização
+        //       </Text>
+        //     </View>
 
-            <Stack w="100%" direction="row" space={3}>
-              <Box
-                w="50%"
-                style={{ alignItems: "center", justifyContent: "center" }}
-              >
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontFamily: "JosefinSans-Bold",
-                    textAlign: "center",
-                    color: COLORS.lightdanger,
-                  }}
-                >
-                  Produtores
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    fontFamily: "JosefinSans-Regular",
-                    textAlign: "center",
-                    color: COLORS.lightdanger,
-                    paddingTop: 5,
-                  }}
-                >
-                  {getPercentage(rpFarmers, tpFarmers)}
-                </Text>
-              </Box>
-              <Box
-                w="50%"
-                style={{ alignItems: "center", justifyContent: "center" }}
-              >
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontFamily: "JosefinSans-Bold",
-                    textAlign: "center",
-                    color: COLORS.lightdanger,
-                  }}
-                >
-                  Pomares
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    fontFamily: "JosefinSans-Regular",
-                    textAlign: "center",
-                    color: COLORS.lightdanger,
-                    paddingTop: 5,
-                  }}
-                >
-                  {getPercentage(rpFarmlands, tpFarmlands)}
-                </Text>
-              </Box>
-            </Stack>
-          </View>
-          {/* <CustomDivider thickness={2} bg={COLORS.lightdanger} /> */}
-        </ScrollView>
+        //     <Stack w="100%" direction="row" space={3}>
+        //       <Box
+        //         w="50%"
+        //         style={{ alignItems: "center", justifyContent: "center" }}
+        //       >
+        //         <Text
+        //           style={{
+        //             fontSize: 16,
+        //             fontFamily: "JosefinSans-Bold",
+        //             textAlign: "center",
+        //             color: COLORS.lightdanger,
+        //           }}
+        //         >
+        //           Produtores
+        //         </Text>
+        //         <Text
+        //           style={{
+        //             fontSize: 18,
+        //             fontFamily: "JosefinSans-Regular",
+        //             textAlign: "center",
+        //             color: COLORS.lightdanger,
+        //             paddingTop: 5,
+        //           }}
+        //         >
+        //           {getPercentage(rpFarmers, tpFarmers)}
+        //         </Text>
+        //       </Box>
+        //       <Box
+        //         w="50%"
+        //         style={{ alignItems: "center", justifyContent: "center" }}
+        //       >
+        //         <Text
+        //           style={{
+        //             fontSize: 16,
+        //             fontFamily: "JosefinSans-Bold",
+        //             textAlign: "center",
+        //             color: COLORS.lightdanger,
+        //           }}
+        //         >
+        //           Pomares
+        //         </Text>
+        //         <Text
+        //           style={{
+        //             fontSize: 18,
+        //             fontFamily: "JosefinSans-Regular",
+        //             textAlign: "center",
+        //             color: COLORS.lightdanger,
+        //             paddingTop: 5,
+        //           }}
+        //         >
+        //           {getPercentage(rpFarmlands, tpFarmlands)}
+        //         </Text>
+        //       </Box>
+        //     </Stack>
+        //   </View>
+        // </ScrollView>
       )}
 
       {isFieldAgent && (

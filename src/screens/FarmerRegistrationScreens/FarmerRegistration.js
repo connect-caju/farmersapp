@@ -407,8 +407,6 @@ export default function FarmerRegistration({ route, navigation }) {
                 position: "absolute",
                 right: 0,
                 top: 4,
-                flexDirection: "row",
-                alignItems: "center",
               }}>
               <Icon name="app-registration" size={40} color={COLORS.grey} />
             </Box>
